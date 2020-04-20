@@ -264,9 +264,464 @@ x=Temp
 &nbsp;...&nbsp; 
   <span class="tooltiprtext">Click to View Output.</span>
 </span>
+</div
+</a>
+<div id="hist1ggp>lot" style="display:none;">
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(airquality, aes(x=Temp)) + 
+  geom_histogram()
+```
+</div>
+
+
+<a href="javascript:showhide('hist2ggplot')">
+<div class="hoverchunk">
+<span class="tooltipr">
+ggplot
+  <span class="tooltiprtext">An R function "ggplot" used to create a framework for a graphic that will have elements added to it with the `+` sign.</span>
+</span><span class="tooltipr">
+(
+  <span class="tooltiprtext">Parenthesis to begin the function. Must touch the last letter of the function.</span>
+</span><span class="tooltipr">
+airquality
+  <span class="tooltiprtext">"airquality" is a dataset. Type "View(airquality)" in R to see it.</span>
+</span><span class="tooltipr">
+,&nbsp; 
+  <span class="tooltiprtext">The comma allows us to specify optional commands to the function. The space after the comma is not required. It just looks nice.</span>
+</span><span class="tooltipr">
+aes(
+  <span class="tooltiprtext">The `aes` or "aesthetics" function allows you to tell the ggplot how it should appear. This includes things like what the x-axis or y-axis should become.</span>
+</span><span class="tooltipr">
+x=Temp
+  <span class="tooltiprtext">"x=" declares which variable will become the x-axis of the graphic.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the aes function.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the ggplot function.</span>
+</span><span class="tooltipr">
+&nbsp;+&nbsp;
+  <span class="tooltiprtext">The addition symbol `+` is used to add further elements to the ggplot.</span>
+</span><br/><span class="tooltipr">
+&nbsp;&nbsp;  geom_histogram(
+  <span class="tooltiprtext">The "geom_histogram()" function causes the ggplot to become a histogram. There are many other "geom_" functions that could be used.</span>
+</span><span class="tooltipr">
+binwidth=5,&nbsp;
+  <span class="tooltiprtext">The "binwidth" command controls the width of the bars in the histogram.</span>
+</span><span class="tooltipr">
+fill="skyblue",
+  <span class="tooltiprtext">The "fill" command controls the color of the insides of each bar.</span>
+</span><span class="tooltipr">
+color="black"
+  <span class="tooltiprtext">The "color" command controls the color of the edges of each bar.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the geom_histogram function.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
 </div>
 </a>
-<div id="hist1ggplot" style="display:none;">
+<div id="hist2ggplot" style="display:none;">
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(airquality, aes(x=Temp)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black")
+```
+</div>
+  
+<a href="javascript:showhide('hist3ggplot')">
+<div class="hoverchunk">
+<span class="tooltipr">
+ggplot
+  <span class="tooltiprtext">An R function "ggplot" used to create a framework for a graphic that will have elements added to it with the `+` sign.</span>
+</span><span class="tooltipr">
+(
+  <span class="tooltiprtext">Parenthesis to begin the function. Must touch the last letter of the function.</span>
+</span><span class="tooltipr">
+airquality
+  <span class="tooltiprtext">"airquality" is a dataset. Type "View(airquality)" in R to see it.</span>
+</span><span class="tooltipr">
+,&nbsp; 
+  <span class="tooltiprtext">The comma allows us to specify optional commands to the function. The space after the comma is not required. It just looks nice.</span>
+</span><span class="tooltipr">
+aes(
+  <span class="tooltiprtext">The `aes` or "aesthetics" function allows you to tell the ggplot how it should appear. This includes things like what the x-axis or y-axis should become.</span>
+</span><span class="tooltipr">
+x=Temp
+  <span class="tooltiprtext">"x=" declares which variable will become the x-axis of the graphic.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the aes function.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the ggplot function.</span>
+</span><span class="tooltipr">
+&nbsp;+&nbsp;
+  <span class="tooltiprtext">The addition symbol `+` is used to add further elements to the ggplot.</span>
+</span><br/><span class="tooltipr">
+&nbsp;&nbsp;  geom_histogram(
+  <span class="tooltiprtext">The "geom_histogram()" function causes the ggplot to become a histogram. There are many other "geom_" functions that could be used.</span>
+</span><span class="tooltipr">
+binwidth=5,&nbsp;
+  <span class="tooltiprtext">The "binwidth" command controls the width of the bars in the histogram.</span>
+</span><span class="tooltipr">
+fill="skyblue",
+  <span class="tooltiprtext">The "fill" command controls the color of the insides of each bar.</span>
+</span><span class="tooltipr">
+color="black"
+  <span class="tooltiprtext">The "color" command controls the color of the edges of each bar.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the geom_histogram function.</span>
+</span><span class="tooltipr">
+&nbsp;+&nbsp;
+  <span class="tooltiprtext">The addition symbol `+` is used to add further elements to the ggplot.</span>
+</span><br/><span class="tooltipr">
+&nbsp;&nbsp;  labs(
+  <span class="tooltiprtext">The "labs" function is used to add labels to the plot, like a main title, x-label and y-label.</span>
+</span><span class="tooltipr">
+title="La Guardia Airport Daily Mean Temperature",&nbsp;
+  <span class="tooltiprtext">The "title=" command allows you to control the main title at the top of the graphic.</span>
+</span><span class="tooltipr">
+x="Temperature",&nbsp;
+  <span class="tooltiprtext">The "x=" command allows you to control the x-label of the graphic.</span>
+</span><span class="tooltipr">
+y="Number of Days"
+  <span class="tooltiprtext">The "y=" command allows you to control the y-label of the graphic.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the labs function.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
+</div>
+</a>
+<div id="hist3ggplot" style="display:none;">
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(airquality, aes(x=Temp)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") + 
+  labs(title="La Guardia Airport Daily Mean Temperature", x="Temperature", y="Number of Days")
+```
+</div>
+  
+  
+<br/>
+
+**Gallery**
+
+<a href="javascript:showhide('histogramgalleryggplot')">Click to view.</a>
+
+<div id="histogramgalleryggplot" style="display:none;">
+
+Hover to see code. 
+
+<span class="tooltipgallery">
+<img class="gallerygraphs" src="./Images/histogramggplotgallery1.png">  
+  <span class="tooltipgallerytext">
+`ggplot(airquality, aes(x = Temp)) +` <br/>
+`  geom_histogram(binwidth=5, fill = "skyblue", color = "black") + ` <br/>
+`  labs(title = "La Guardia Airport Daily Mean Temperature", ` <br/>
+&nbsp;&nbsp; ` x = "Temperature", y = "Number of Days") + ` <br/>
+`  theme_bw() + ` <br/>
+`  theme(plot.title = element_text(size = 14, face = "bold", hjust = .5), ` <br/>
+&nbsp;&nbsp; ` panel.grid.major = element_line(color = "grey80")) ` <br/>
+  </span>
+</span>
+
+
+
+<span class="tooltipgallery">
+<img class="gallerygraphs" src="./Images/histogramggplotgallery2.png">  
+  <span class="tooltipgallerytext">
+`ggplot(airquality) + ` <br/>
+`  geom_histogram(aes(x = Temp, fill = Temp > median(Temp)), color = "black", binwidth = 2) + ` <br/>
+`  labs(title = "La Guardia Airport Daily Mean Temperature", ` <br/>
+&nbsp;&nbsp; ` x = "Temperature", y = "Number of Days") + ` <br/>
+`  theme_bw() + ` <br/>
+`  theme(plot.title = element_text(size = 14, face = "bold", hjust = .5),` <br/>
+&nbsp;&nbsp; ` panel.grid.major = element_line(color = "grey80"), ` <br/>
+&nbsp;&nbsp; ` legend.position = "none") + ` <br/>
+`  geom_vline(xintercept = 72, linetype = "dashed", size = 1.5, color = "black") +   ` <br/>
+`  geom_vline(xintercept = 85, linetype = "dashed", size = 1.5, color = "black") +   ` <br/>
+`  geom_text(x = 71, y = 10, label = "Q1") +   ` <br/>
+`  geom_text(x = 86, y = 10, label = "Q3")   ` <br/>
+  </span>
+</span>
+  
+
+
+<span class="tooltipgallery">
+<img class="gallerygraphs" src="./Images/histogramggplotgallery3.png">  
+  <span class="tooltipgallerytext">
+` ggplot(airquality, aes(x = Temp)) + ` <br/>
+`  geom_histogram(aes(fill = Temp > median(Temp)), color = "black", binwidth = 2) + ` <br/>
+`  labs(title = "La Guardia Airport Daily Mean Temperature", ` <br/>
+&nbsp;&nbsp; ` x = "Temperature", y = "Number of Days", fill = "Temperature") + ` <br/>
+`  theme_bw() + ` <br/>
+`  theme(plot.title = element_text(size = 10, face = "bold", hjust = .5),` <br/>
+&nbsp;&nbsp; ` panel.grid.major = element_line(color = "grey80")) + ` <br/>
+`  scale_fill_manual(values = c("steelblue2","brown1"),labels=c("< 79 Degrees","> 79 Degrees")) + ` <br/>
+`  geom_vline(xintercept = 72, linetype = "dashed", size = 1.5, color = "black") + ` <br/>
+`  geom_vline(xintercept = 85, linetype = "dashed", size = 1.5, color = "black") +   ` <br/>
+`  geom_text(x = 71, y = 10, label = "Q1") +   ` <br/>
+`  geom_text(x = 86, y = 10, label = "Q3")   ` <br/>
+  </span>
+</span>
+
+
+
+
+
+
+<span class="tooltipgallery">
+<img class="gallerygraphs" src="./Images/histogramggplotgallery4.png">  
+  <span class="tooltipgallerytext">
+` ggplot(airquality, aes(x = Temp)) + ` <br/>
+`  geom_histogram(aes(fill = Temp > median(Temp)), color = "black", binwidth = 3) + ` <br/>
+`  labs(title = "Temperature of La Guardia Airport by Month", ` <br/>
+&nbsp;&nbsp; ` x = "Temperature", y = "Number of Days", fill = "Temperature") + ` <br/>
+`  theme_bw() + ` <br/>
+`  theme(plot.title = element_text(size = 16, face = "bold", hjust = .5),` <br/>
+&nbsp;&nbsp; ` panel.grid.major = element_line(color = "grey80")) + ` <br/>
+`  scale_fill_manual(values = c("steelblue2","brown1"),labels=c("< 79 Degrees","> 79 Degrees")) + ` <br/>
+`  facet_grid(~Month) + ` <br/>
+`  geom_vline(xintercept = 77.88, linetype = "dashed", size = 1.5, color = "black") + ` <br/>
+`  geom_text(x = 69, y = 10, label = "Mean = \n 77.88")   ` <br/>
+  </span>
+</span>
+
+
+</div>  
+  
+  </p> 
+</div>
+
+<div id="plotlyHistogram" class="tabcontent">
+  <p>Not yet available.</p>
+</div>
+
+
+
+
+</div>
+
+
+
+----
+
+#### Python Instructions Place Holder (it's the next 454 lines plus the above 2 lines) 
+
+<div style="padding-left:125px;">
+
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'BaseHistogram')">Base R</button>
+  <button class="tablinks" onclick="openTab(event, 'ggplot2Histogram')">ggplot2</button>
+  <button class="tablinks" onclick="openTab(event, 'plotlyHistogram')">plotly</button>
+</div>
+
+<div id="BaseHistogram" class="tabcontent">
+  <p>
+  
+
+To make a histogram in R use the function:
+
+`hist(object)`
+
+* `object` must be quantitative data. R refers to this as a "numeric vector."
+
+Type `?hist` in your **R Console** to open the help file in R.
+
+<br>
+
+**Example Code** 
+
+Hover your mouse over the example codes to learn more. 
+
+Click to see what they do.
+
+<a href="javascript:showhide('hist1')">
+<div class="hoverchunk">
+<span class="tooltipr">
+hist
+  <span class="tooltiprtext">An R function "hist" used to create a histogram.</span>
+</span><span class="tooltipr">
+(
+  <span class="tooltiprtext">Parenthesis to begin the function. Must touch the last letter of the function.</span>
+</span><span class="tooltipr">
+airquality
+  <span class="tooltiprtext">"airquality" is a dataset. Type "View(airquality)" in R to see it.</span>
+</span><span class="tooltipr">
+$
+  <span class="tooltiprtext">The $ allows us to access any variable from the airquality dataset.</span>
+</span><span class="tooltipr">
+Temp
+  <span class="tooltiprtext">"Temp" is a quantitative variable (numeric vector) from the "airquality" dataset.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the hist function.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
+</div>
+</a>
+<div id="hist1" style="display:none;">
+```{r, echo=FALSE}
+hist(airquality$Temp)
+```
+</div>
+
+<a href="javascript:showhide('hist3')">
+<div class="hoverchunk">
+<span class="tooltipr">
+hist(airquality$Temp,&nbsp; <span class="tooltiprtext">This code was explained in the first example code.</span>
+</span><span class="tooltipr">
+col="skyblue" <span class="tooltiprtext">col= allows us to specify the color of the plot using a named color. The name of the color must be placed in quotations. Type "colors()" in R to see color options.</span>
+</span><span class="tooltipr">
+) <span class="tooltiprtext">Functions always end with a closing parenthesis.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
+</div>
+</a>
+<div id="hist3" style="display:none;">
+```{r, echo=FALSE}
+hist(airquality$Temp, col="skyblue")
+```
+</div>  
+  
+<a href="javascript:showhide('hist2')">
+<div class="hoverchunk">
+<span class="tooltipr">
+hist(airquality$Temp
+  <span class="tooltiprtext">This part was explained in the first example code.</span>
+</span><span class="tooltipr">
+,&nbsp; 
+  <span class="tooltiprtext">The comma allows us to specify optional commands to the function. The space after the comma is not required. It just looks nice.</span>
+</span><span class="tooltipr">
+col="skyblue"<span class="tooltiprtext">col= allows us to specify the color of the plot using a named color. The name of the color must be placed in quotations. Type "colors()" in R to see color options.</span>
+</span><span class="tooltipr">
+,&nbsp;
+ <span class="tooltiprtext">A comma must always be used to separate additional commands.</span>
+</span><span class="tooltipr">
+xlab="Temperature"
+  <span class="tooltiprtext">xlab= stands for "x label." Use it to specify the text to print on the plot under the x-axis. The desired text must always be in quotations.</span>
+</span><span class="tooltipr">
+,&nbsp;
+ <span class="tooltiprtext">A comma must always be used to separate additional commands.</span>
+</span><span class="tooltipr"> 
+ main="La Guardia Airport Daily Mean Temperatures"
+<span class="tooltiprtext">main= lets us specify the "main" title to be placed above the plot. The desired text must always be placed in quotations.</span>
+</span><span class="tooltipr">
+)
+ <span class="tooltiprtext">Functions must always end with a closing parenthesis.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
+</div>
+</a>
+<div id="hist2" style="display:none;">
+```{r, echo=FALSE}
+hist(airquality$Temp, col="skyblue", xlab="Temperature", main="La Guardia Airport Daily Mean Temperatures")
+```
+</div>  
+  
+  
+  </p>
+</div>
+
+
+
+
+<div id="ggplot2Histogram" class="tabcontent">
+  <p>
+
+To make a histogram in R using the ggplot approach, first ensure
+
+`library(ggplot2)`
+
+is loaded. Then, 
+
+`ggplot(data, aes(x=column)) + `
+
+&nbsp;&nbsp;`geom_histogram()`
+
+* `data` is the name of your dataset.
+* `column` is a column of data from your dataset that is quantitative.
+* The aesthetic helper function `aes(x= )` is how you tell the gpplot to make the x-axis become your `column` of data.
+* The geometry helper function `geom_histogram()` causes the ggplot to become a histogram.
+
+<br>
+
+**Example Code** 
+
+Hover your mouse over the example codes to learn more. 
+
+Click to see what they do.
+
+<a href="javascript:showhide('hist1ggplot')">
+<div class="hoverchunk">
+<span class="tooltipr">
+ggplot
+  <span class="tooltiprtext">An R function "ggplot" used to create a framework for a graphic that will have elements added to it with the `+` sign.</span>
+</span><span class="tooltipr">
+(
+  <span class="tooltiprtext">Parenthesis to begin the function. Must touch the last letter of the function.</span>
+</span><span class="tooltipr">
+airquality
+  <span class="tooltiprtext">"airquality" is a dataset. Type "View(airquality)" in R to see it.</span>
+</span><span class="tooltipr">
+,&nbsp; 
+  <span class="tooltiprtext">The comma allows us to specify optional commands to the function. The space after the comma is not required. It just looks nice.</span>
+</span><span class="tooltipr">
+aes(
+  <span class="tooltiprtext">The `aes` or "aesthetics" function allows you to tell the ggplot how it should appear. This includes things like what the x-axis or y-axis should become.</span>
+</span><span class="tooltipr">
+x=Temp
+  <span class="tooltiprtext">"x=" declares which variable will become the x-axis of the graphic.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the aes function.</span>
+</span><span class="tooltipr">
+)  
+  <span class="tooltiprtext">Closing parenthsis for the ggplot function.</span>
+</span><span class="tooltipr">
+&nbsp;+&nbsp;
+  <span class="tooltiprtext">The addition symbol `+` is used to add further elements to the ggplot.</span>
+</span><br/><span class="tooltipr">
+&nbsp;&nbsp;  geom_histogram()
+  <span class="tooltiprtext">The "geom_histogram()" function causes the ggplot to become a histogram. There are many other "geom_" functions that could be used.</span>
+</span><span class="tooltipr">
+&nbsp;&nbsp;&nbsp;&nbsp;  
+  <span class="tooltiprtext">Press Enter to run the code.</span>
+</span><span class="tooltipr" style="float:right;">
+&nbsp;...&nbsp; 
+  <span class="tooltiprtext">Click to View Output.</span>
+</span>
+</div
+</a>
+<div id="hist1ggp>lot" style="display:none;">
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ggplot(airquality, aes(x=Temp)) + 
   geom_histogram()
