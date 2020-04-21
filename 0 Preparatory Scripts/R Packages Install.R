@@ -2,5 +2,5 @@
 install.packages(c("mosaic", "plotly", "tidyverse", "dplyr"))
 
 # R Packages of data sets
-install.packages(c("nycflights13", "ggplot2movies"))
-
+install.packages(c("ggplot2movies"))
+  # You could try "nycflights13" as well if you
