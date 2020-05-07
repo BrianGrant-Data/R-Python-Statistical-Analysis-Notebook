@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -20,24 +20,7 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
 
 
 
@@ -84,7 +67,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -233,6 +215,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -244,18 +227,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -403,7 +374,7 @@ $(document).ready(function () {
 <p>This page, and all pages of this notebook, are meant to be customized to become a useful <em>Guide to Statistical Analysis</em> in R for your <em>current</em> and <em>future</em> self.</p>
 <div style="font-size:.8em;">
 <!-- Code to shrink font-size of following paragraph -->
-<p>To begin customizing, <a href="https://github.com/saundersg/Statistics-Notebook">download</a> your own copy of the book <span style="font-size:.8em;">(if you haven’t already)</span>. Please note the <a href="https://choosealicense.com/licenses/gpl-3.0/">GNU General Public License</a> when downloading. You are free to delete this commentary in your own copy of the notebook.</p>
+<p>If you want to get a clean copy of this notebook, you can <a href="https://github.com/saundersg/Statistics-Notebook">download another copy of the book.</a> Please note the <a href="https://choosealicense.com/licenses/gpl-3.0/">GNU General Public License</a> when downloading. You are free to delete this commentary in your own copy of the notebook.</p>
 </div>
 <!-- Ends smaller font-size section -->
 </div>
@@ -422,6 +393,7 @@ $(document).ready(function () {
 <h3>Show Notes</h3>
 <!-- This is a great place to add general notes --------------- -->
 <p><a href="RMarkdownHints.html">Customization Help</a></p>
+<p>I still don’t know how to navigate quickly through these files. It’s making adding notes tedious.</p>
 <!-- End your notes before here. ------------------------------------- -->
 </div>
 </div>
@@ -435,16 +407,16 @@ $(document).ready(function () {
 <h3>One Quantitative Response Variable Y</h3>
 <div id="graphics" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#histogram"> <img class="myhover" src="./Images/histogram.png" alt="Histogram" title="Histogram"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="./Images/dotplotsingle.png" alt="Dot Plot" title="Dot Plot"> </a> <a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="./Images/boxplotsingle.png" alt="Boxplot" title="Boxplot"> </a></p>
+<p><a href="GraphicalSummaries.html#histogram"> <img class="myhover" src="Images/histogram.png" alt="Histogram" title="Histogram"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="Images/dotplotsingle.png" alt="Dot Plot" title="Dot Plot"> </a> <a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="Images/boxplotsingle.png" alt="Boxplot" title="Boxplot"> </a></p>
 <!--- End your notes before here.  ------------------>
 </div>
 </div>
 <div id="tests" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -465,16 +437,16 @@ $(document).ready(function () {
 <h3>Quantitative Y | Categorical X (2 Groups)</h3>
 <div id="graphics-1" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="./Images/boxplot.png" alt="Side-by-side Boxplots" title="Side-by-side Boxplots"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="./Images/dotplotdouble.png" alt="Dot Plot" title="Side-by-side Dot Plots"> </a></p>
+<p><a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="Images/boxplot.png" alt="Side-by-side Boxplots" title="Side-by-side Boxplots"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="Images/dotplotdouble.png" alt="Dot Plot" title="Side-by-side Dot Plots"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-1" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -495,16 +467,16 @@ $(document).ready(function () {
 <h3>Quantitative Y | Categorical X (3+ Groups)</h3>
 <div id="graphics-2" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="./Images/boxplotthree.png" alt="Side-by-side Boxplots" title="Side-by-side Boxplots 3+ Groups"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="./Images/dotplottriple.png" alt="Side-by-side Dot Plots" title="Side-by-side Dot Plots 3+ Groups"> </a></p>
+<p><a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="Images/boxplotthree.png" alt="Side-by-side Boxplots" title="Side-by-side Boxplots 3+ Groups"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="Images/dotplottriple.png" alt="Side-by-side Dot Plots" title="Side-by-side Dot Plots 3+ Groups"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-2" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -525,16 +497,16 @@ $(document).ready(function () {
 <h3>Quantitative Y | Quantitative X</h3>
 <div id="graphics-3" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="./Images/scatterplot.png" alt="Scatterplot" title="Scatterplot"> </a></p>
+<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="Images/scatterplot.png" alt="Scatterplot" title="Scatterplot"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-3" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -555,16 +527,16 @@ $(document).ready(function () {
 <h3>Quantitative Y | Multiple X</h3>
 <div id="graphics-4" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="./Images/scatterplotmany.png" alt="Scatterplot" title="Scatterplot with Color and Sizing"> </a></p>
+<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="Images/scatterplotmany.png" alt="Scatterplot" title="Scatterplot with Color and Sizing"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-4" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -585,16 +557,16 @@ $(document).ready(function () {
 <h3>Binomial Y | Quantitative X</h3>
 <div id="graphics-5" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="./Images/scatterplotbinomY.png" alt="Scatterplot with Binomial Y" title="Scatterplot with Binomial Y"> </a></p>
+<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="Images/scatterplotbinomY.png" alt="Scatterplot with Binomial Y" title="Scatterplot with Binomial Y"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-5" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -615,16 +587,16 @@ $(document).ready(function () {
 <h3>Binomial Y | Multiple X</h3>
 <div id="graphics-6" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="./Images/scatterplotbinomYmult.png" alt="Scatterplot with Binomial Y" title="Scatterplot with Binomial Y, including coloring and shading"> </a></p>
+<p><a href="GraphicalSummaries.html#scatterplots"> <img class="myhover" src="Images/scatterplotbinomYmult.png" alt="Scatterplot with Binomial Y" title="Scatterplot with Binomial Y, including coloring and shading"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-6" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -645,16 +617,16 @@ $(document).ready(function () {
 <h3>Caterogical Y | Categorical X</h3>
 <div id="graphics-7" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
-<p><a href="GraphicalSummaries.html#bar-charts"> <img class="myhover" src="./Images/barplot.png" alt="Bar Chart" title="Bar Chart"> </a></p>
+<p><a href="GraphicalSummaries.html#bar-charts"> <img class="myhover" src="Images/barplot.png" alt="Bar Chart" title="Bar Chart"> </a></p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
 <div id="tests-7" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
 <!--- End of Add content area.  ------------------>
@@ -689,6 +661,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

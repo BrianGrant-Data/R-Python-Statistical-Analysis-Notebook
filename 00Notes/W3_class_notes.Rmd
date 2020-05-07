@@ -1,0 +1,185 @@
+---
+title: "W3_Notes"
+output: html_document
+---
+## Setup
+```{r}
+install.packages("tidyverse")
+install.packages("plotly")
+install.packages("mosaic")
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(mosaic)
+library(car)
+```
+We were working on content in MakingInference.Rmd
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+install.packages("car")
+```
+
+
+```{r}
+library(pander)
+library(mosaic)
+library(car)
+```
+
+```{r}
+View(mtcars)
+```
+
+## One sample t test
+```{r}
+t.test(mtcars$mpg, mu=20, alternative='two.sided',conf.level=0.95)
+
+ttestoutput <- t.test(mtcars$mpg, mu=20, alternative='two.sided',conf.level=0.95)
+
+pander(ttestoutput)
+
+args(t.test)
+
+qqPlot(mtcars$mpg)
+```
+```{r}
+t.test(KidsFeet$length, 
+       mu = 28, alternative = "two.sided", conf.level = .95)
+```
+
+## Two sample independent t test
+```{r}
+t.test(mpg ~ am, 
+       data=mtcars, 
+       mu=0)
+```
+
+```{r}
+qqPlot(length ~ sex, data = KidsFeet)
+
+t.test(length ~ sex, 
+       data = KidsFeet,
+       mu = 0, 
+       alternative = "two. sided",
+       conf.level = .95)
+```
+
+
+## Two sample dependent (paired samples) t test
+
+Use the R Instructions to perform a Paired-Samples t Test of the following hypotheses using the KidsFeet data set.
+
+
+```{r}
+View(KidsFeet)
+
+kf <- kidsfeet
+kf$width3 <- kf$width * 3
+
+t.test()
+.....
+```
+
+
+
+# Skills Quiz
+
+In which distribution would an observation of x=5 be the most likely to occur?
+
+```{r}
+curve(dnorm(x,-5,2), -12, 20, col="skyblue", lwd=2, ylab="", n=1000, ylim=c(0,.81))
+
+curve(dchisq(x,5), from=0, add=TRUE, col="firebrick", lwd=2, n=1000)
+
+curve(dt(x,5), add=TRUE, col="skyblue4", lwd=2, n=1000)
+
+curve(df(x,10,10), from=0, add=TRUE, col="salmon", lwd=2, n=1000)
+
+legend("topright",
+       legend=c("Normal(-5,2)",
+                "Chi-squared(8)",
+                "t(5)",
+                "f(2,5)"
+                ),
+       lwd=2,
+       lty=1,
+       col=c("skyblue","firebrick","skyblue4","salmon"),
+       bty='n')
+
+```
+Which of the following set of sample values are most likely to be obtained if a sample of n = 5 observations is sampled from the normal distribution drawn by the above code in R?
+
+```{r}
+curve(dnorm(x, -5, 2), from=-12, to=2, lwd=2, col="skyblue", ylab="Normal Distribution with Mean of -5 and Standard Deviation of 2")
+
+abline(h=0, v=-5, lty=2)
+```
+
+What are the mean uptake values for each Type of plant (Quebec and Mississippi) for plants that are chilled at a concentration of 250?
+
+Use a subset of the CO2 dataset in R to answer the following questions.
+
+Filter the dataset so that you are considering only the chilled plants where conc = 250.
+
+(Hint: Treatment == "chilled" & conc == 250)
+
+```{r}
+?CO2
+
+View(CO2)
+
+library(tidyverse) #loads the filter(...) function
+
+CO2.chilled.250 <- filter(CO2, Treatment == "chilled"& conc == 250)
+
+CO2.chilled.250 %>% 
+  group_by(Type) %>% 
+  summarise(mean(uptake))
+```
+
+Recreate one of these dot plots in R using either Base or ggplot2 graphics.
+
+```{r}
+stripchart(uptake ~ Type,
+           data = CO2.chilled.250,
+           col = c('skyblue', 'red'),
+           pch = 15,
+           ylim = c(-.2, 3),
+           method = "stack",
+           main = "Quebec shows higher uptake values than \nMississippi when plants are chilled at an ambient CO2 of 250")
+           
+```
+
+These results are based on a small sample of Mississippi and Quebec plants. The question that remains is whether or not this pattern holds for ALL Mississippi and Quebec plants, or if it was just a figment of this sample of data.
+
+ 
+
+To determine if we should conclude that this pattern holds for the full population, conduct an appropriate hypothesis test for the hypotheses:
+
+H0:μMiss−μQueb=0
+Ha:μMiss−μQueb≠0
+where μMiss represents the (unknown) true mean CO2 uptake of ALL Mississippi plants that are chilled at a concentration of 250 and μQueb represents the true (unkown) mean CO2 uptake of ALL Quebec plants that are chilled at a concentration of 250.
+
+Report the test statistic, the parametric distribution being used for the test statistic (including degrees of freedom if appropriate), and p-value of the test.
+
+```{r}
+t.test(uptake ~ Type, 
+       data = CO2.chilled.250,
+       mu = 0,
+       alternative = "two.sided",
+       conf.level = .95)
+```
+
+Make a Q-Q Plot to determine if the distribution is normal 
+
+```{r}
+qqPlot(uptake ~ Type, data = CO2.chilled.250)
+```
+
