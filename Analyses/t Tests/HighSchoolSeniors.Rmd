@@ -11,30 +11,164 @@ library(tidyverse)
 library(DT)
 library(pander)
 library(readr)
+library(mosaic)
 
-HSS <- read_csv("HighSchoolSeniors.csv")
+HSS <- read_csv("../../Data/HighSchoolSeniors.csv")
 #Remember: select "Session, Set Working Directory, To Source File Location", and then play this R-chunk into your console to read the HSS data into R. 
 ```
 
-<!-- Instructions
+<!-- Instruction -->
 
-1. Use the HSS dataset in R to come up with a question that can be answered with a t Test. 
+<!-- 1. Use the HSS dataset in R to come up with a question that can be answered with a t Test. -->
 
-Here is a link to the survey given to the students that participated in the study:
-https://ww2.amstat.org/censusatschool/pdfs/C@SQuestionnaire.pdf
-(Use the link to learn about what each column of data in the data set represents.)
+<!--  Potential questions -->
+<!-- birthmonth to fav physical activity -->
+<!--  Video games to sleep/fav subject/hw hrs / fam time hours/ gender/ age/ languages/ memmory / reaction time/ sports/ month/ season/ hours of sleep: school and no school, hanging with friends, outdoor games, paid work, housework, tv -->
 
-2. Establish why your question is interesting and rephrase the question using a statistical "null" and "alternative" hypothesis. (Hint, see the "Math 325 Notebook -> R Help -> R-Markdown Hints" page of your textbook for instructions on how to write mathematical hypotheses.)
+<!-- hw, fam time, sleep, friends, work -->
 
-3. Clearly answer your question using statistics. Be sure to compute a p-value and provide supporting numerical and graphical summaries.
 
-Note: you can create "groups" from the data in many ways. For example, suppose you wanted to create a variable that grouped people according to whether they thought recycling was more important than conserving water. You could do this by:
+I want to look into trends of the above average video gamer and compare them to the below average video gamers. 
 
+The U.S. Census at School Questionnaire will be used as it is a census of data on High School Seniors. In this annalyisis, the population we're studying are the high school seniors at the schools and countries participating in the Census at School Program. 
+
+<!-- Here is a link to the survey given to the students that participated in the study: -->
+<!-- https://ww2.amstat.org/censusatschool/pdfs/C@SQuestionnaire.pdf -->
+<!-- (Use the link to learn about what each column of data in the data set represents.) -->
+
+<!-- 2. Establish why your question is interesting and rephrase the question using a statistical "null" and "alternative" hypothesis. (Hint, see the "Math 325 Notebook -> R Help -> R-Markdown Hints" page of your textbook for instructions on how to write mathematical hypotheses.) --> 
+
+The null hypothesis is that the difference of the population means for high school students who play video games longer than 75% of the population, and the high school students who play video games for less than 75% of the population, is eqaul to 0. The alternative hypothesis is that the difference in means does not equal 0.
+
+<!-- 3. Clearly answer your question using statistics. Be sure to compute a p-value and provide supporting numerical and graphical summaries. -->
+We'll now clean the data by removing NA's, impossibly high values and any entries that were compromised due to data elsewere in the row.
 ```{r}
-HSS <- HSS %>%
-  mutate(recycling_than_water = ifelse(Importance_recycling_rubbish >	Importance_conserving_water, "Recycling More Important", "Water Conservation More Important"))
+# fiter out _ NA's, _ impossible values, and _1? entry that seemed to have been an error
+# cooldata0 <- HSS %>% 
+#   select(Gender,
+#          Video_Games_Hours,
+#          Doing_Homework_Hours,
+#          Doing_Things_With_Family_Hours,
+#          Sleep_Hours_Schoolnight,
+#          Sleep_Hours_Non_Schoolnight,
+         
+cooldata <- HSS %>% 
+  select(Video_Games_Hours,
+         Doing_Homework_Hours) 
+
+cooldata2 <- cooldata %>% 
+  filter(!is.na(Video_Games_Hours), Video_Games_Hours <= 70, Doing_Homework_Hours < 204)
 ```
 
--->
+Now that we have cleaned the data, we'll seperate the data into two groups: The first group will be for students who reported playing video games equal to or longer than 75% of the sample. The second group is for the students who reported playing video games for less time than 75% of our sample.
+
+```{r}
+# lowhalf <- cooldata2 %>% 
+#   filter(Video_Games_Hours <= median(Video_Games_Hours))
+# uphalf <- cooldata2 %>% 
+#   filter(Video_Games_Hours > median(Video_Games_Hours))
+
+top25thpercent <- cooldata2 %>% 
+  filter(Video_Games_Hours >= quantile(Video_Games_Hours, .75))
+percent75 <- cooldata2 %>% 
+  filter(Video_Games_Hours < quantile(Video_Games_Hours, .75))
+
+# samples seperated at the third standard deviation
+# top5thpercent <- cooldata2 %>% 
+#   filter(Video_Games_Hours >= quantile(Video_Games_Hours, .95))
+# percent95 <- cooldata2 %>% 
+#   filter(Video_Games_Hours < quantile(Video_Games_Hours, .95))
+
+# samples seperated at the third standard deviation
+# sd3.a <- cooldata2 %>% 
+#   filter(Video_Games_Hours >= 
+#             (sd(Video_Games_Hours)*3 + mean(Video_Games_Hours)
+#              )
+#          )
+# sd3.b <- cooldata2 %>% 
+#   filter(Video_Games_Hours < 
+#             (sd(Video_Games_Hours)*3 + mean(Video_Games_Hours)
+#              )
+#          )
+```
+# Independent Samples t Test requirements
+
+The requirements for an Independent Samples t Test requirements have been met. Though this dataframe was gathered via a high school survey, the dataframe is identified as a census and so we must assume that both samples are representative of the population. Remember, the population is the high school seniors at the U.S. schools participating in the Census at School Program. The sampling distribution of the difference of the sample means (x¯1−x¯2) can be assumed to be normal.
+```{r}
+# Sample Count
+percent75 %>% 
+  summarise(min = min(Video_Games_Hours),
+            Q1 = quantile(Video_Games_Hours, .25),
+            mean = mean(Video_Games_Hours),
+            med = median(Video_Games_Hours),
+            sd = sd(Video_Games_Hours),
+            var = var(Video_Games_Hours),
+            Q3 = quantile(Video_Games_Hours, .75),
+            max = max(Video_Games_Hours),
+            n = n()
+  )
+
+top25thpercent %>% 
+  summarise(min = min(Doing_Homework_Hours),
+            Q1 = quantile(Doing_Homework_Hours, .25),
+            mean = mean(Doing_Homework_Hours),
+            med = median(Doing_Homework_Hours),
+            sd = sd(Doing_Homework_Hours),
+            var = var(Doing_Homework_Hours),
+            Q3 = quantile(Doing_Homework_Hours, .75),
+            max = max(Doing_Homework_Hours)
+  )
+```
+
+
+
+numeric and graphical summary of the data
+
+```{r}
+# might need to get rid of the below as this is redundant.
+cooldata2 %>% 
+  summarise(min = min(Video_Games_Hours),
+            Q1 = quantile(Video_Games_Hours, .25),
+            mean = mean(Video_Games_Hours),
+            med = median(Video_Games_Hours),
+            sd = sd(Video_Games_Hours),
+            var = var(Video_Games_Hours),
+            Q3 = quantile(Video_Games_Hours, .75),
+            max = max(Video_Games_Hours),
+            n =
+  )
+
+cooldata2 %>% 
+  summarise(min = min(Doing_Homework_Hours),
+            Q1 = quantile(Doing_Homework_Hours, .25),
+            mean = mean(Doing_Homework_Hours),
+            med = median(Doing_Homework_Hours),
+            sd = sd(Doing_Homework_Hours),
+            var = var(Doing_Homework_Hours),
+            Q3 = quantile(Doing_Homework_Hours, .75),
+            max = max(Doing_Homework_Hours)
+  )
+# cooldata2 %>% 
+#         group_by(Gender) %>%
+#   
+#         summarise(avg = median(Video_Games_Hours), n = count())
+
+# qqplot(Video_Games_Hours ~ Gender, data = cooldata2)
+boxplot(cooldata2$Video_Games_Hours)
+boxplot(cooldata2$Doing_Homework_Hours)
+hist(cooldata2$Video_Games_Hours)
+hist(cooldata2$Doing_Homework_Hours)
+
+```
+
+
+<!-- Note: you can create "groups" from the data in many ways. For example, suppose you wanted to create a variable that grouped people according to whether they thought recycling was more important than conserving water. You could do this by: -->
+
+<!-- ```{r} -->
+<!-- HSS <- HSS %>% -->
+<!--   mutate(recycling_than_water = ifelse(Importance_recycling_rubbish >	Importance_conserving_water, "Recycling More Important", "Water Conservation More Important")) -->
+<!-- ``` -->
+
+
 
 
