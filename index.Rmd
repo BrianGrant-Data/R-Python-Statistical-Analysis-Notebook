@@ -5,7 +5,8 @@ output:
     theme: cerulean
     css: styles.css
 ---
-## Intro
+##
+<!-- This is the introduction -->
 <!-- You can delete the following copyright statement if you wish: -->
 
 <div style="color:gray;"><!-- Code to change the following paragraphs to gray text -->
@@ -23,14 +24,15 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 <!-- End of download and copyright instructions. -->
 
 
-## Table of Contents
 
-## {.tabset .tabset-fade}
+
+
+
+## Class Notes {.tabset .tabset-fade}
 <!-- This seems to designate the start and end of the notes tabs -->
 ### Hide Notes
 
-### Show Notes
-
+### General Notes
 <!-- This is a great place to add general notes --------------- -->
 
 [Customization Help](RMarkdownHints.html)
@@ -40,21 +42,36 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 
 ### W01
+### W02
+### W03
+### W04
+### W05
+### W06
+### W07
+### W08
+### W09
+### W10
+### W11
+### W12
+### W13
+### W14
 
 <!-- End your notes before here. ------------------------------------- -->
-
-
 ##
 <!-- This seems to be were the notes tabs end. -->
 
-----
 
+
+## One Quantitative Response Variable Y 
+###
+<!-- This is an image -->
 <div style="float:left;width:125px;" align=center class="tooltipimage">
 <img src="./Images/QuantY.png" width=35px;>
-  <span class="tooltipimagetext">Y is a single quantitative variable of interest. This would be like "heights" of BYU-Idaho students.</span>
 </div>
 
-### One Quantitative Response Variable Y {.tabset .tabset-pills}
+Y is a single quantitative variable of interest. This would be like "heights" of BYU-Idaho students.</span>
+
+### {.tabset .tabset-pills}
 
 #### Graphics
 <div style="padding-left:125px;color:lightgray;">
@@ -110,17 +127,17 @@ Add your own notes about appropriate inferential procedures for this type of dat
 </div>
 
 ##
+<!-- This preps for the next section in someway -->
 <div style="clear:both;"></div>
 
-----
-
+## Quantitative Y | Categorical X (2 Groups)
 <div style="float:left;width:125px;" align=center class="tooltipimage">
 <img src="./Images/QuantYQualXg2.png" width=59px;>
-  <span class="tooltipimagetext">Y is a single quantitative variable of interest. This would be like "heights" of BYU-Idaho students. X is a qualitative (categorical) variable of interest like "gender" that has just two groups "A" and "B". So this logo represents situtations where we would want to compare heights of male (group A) and female (group B) students.</span>
 </div>
 
-### Quantitative Y | Categorical X (2 Groups) {.tabset .tabset-pills}
+Y is a single quantitative variable of interest. This would be like "heights" of BYU-Idaho students. X is a qualitative (categorical) variable of interest like "gender" that has just two groups "A" and "B". So this logo represents situtations where we would want to compare heights of male (group A) and female (group B) students.
 
+###  {.tabset .tabset-pills}
 #### Graphics
 <div style="padding-left:125px;color:lightgray;">
 <!-- Add your customizations in the area below: -->
