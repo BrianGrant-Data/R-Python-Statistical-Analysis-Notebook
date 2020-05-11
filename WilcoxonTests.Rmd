@@ -14,15 +14,17 @@ output:
  }
 </script>
 
-```{r, include=FALSE}
+```{r Libraries, include=FALSE}
 library(mosaic)
 ```
 
 
 ----
+## Intro
 
-Wilcoxon tests allow for the testing of hypotheses about the value of the the *median* without assuming the test statistic follows any parametric distribution. They are often seen as nonparametric alternatives to the various t tests. However, they can also be used on ordinal data (data that is not quite quantitative, but is ordered) unlike t tests which require quantitative data.
+Rather than testing a hypothesis using a *mean*, Wilcoxon tests allow for the testing of hypotheses about the value of the the *median* without assuming the test statistic follows any parametric distribution. They are often seen as nonparametric alternatives to the various t tests. However, they can also be used on ordinal data (data that is not quite quantitative, but is ordered) unlike t tests which require quantitative data.
 
+In otherwords: when you would do a t-test but don't have a normal distribution, try a Wilcoxon test.
 ----
 
 
@@ -33,6 +35,8 @@ Wilcoxon tests allow for the testing of hypotheses about the value of the the *m
 </div>
 
 For testing hypotheses about the value of the median of (1) one sample of quantitative data or (2) one set of differences from paired data. 
+
+Note: the mu is not about the mean here. It's actually the median.
 
 #### Overview 
 
