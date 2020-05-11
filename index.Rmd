@@ -5,7 +5,7 @@ output:
     theme: cerulean
     css: styles.css
 ---
-
+## Intro
 <!-- You can delete the following copyright statement if you wish: -->
 
 <div style="color:gray;"><!-- Code to change the following paragraphs to gray text -->
@@ -25,12 +25,9 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 ## Table of Contents
 
-<!-- This is how to comment text out. You can comment out the above instructions if you wish. Comments allow the text to remain in the Rmd file, but not be displayed in the html file. -->
-
-
 ## {.tabset .tabset-fade}
-
-### Hide 
+<!-- This seems to designate the start and end of the notes tabs -->
+### Hide Notes
 
 ### Show Notes
 
@@ -42,24 +39,13 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### W01
 
 <!-- End your notes before here. ------------------------------------- -->
+
+
 ##
+<!-- This seems to be were the notes tabs end. -->
 
 ----
 
