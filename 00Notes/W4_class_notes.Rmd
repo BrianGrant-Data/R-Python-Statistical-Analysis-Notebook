@@ -1,0 +1,51 @@
+---
+title: "W4 Notes: Wilcoxon Tests"
+output: 
+  html_document: 
+    theme: cerulean
+    css: styles.css
+---
+
+```{r Libraries}
+library(mosaic)
+library(car)
+```
+```{r Example}
+
+wilcox.test(length ~ sex,
+            data=KidsFeet)
+```
+
+
+Since the wilcoxon test had ties in the rankings, let's try a t-test.
+
+First test normality:
+```{r}
+qqPlot(length ~ sex, 
+       data = KidsFeet)
+```
+
+Looks great! Now for the t-test:
+```{r}
+t.test(length ~ sex, 
+       data = KidsFeet)
+
+```
+This works out great! Wilcoxon tests might not work well here because Wilcoxon is more used when you're analyizing ranks (like first, second, and third place in class rankings). 
+
+If the t-test requirements are met, do that. If the distribution is not parametric, or if you're dealing with ordinal data instead of quantitative data. 
+
+
+# Questions
+What does "alternative hypothesis: true location shift is not equal to 0" mean?
+
+- that you have repeat values in the list? This means that when ranking the values, there were ties between ranks.
+- if there are a lot of ties, a Wilcoxon test won't work.
+  
+
+What is "stochastically" mean?
+
+- when the distribution is taller, or wider than a normal distribution?
+  
+
+
