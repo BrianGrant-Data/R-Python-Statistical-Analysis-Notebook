@@ -13,14 +13,14 @@ output:
  }
 </script>
 
-```{r, include=FALSE}
+```{r load libraries, include=FALSE}
 library(mosaic)
 library(car)
 library(pander)
 library(DT) #You may need to run: install.packages("DT") 
 ```
 
-```{r, eval=FALSE}
+```{r examine data, eval=FALSE}
 # Play the chunk above and this one to get the data into your Console
 View(Friendly)
 ?Friendly
@@ -43,7 +43,7 @@ A study was performed to determine whether the *Meshed* or *Before* approaches t
 
 <div style="padding-left:15px;">
 
-##### <a href="javascript:showhide('uniquename')">The Experiment <span style="font-size:8pt;">(click to view)</span></a>
+## <a href="javascript:showhide('uniquename')">The Experiment <span style="font-size:8pt;">(click to view)</span></a>
 
 
 <div id="uniquename" style="display:none;">
@@ -75,8 +75,9 @@ The results from the study can be found in the `Friendly` data set in R after lo
 Click the "Code" button to see the data.
 
 
-```{r}
+```{r view raw data}
 datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
+
 ```
 
 
@@ -85,13 +86,77 @@ datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
 
 <br />
 
+## Analysis
 
-<!-- Begin writing your analysis below here. -->
-
+### Research Question
 <!-- Note that your goal is to use the Friendly data to show whether or not the Meshed or Before methods have any positive benefit on memory recall. -->
 
+We'll be testing to see if either of the two treatment groups, the ones that used the "Meshed" or "Before" methods, had a greater positive affect on memory recall than control group, the one that used the "SFR" method. 
 
+This will require two indendent samples tests: Meshed compared to SFR and Before compared to SFR. Before we can determine what type of test we can do, we'll need to check the normality of our data.
 
+### Describe the Data
 
+We'll create a six number summary and a Q-Q plot of each of the three samples.
 
+```{r Check for Normality}
+Friendly %>% 
+  group_by(condition) %>% 
+  summarise(min = min(correct),
+            Q1 = quantile(correct, 0.25),
+            mean = mean(correct), 
+            median = median(correct), 
+            Q3 = quantile(correct, 0.75),
+            max = max(correct),
+            "Sample Size" = n()
+            ) %>%
+  pander()
 
+qqPlot(correct ~ condition,
+       data = Friendly)
+
+stripchart(correct ~ condition,
+           data = Friendly, 
+           method = "stack")
+```
+
+From these we can see that the data is not normal, none of the samples are large enough to be considered normal, and the distributions are not identically distributed. We'll have to conduct a Wilcoxon Rank Sum Test.
+
+### Make inferences
+
+Now that we've determined what type of test we'll conduct, I'll set the official hypothesis.
+
+The null hypothesis is that the difference in the treatment and control samples' medians are equal to zero.
+
+The alternative hypothesis is that the difference in the treatment and control samples' medians are not equal to zero.
+
+Our alpha is equal to 0.05.
+
+The Wilcoxon Rank Sum Tests are as follows:
+
+```{r Wilcoxon Rank Sum Test 1}
+wilcox.test(
+  Friendly$correct[Friendly$condition == "SFR"],
+  Friendly$correct[Friendly$condition == "Before"],
+  mu = 0,
+  alternative = "greater",
+  conf.level = 0.95
+  
+)
+```
+
+```{r Wilcoxon Rank Sum Test 2}
+wilcox.test(
+  Friendly$correct[Friendly$condition == "SFR"],
+  Friendly$correct[Friendly$condition == "Meshed"],
+  mu = 0,
+  alternative = "greater",
+  conf.level = 0.95
+)
+```
+
+Since the p-value for the "Before" method hypotheses is _, we have _sufficient evidence to reject the null hypothesis for the "Before" method. 
+
+Since the p-value for the "Meshed" method hypotheses is _, we have _sufficient evidence to reject the null hypothesis for the "Meshed" method.
+
+### Conclusion
