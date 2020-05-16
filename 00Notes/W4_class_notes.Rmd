@@ -5,7 +5,18 @@ output:
     theme: cerulean
     css: styles.css
 ---
+# Set up
 
+```{r Downloads}
+install.packages("cars")
+```
+
+```{r Libraries}
+library(car)
+```
+
+
+# Trying Wilcoxon Tests
 ```{r Libraries}
 library(mosaic)
 library(car)
@@ -48,4 +59,127 @@ What is "stochastically" mean?
 - when the distribution is taller, or wider than a normal distribution?
   
 
+# Day 2
+library(mosaic)
+library(car)
+library(pander)
+library(DT)
+View(Friendly)
+?Friendly
+
+
+# SKills Quiz
+## Set up
+
+```{r Downloads}
+install.packages("cars")
+```
+
+```{r Libraries}
+library(car)
+library(mosaic)
+```
+
+```{r}
+ggplot(cars) +
+   geom_dotplot(aes(x=dist))
+max(cars$dist)
+
+qqPlot(cars$dist)
+```
+
+```{r}
+ggplot(cars) +
+   geom_dotplot(aes(x=dist)) +
+   geom_vline(xintercept=100)
+
+wilcox.test(cars$dist, mu = 100, alternative = "two.sided")
+```
+Recreate the dot plot used in the previous question by running the code:
+```{r}
+
+ggplot(cars) +
+  geom_dotplot(aes(x=dist)) +
+  geom_vline(xintercept=100) #Adds the vertical line representing the null hypothesis
+```
+Before beginning Step 1 of the Wilcoxon Test, we need to calculate the "differences". As stated in your textbook, "The differences are obtained by subtracting the hypothesized value for the median from all observations.
+
+```{r}
+differences <- (cars$dist - 100)
+differences
+```
+As shown in your dot plot there is only one positive difference, this is the single dot to the right of the vertical line in your dotplot. All the other values are negative as they are to the left of the hypothesized value of 100.
+ 
+ 
+What is the value of the single positive difference for this data?
+
+```{r}
+20
+```
+
+What rank will this single positive difference be given? Hint the first eight negative differences (in order of magnitude) are
+-7,  -8, -15, -16, -20, -24, -30, and -32?
+
+(Remember: if there is a tie between two ranks, then the ranks of the two values are averaged together.)
+
+The value of the single positive rank will be: _
+
+Thus, the sum of the positive ranks will thus also be: _
+
+Note that this answer is exactly the same as the value of the test statistic that you obtained in your test in R from the previous question! To see this, rerun the wilcox.test() from the previous question with the code:
+
+```{r}
+wilcox.test(cars$dist, mu = 100, alternative = "two.sided")
+
+```
+
+There are two things needed to calculate the p-value of a hypthesis test. Which of these two things have we calculated so far?
+
+A test statistic.
+
+So, to calculate the p-value, we must now come up with all of the possible values that the test statistic could have been, and the probability of each value occurring. This is known as the distribution of the test statistic.
+
+First, note that it could have been possible that none of the values were greater than 100. In this case, the sum of the positive ranks would have been: 0
+
+Also, it could have been possible that all of the values were greater than 100. In this case, the sum of the positive ranks would have been   , which is the sum of the ranks 1, 2, 3, ..., 50. You can find this in R with the command:
+
+> sum(1:50)
+
+```{r}
+sum(1:50)
+```
+This means that the test statistic of the Wilcoxon Test could have been any whole number between 0 and 1275.
+
+That is a lot of possibilities! It is so many possibilities in fact, that drawing the plot of the distribution of all possible test statistics in a way similar to the plots of vertical lines shown in your textbook provides the following image. The lines are so close together it looks like a solid normal distribution. This is an amazing result because the Wilcoxon Test is a nonparametric test, so no assumptions about normality were made. All the same, we shade the region that is as extreme or more extreme than the observed test statistic of 5.5. This results in the following picture where the very tips of the two tails are shaded in red.
+
+
+## Question 4
+
+This final set of questions is to help you verify that you can use R to answer research questions that utilize the Wilcoxon Tests.
+ 
+Consider the Duncan dataset in R. (Ensure library(mosaic) and library(car) is loaded.)
+ 
+Filter the data set to just show "wc" and "prof" types of occupations. Then, create Q-Q Plots of prestige scores for (1) the professional and managerial occupations and (2) the white-collar occupations. 
+
+```{r}
+library(car)
+view(Duncan)
+
+Duncan2 <- Duncan %>% 
+  filter(type != "bc") %>% 
+  droplevels()
+
+qqPlot(prestige ~ type, 
+       data = Duncan2
+       )
+
+wilcox.test(
+  Duncan$prestige[
+    Duncan$type == "prof"],
+  Duncan$prestige[
+    Duncan$type == "wc"],
+  mu = 0, 
+  alternative = "two.sided",
+  conf.level = 0.95)
+```
 
