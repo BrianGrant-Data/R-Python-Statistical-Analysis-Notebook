@@ -751,6 +751,9 @@ The numbers within the row of the table next to the "G" show how many Girls had 
 
 Used to reduce a dataset to a smaller set of rows than the original dataset contained.
 
+**Warning**
+If you use filter() and you need to run a Q-Q plot on the filtered level, remember to use droplevels() or the Q-Q plot won't work. This prevents some sort of error where the filtered data technically remembers what you filtered out and prevents you from making a  Q-Q plot.
+
 **Usage** 
 
 `filter(NameOfDataset, columnName filteringRules)`
@@ -1150,8 +1153,14 @@ birthmonth
 <hr />
 
 
+## droplevels( )
+<div style="padding-left:15px;">
 
+If you use filter() and you need to run a Q-Q plot on the filtered level, remember to use droplevels() or the Q-Q plot won't work. This prevents some sort of error where the filtered data technically remembers what you filtered out and prevents you from making a  Q-Q plot.
 
+</div>
+<br />
+<hr />
 
 
 ## select( )
@@ -2099,6 +2108,7 @@ KidsFeet %>%
 </div>
 
 </div>
+
 
 ----
 
