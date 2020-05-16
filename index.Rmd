@@ -248,7 +248,7 @@ Add your own notes about appropriate inferential procedures for this type of dat
 </div>
 
 ##
-<div style="clear:both;"></div>
+<div style="clear:both;"></div>O
 
 ----
 
