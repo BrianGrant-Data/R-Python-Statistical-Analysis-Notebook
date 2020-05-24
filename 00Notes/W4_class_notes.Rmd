@@ -153,7 +153,7 @@ This means that the test statistic of the Wilcoxon Test could have been any whol
 That is a lot of possibilities! It is so many possibilities in fact, that drawing the plot of the distribution of all possible test statistics in a way similar to the plots of vertical lines shown in your textbook provides the following image. The lines are so close together it looks like a solid normal distribution. This is an amazing result because the Wilcoxon Test is a nonparametric test, so no assumptions about normality were made. All the same, we shade the region that is as extreme or more extreme than the observed test statistic of 5.5. This results in the following picture where the very tips of the two tails are shaded in red.
 
 
-## Question 4
+## Question 5
 
 This final set of questions is to help you verify that you can use R to answer research questions that utilize the Wilcoxon Tests.
  
@@ -164,7 +164,10 @@ Filter the data set to just show "wc" and "prof" types of occupations. Then, cre
 ```{r}
 library(car)
 view(Duncan)
+```
 
+
+```{r}
 Duncan2 <- Duncan %>% 
   filter(type != "bc") %>% 
   droplevels()
@@ -172,14 +175,122 @@ Duncan2 <- Duncan %>%
 qqPlot(prestige ~ type, 
        data = Duncan2
        )
+```
 
+Notice that the small sample size and potentially non-normal looking data suggests that a Wilcoxon Test is more appropriate than a t Test. Use an appropriate Wilcoxon Test that would answer the following question using the Duncan dataset in R. 
+
+Are prestige scores typically higher for professional and managerial occupations than for white-collar occupations? 
+
+```{r}
 wilcox.test(
   Duncan$prestige[
     Duncan$type == "prof"],
   Duncan$prestige[
     Duncan$type == "wc"],
   mu = 0, 
-  alternative = "two.sided",
+  alternative = "greater",
   conf.level = 0.95)
 ```
+
+My Answer:
+reject the null.
+
+### part 2
+Use the Salaries dataset in R. (Ensure the library(mosaic) is loaded.) Consider side-by-side box plots of salary according to gender for just the professors.
+
+```{r}
+library(mosaic)
+```
+
+```{r}
+View(Salaries)
+?Salaries
+```
+
+```{r}
+Salariesprof <- Salaries %>%
+  filter(rank == 'Prof')
+
+boxplot(salary ~ sex,
+        data = Salariesprof,
+        ylab = "Annual Salary (USD)",
+        main = "Do Male Prof's Earn Higher Median Wage",
+        col = "tan")
+```
+
+```{r}
+Salariesprof %>% 
+        group_by(sex) %>% 
+        summarise(median = median(salary),
+                  n = n()
+                  )
+```
+
+
+```{r}
+wilcox.test(salary ~ sex,
+            data = Salariesprof,
+            mu = 0,
+            alternative = "two.sided",
+            conf.level = 0.95
+            )
+```
+
+### part 3
+
+Use the Davis dataset in R. (Ensure the library(mosaic) and library(car) are loaded.)
+
+ 
+
+Filter the data to be just for men.
+
+ 
+
+Use an appropriate Wilcoxon Test to decide if it is true that men who work out regularly over or under report their weight. (In other words, are men that work out regularly likely to report they weigh more or less than they actually do?) Let the null hypothesis be that the median of the differences in actual and reported weights are equal to zero. (Make sure the order is Actual - Reported weight.)
+
+ 
+
+H0:median of the differences=0
+Ha:median of the differences≠0
+ 
+
+Note: you should create a graphic of the differences to ensure that your test results are consistent with the pattern evident in the data. Recreate the graph shown below, or one similar.
+
+```{r Load libraries}
+library(mosaic)
+library(car)
+```
+
+```{r Examine data}
+View(Davis)
+?Davis
+
+DavisM <- Davis %>% 
+  filter(
+    sex == "M"
+  )
+```
+```{r Wilcoxon Test}
+wilcox.test(
+  DavisM$weight,
+  DavisM$repwt,
+  mu = 0,
+  conf.level = .95,
+  paired = TRUE,
+  alternative = "two.sided"
+)
+
+```
+
+```{r Histogram}
+hist(
+  DavisM$weight - DavisM$repwt,
+  col = "gray",
+  main = "Difference in Individual's Actual and Reported Weight (kg)",
+  ylab = "Number of Individuals",
+  xlab = "Positive values mean under-repored weight (Actual - Reported"
+)
+
+```
+
 

@@ -18,13 +18,14 @@ library(mosaic)
 library(DT)
 library(pander)
 library(car)
+library(lmtest)
 
 # To get the "late" dataset into your R Console, 
 # you need to go to your file menu of R-Studio and select
 # "Session, Set working directory, To source file location"
 # Then click the green "play" arrow in 
 # the top right corner of this gray R-Chunk. 
-late <- read.csv("../Data/late.csv", header=TRUE)
+late <- read.csv("../../Data/late.csv", header=TRUE)
 # Then type:
 # > View(late)
 # in your R Console
@@ -37,8 +38,11 @@ late <- read.csv("../Data/late.csv", header=TRUE)
 <!--If you want to give your critiquers some ideas about what you have questions on and would like help with, place those details here.-->
 
 **Comments to Critiquers:** 
+Does anyone know how to write the seven hypotheses required for a three-way ANOVA? In particular, how to write the seventh hypothesis where all three factors are referenced?
 
+I apologize in advance: though I put together the most cohesive ANOVA I can think of for our data set, I believe I might have misunderstood the assignment. My conclusion is simply that this assignment can't be completed with the resources we have.
 
+If you could focus your comments on clarifying what the assignment is and how to go about completing it, that would be greatly appreciated.
 
 <!--End your comments to your critiquers before this line.-->
 
@@ -49,7 +53,9 @@ late <- read.csv("../Data/late.csv", header=TRUE)
 
 ### Overview
 <!-- Be sure to add your own background here before beginning the Analysis. -->
+This report will attempt to measure the effect tardiness fines have on daycare pick up times.
 
+The data comes from ucsd.edu and the details of their study is quoted in the "Study Details" tab.
 
 
 
@@ -129,5 +135,152 @@ pander(Late)
 
 ## Analysis
 
+### Hypothesis
+
+There are three recorded factors that could possibly effect how many parents are late: Treatment, Center, Week, and Status. The Treatment factor has two levels, *Control* and *Fine*. The  Center factor has 12 levels, one for each private daycare in the study. The Week factor has 20 levels. 
+
+<!-- For a three-way ANOVA there are 7 sets of hypotheses: -->
+
+<!-- #### Factor A -->
+<!-- $$ -->
+<!--   H_0: \alpha_1 = \alpha_2 = \ldots = 0 -->
+<!-- $$ -->
+<!-- $$ -->
+<!--   H_a: \alpha_i \neq 0 \ \text{for at least one} \ i -->
+<!-- $$ -->
+
+<!-- #### Factor B -->
+<!-- $$ -->
+<!--   H_0: \beta_1 = \beta_2 = \ldots = 0 -->
+<!-- $$ -->
+<!-- $$ -->
+<!--   H_a: \beta_j \neq 0 \ \text{for at least one} \ j -->
+<!-- $$ -->
+
+<!-- #### Factor C -->
+<!-- $$ -->
+<!--   H_0: \gamma_1 = \gamma_2 = \ldots = 0 -->
+<!-- $$ -->
+<!-- $$ -->
+<!--   H_a: \gamma_k \neq 0 \ \text{for at least one} \ k -->
+<!-- $$ -->
+
+<!-- #### Factor AB -->
+<!-- $$ -->
+<!--   H_0: \text{The effect of} \ \alpha \ \text{is the same for all levels of} \ \beta -->
+<!-- $$ -->
+<!-- $$ -->
+<!--   H_a: \text{The effect of} \ \alpha \ \text{is different for at least one level of} \ \beta -->
+<!-- $$ -->
 
 
+The mathematical model is as follows and will be used to conduct an ANOVA:
+
+$$
+  y_{ijkl} = \mu + \alpha_i + \beta_j + \gamma_k + \epsilon_{ijkl} \ \text{where} \ \epsilon_{ijkl}\sim N(0,\sigma)
+$$
+
+### ANOVA
+
+I will conduct an ANOVA with the following code:
+
+```{r}
+Late.aov <- aov(
+  No.ofLateChildren ~     + Treatment + as.factor(Center) + as.factor(Week),
+  data = Late
+  )
+
+summary(Late.aov) %>% 
+  pander()
+```
+
+The ANOVA returns low p-values for each of the three factors. Therefore, at least one level for each of the factors has a different average amount of tardiness then from the other levels of that factor.
+
+In other words, each of the factors has an affect on how many children are picked up late.
+
+I'll show the results of the ANOVA graphicaly by plotting each factor.
+
+
+```{r Plot Demonstrating Treatment}
+xyplot(
+  No.ofLateChildren ~ 
+    Treatment, 
+  data = Late, 
+  main = "Plot Demonstrating Treatment", 
+  jitter.x=TRUE,
+  pch=16)
+```
+```{r Plot Demonstrating Center}
+xyplot(
+  No.ofLateChildren ~ 
+    Center, 
+  data = Late, 
+  main = "Plot Demonstrating Center", 
+  jitter.x=TRUE,
+  pch=16)
+
+```
+```{r Plot Demonstrating Week}
+xyplot(
+  No.ofLateChildren ~ 
+    Week, 
+  data = Late, 
+  main = "Plot Demonstrating Week", 
+  jitter.x=TRUE,
+  pch=16)
+
+```
+
+
+Now I will find out which combination of factors yields an average amount of tardiness greater than the other levels of that combination.
+
+I'll expand the ANOVA.
+
+```{r Expanded ANOVA}
+Lateint.aov <- aov(
+  No.ofLateChildren ~ 
+    as.factor(Treatment) * 
+    as.factor(Center) *
+    as.factor(Week),
+  data = Late
+  )
+
+summary(Lateint.aov) %>% 
+  pander()
+```
+
+The ANOVA can no longer show p-values. This is apparently because the ANOVA is "fully-saturated" and does not have the degrees of freedom necessary.
+
+I'll now check the requirements for an ANOVA and see if there were issues there.
+
+### Requirements Check
+
+
+The sample of data can be considered to be representative of the population since there are more than 30 observations (in this case there are 200).
+
+As shown below, the data is not normally distributed in each group, but the population variance of each group can be assumed to be the same since the *residuals* from the ANOVA show a constant variance.
+
+```{r}
+par(mfrow = c(1,2))
+plot(Late.aov, which = 1:2)
+```
+
+Since not all three requirements have been met, an ANOVA is not an apropriate test for this analysis but since I have not been taught any methods that would be better.
+
+## Conclusion
+
+Since this is as far as we can go, I'll accept the null hypothesis since the data doesn't meet the requirements necessary for an ANOVA.
+<!-- did the less parents arrive late when there was a fine? (weeks 5-16) -->
+<!-- or did more or less parents arrive late after the fine was removed? (1-4 vs 17-20) -->
+
+<!-- factors:  -->
+<!-- *1 tretment -->
+<!-- *2 center -->
+<!-- *3 week -->
+<!-- 4 fine "status" (pre, active, post, or null) -->
+
+<!-- This model allows me to ask the following questions: -->
+
+<!-- 1. Does the treatment factor affect the amount of parents arriving late -->
+
+<!-- 2. Does the amount of time the fine has been in affect for affect the amount of parents arriving late  -->

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -20,6 +20,7 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
@@ -84,7 +85,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -233,6 +233,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -245,19 +246,10 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -390,6 +382,14 @@ $(document).ready(function () {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Analysis Of Variance (ANOVA)</h1>
@@ -427,9 +427,9 @@ Note: A factor is defined as a qualitative variable containing at least two cate
 <p><strong>Hypotheses</strong></p>
 <p>For a One-way ANOVA</p>
 <p><span class="math display">\[
-  H_0: \alpha_1 = \alpha_2 = \ldots = 0
+  H_0: \mu_1 = \mu_2 = \ldots = \mu_m = \mu 
 \]</span> <span class="math display">\[
-  H_a: \alpha_i \neq 0 \ \text{for at least one} \ i
+  H_a: \mu_i \neq \mu \quad \text{for at least one}\ i\in\{1,\ldots,m\}.
 \]</span></p>
 <p><strong>Mathematical Model</strong></p>
 <p>A typical model for a one-way ANOVA is of the form <span class="math display">\[
@@ -637,12 +637,12 @@ Note: A factor is defined as a qualitative variable containing at least two cate
 </table>
 <h6 id="anova-table">ANOVA Table</h6>
 <p>In general, the ANOVA table is created by</p>
-<table style="width:100%;">
+<table>
 <colgroup>
 <col width="11%" />
-<col width="26%" />
-<col width="21%" />
-<col width="14%" />
+<col width="27%" />
+<col width="22%" />
+<col width="13%" />
 <col width="12%" />
 <col width="12%" />
 </colgroup>
@@ -687,7 +687,7 @@ Note: A factor is defined as a qualitative variable containing at least two cate
 <p>To check that the ANOVA assumptions are satisfied, it is required to check the data in each group for normality using QQ-Plots. Also, the sample variance of each group must be relatively constant. The fastest way to check these two assumptions is by analyzing the <em>residuals</em>.</p>
 <ul>
 <li>An ANOVA <strong>residual</strong> is defined as the difference between the observed value of <span class="math inline">\(y_{ik}\)</span> and the mean <span class="math inline">\(\bar{y}_{i\bullet}\)</span>. Mathematically, <span class="math display">\[
-  r_{ik} = y_{ik} - \bar{y}_{i\bullet}
+r_{ik} = y_{ik} - \bar{y}_{i\bullet}
 \]</span> One QQ-Plot of the residuals will provide the necessary evidence to decide if it is reasonable to assume that the error terms are normally distributed. Also, the constant variance can be checked visually by using what is known as a residuals versus fitted values plot. For the <strong>Fabricated Example</strong> above, the QQ-Plot and residuals versus fitted values plots show the two assumptions of ANOVA appear to be satisfied.</li>
 </ul>
 <p><img src="ANOVA_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
@@ -879,6 +879,28 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

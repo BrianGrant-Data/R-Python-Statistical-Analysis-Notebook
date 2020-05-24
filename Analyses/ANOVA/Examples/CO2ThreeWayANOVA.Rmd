@@ -15,6 +15,7 @@ This example is taken from an experiment listed in the R help files under `?CO2`
 
 ```{r, include=FALSE}
 library(mosaic)
+library(lmtest)
 ```
 
 ```{r, results='asis'}

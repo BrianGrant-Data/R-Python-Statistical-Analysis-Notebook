@@ -93,11 +93,11 @@ datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
 
 We'll be testing to see if either of the two treatment groups, the ones that used the "Meshed" or "Before" methods, had a greater positive affect on memory recall than control group, the one that used the "SFR" method. 
 
-This will require two indendent samples tests: Meshed compared to SFR and Before compared to SFR. Before we can determine what type of test we can do, we'll need to check the normality of our data.
+This will require two independent samples tests: Meshed compared to SFR and Before compared to SFR. Before we can determine what type of test we can do, we will need to check the normality of our data.
 
 ### Describe the Data
 
-We'll create a six number summary and a Q-Q plot of each of the three samples.
+We'll create a six-number summary and a Q-Q plot of each of the three samples.
 
 ```{r Check for Normality}
 Friendly %>% 
@@ -120,11 +120,11 @@ stripchart(correct ~ condition,
            method = "stack")
 ```
 
-From these we can see that the data is not normal, none of the samples are large enough to be considered normal, and the distributions are not identically distributed. We'll have to conduct a Wilcoxon Rank Sum Test.
+From these we can see that the data is not normal, none of the samples are large enough to be considered normal, and the distributions are not identically distributed. We will have to conduct a Wilcoxon Rank Sum Test.
 
 ### Make inferences
 
-Now that we've determined what type of test we'll conduct, I'll set the official hypothesis.
+Now that we have determined what type of test we'll conduct, I'll set the official hypothesis.
 
 The null hypothesis is that the difference in the treatment and control samples' medians are equal to zero.
 
@@ -134,29 +134,33 @@ Our alpha is equal to 0.05.
 
 The Wilcoxon Rank Sum Tests are as follows:
 
-```{r Wilcoxon Rank Sum Test 1}
+```{r Wilcoxon Rank Sum Test 1, warning = FALSE, message = FALSE}
 wilcox.test(
-  Friendly$correct[Friendly$condition == "SFR"],
   Friendly$correct[Friendly$condition == "Before"],
-  mu = 0,
-  alternative = "greater",
-  conf.level = 0.95
-  
-)
-```
-
-```{r Wilcoxon Rank Sum Test 2}
-wilcox.test(
   Friendly$correct[Friendly$condition == "SFR"],
-  Friendly$correct[Friendly$condition == "Meshed"],
   mu = 0,
   alternative = "greater",
   conf.level = 0.95
-)
+) %>% 
+  pander()
 ```
 
-Since the p-value for the "Before" method hypotheses is _, we have _sufficient evidence to reject the null hypothesis for the "Before" method. 
+```{r Wilcoxon Rank Sum Test 2, warning = FALSE, message = FALSE}
+wilcox.test(
+  Friendly$correct[Friendly$condition == "Meshed"],
+  Friendly$correct[Friendly$condition == "SFR"],
+  mu = 0,
+  alternative = "greater",
+  conf.level = 0.95
+) %>% 
+  pander()
+```
 
-Since the p-value for the "Meshed" method hypotheses is _, we have _sufficient evidence to reject the null hypothesis for the "Meshed" method.
+Since the p-value for the "Before" method hypothesis is 0.02278, we have sufficient evidence to reject the null hypothesis for the "Before" method. 
+
+Since the p-value for the "Meshed" method hypothesis is 0.05075, we have insufficient evidence to reject the null hypothesis for the "Meshed" method.
 
 ### Conclusion
+
+According to the Wilcoxon test, we can accept that the "Before" method is more effective than the "SFR" method, but we can't do that for the "Meshed" method. According to the original study, educators can conclude that the "Before" method is the better option of the three methods.
+

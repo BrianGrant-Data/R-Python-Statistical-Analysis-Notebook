@@ -35,23 +35,28 @@ Our data frame will be the U.S. Census at School Questionnaire since it is a cen
 
 <!-- 2. Establish why your question is interesting and rephrase the question using a statistical "null" and "alternative" hypothesis. (Hint, see the "Math 325 Notebook -> R Help -> R-Markdown Hints" page of your textbook for instructions on how to write mathematical hypotheses.) --> 
 
-The null hypothesis is that the difference of the population means for time spent doing homework by high school students who do and do not play video games is equal to 0. The alternative hypothesis is that the difference in means is less than 0. Alpha will equal .05.
 
 # Analysis
-For this analysis, I'll follow the following steps: 
-- Clean the data frame
-- Separate the data frame into gamer and non-gamer groups
-- Visualize the data
-- Confirm independent samples t Test requirements are met
-- Conduct an independent samples t Test to test the hypothesis
+The null hypothesis is that the difference of the population means for time spent doing homework by high school students who do and do not play video games is equal to 0. The alternative hypothesis is that the difference in means is less than 0. Alpha will equal .05.
+
+$$
+H_0: \mu = \text{0}
+$$
+$$
+H_a: \mu < \text{0}
+$$
+$$
+\alpha = .05
+$$
+
 
 ### Clean the data frame
 <!-- 3. Clearly answer your question using statistics. Be sure to compute a p-value and provide supporting numerical and graphical summaries. -->
 First, I'll remove the entries that left the video game and/or homework sections blank. I'll also need to remove any entries that report playing video games or doing homework for more than 168 hours a week since there are only 168 hours in a week.
 
-I won't remove the other sections just yet. I can't determine which entries were lies and which entries are actual errors based off of the responses recorded for elsewhere on the survey, however that information might help with detecting compromised entries in the video game and homework sections later on in the analysis.
+I won't remove the other sections just yet. Though, I can't determine which entries were lies and which entries are actual errors based off of the responses recorded elsewhere on the survey, that information might help with detecting compromised entries in the video game and homework sections later on in the analysis.
 
-```{r filter}
+```{r filter NAs}
 # filter out _ NA's, _ impossible values, and _1? entry that seemed to have been an error
 # relevantdata0 <- HSS %>% 
 #   select(Gender,
@@ -71,30 +76,43 @@ relevantdata <- HSS %>%
 
 I'll also check for any outliers that may have also been errors. 
 
-```{r Outliers}
+```{r Check Outliers}
 outliers_games <- relevantdata %>% 
+  select(c(Video_Games_Hours, Doing_Homework_Hours)) %>% 
   filter(Video_Games_Hours >= 
            (sd(Video_Games_Hours)*3 + mean(Video_Games_Hours))
          ) %>% 
   arrange(Video_Games_Hours,
-          Doing_Homework_Hours)
+          Doing_Homework_Hours) %>% 
+  droplevels()
  
 outliers_hw <- relevantdata %>% 
+  select(c(Video_Games_Hours, Doing_Homework_Hours)) %>% 
   filter(Doing_Homework_Hours >= 
            (sd(Doing_Homework_Hours)*3 + mean(Doing_Homework_Hours))
          ) %>% 
   arrange(Doing_Homework_Hours,
-          Video_Games_Hours)
+          Video_Games_Hours) %>% 
+  droplevels()
+```
 
+These are the outliers in the hours spent playing video games.
+```{r View Outliers 1}
 #view(outliers_games %>% select(Video_Games_Hours))
+datatable(outliers_games)
+```
+
+These are the outliers in the hours spent doing homework.
+```{r View Outliers 2}
 #view(outliers_hw %>% select(Doing_Homework_Hours))
+datatable(outliers_hw)
+
 
 ```
 
-There is an entry were the person put that they do homework and video games for 200 hours a week total. This person also put 100 on almost all of the questions at that point of the form so I'll remove that entry from our data frame. I don't think I can prove that any other entries were compromised.
+There is an entry were the person put that the time they spend each week on homework and video games is 200 hours total. This person also put 100 on almost all of the questions at that point of the form so I'll remove that entry from our data frame. 
 
-Now that the errors have been removed, I'll remove the columns we'll not be working with and we'll start with the analysis.
-
+There are no other errors I can detect.
 
 ```{r Last filter}
 relevantdata2 <-relevantdata %>% 
@@ -107,7 +125,7 @@ relevantdata2 <-relevantdata %>%
 
 ### Group the data frame
 
-Now we simply separate the data frame based on if they played video games or not.
+Now we simply separate the data frame based on if they played video games or not. Anyone who reported playing video games for zero hours per week will be classified as a non-gamer, and anyone who reported playing video games for more than zero hours per week will be classified as a gamer.
 <!-- Note: you can create "groups" from the data in many ways. For example, suppose you wanted to create a variable that grouped people according to whether they thought recycling was more important than conserving water. You could do this by: -->
 
 
@@ -123,43 +141,18 @@ nongamers <- relevantdata2 %>%
   filter(Video_Games_Hours == 0)
 gamers <- relevantdata2 %>%
   filter(Video_Games_Hours != 0)
+
+relevantdata2 %>% 
+  group_by(gamer_status) %>% 
+  summarise(n = n()) %>% 
+  pander()
 ```
 
 This gives us 254 gamers and 182 non-gamers to work with.
 
-```{r Groupings I can not use}
-
-# samples separated at the third standard deviation
-# top5thpercent <- relevantdata2 %>% 
-#   filter(Video_Games_Hours >= quantile(Video_Games_Hours, .95))
-# percent95 <- relevantdata2 %>% 
-#   filter(Video_Games_Hours < quantile(Video_Games_Hours, .95))
-
-# samples separated at the third standard deviation
-# sd3.a <- relevantdata2 %>% 
-#   filter(Video_Games_Hours >= 
-#             (sd(Video_Games_Hours)*3 + mean(Video_Games_Hours)
-#              )
-#          )
-# sd3.b <- relevantdata2 %>% 
-#   filter(Video_Games_Hours < 
-#             (sd(Video_Games_Hours)*3 + mean(Video_Games_Hours)
-#              )
-#          )
-
-# lowhalf <- relevantdata2 %>% 
-#   filter(Video_Games_Hours <= median(Video_Games_Hours))
-# uphalf <- relevantdata2 %>% 
-#   filter(Video_Games_Hours > median(Video_Games_Hours))
-
-# top25thpercent <- relevantdata2 %>% 
-#   filter(Video_Games_Hours >= quantile(Video_Games_Hours, .75))
-# percent75 <- relevantdata2 %>% 
-#   filter(Video_Games_Hours < quantile(Video_Games_Hours, .75))
-```
 ### Visualize the data
 
-The time spent by both groups seems to have similar distributions.
+The distribution is visualized as follows:
 
 ```{r Numeric & Graphical Summaries}
 boxplot(Doing_Homework_Hours ~ gamer_status, 
@@ -170,7 +163,8 @@ boxplot(Doing_Homework_Hours ~ gamer_status,
         col = "skyblue"
         )
 
-gamers %>% 
+relevantdata2 %>% 
+  group_by(gamer_status) %>% 
   summarise(Min = min(Doing_Homework_Hours),
             Q1 = quantile(Doing_Homework_Hours, .25),
             Mean = mean(Doing_Homework_Hours),
@@ -179,27 +173,18 @@ gamers %>%
             Max = max(Doing_Homework_Hours),
             SD = sd(Doing_Homework_Hours),
             n = n()
-  )
-
-nongamers %>% 
-  summarise(Min = min(Doing_Homework_Hours),
-            Q1 = quantile(Doing_Homework_Hours, .25),
-            Mean = mean(Doing_Homework_Hours),
-            Med = median(Doing_Homework_Hours),
-            Q3 = quantile(Doing_Homework_Hours, .75),
-            Max = max(Doing_Homework_Hours),
-            SD = sd(Doing_Homework_Hours),
-            n = n()
-  )
-
+  ) %>% 
+  pander()
 ```
+The time spent by both groups seems to have similar distributions.
+
 
 
 ### Independent Samples t Test requirements
 
-Though the data is highly skewed, the requirements for an Independent Samples t Test requirement have been met. Though this data frame was gathered via a high school survey, the data frame is identified as a census and so I must assume that both samples are representative of the population. Remember, the population is the high school seniors at the U.S. schools participating in the Census at School Program. 
+Though this data frame was gathered via a high school survey, the data frame is identified as a census and so I must assume that both samples are representative of the population. Remember, the population is the high school seniors at the U.S. schools participating in the Census at School Program. 
 
-Since the samples size are sufficiently large (greater than 30), the sampling distribution of the difference of the sample means (x¯1−x¯2) can be assumed to be normal.
+Now we must determine if the data has a normal distribution.
 
 ```{r QQ Plot}
 qqPlot(Doing_Homework_Hours ~ gamer_status, 
@@ -208,8 +193,16 @@ qqPlot(Doing_Homework_Hours ~ gamer_status,
        )
 ```
 
+We can see that the data does not fall as normal within a Q-Q plot.
 
-### Independent Samples t Test
+However, since the samples size are sufficiently large (greater than 30), the sampling distribution of the difference of the sample means (x¯1−x¯2) can be assumed to be normal.
+
+Thus, though the data is highly skewed, the requirements for an Independent Samples t Test requirement have been met and a t-test can be performed.
+
+
+### Independent Samples t-Test
+
+The independent two samples t-test yields the following information:
 
 ```{r}
 t.test(gamers$Doing_Homework_Hours, 
@@ -221,9 +214,11 @@ t.test(gamers$Doing_Homework_Hours,
   pander()
 ```
 
+Since our p-value is 0.0001113, and our alpha is .05, there is sufficient evidence to reject the null hypothesis.  
+
 # Interpretation
 
-Since our p-value is 0.0001113, and our alpha is .05, there is sufficient evidence to reject the null hypothesis. Therefore, we accept the alternative hypothesis that High School Students who play video games spend less time doing homework than the students who don't play video games.
+We accept the alternative hypothesis that High School Students who play video games spend less time doing homework than the students who don't play video games.
 
 # Conclusion
 

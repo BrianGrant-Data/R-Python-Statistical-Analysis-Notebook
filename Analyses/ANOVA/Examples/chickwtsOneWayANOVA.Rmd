@@ -3,6 +3,9 @@ title: "Chick Weights -- One-way ANOVA"
 output: 
   html_document:
     theme: cerulean
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 
 <br />
@@ -52,7 +55,7 @@ xyplot(weight ~ feed, data=chickwts, main="", type=c("p","a"))
 The detailed values depicted in the plot above are summarized in the table below.
 
 ```{r, results='asis'}
-knitr::kable(favstats(weight ~ feed, data=chickwts)[,c(".group","mean","sd","n")])
+knitr::kable(favstats(weight ~ feed, data=chickwts)[,c("feed","mean","sd","n")])
 ```
 
 #### Interpretation

@@ -4,6 +4,7 @@ output:
   html_document:
     theme: cerulean
     css: styles.css
+    code_folding: hide
 header-includes: 
   - \usepackage{amsmath}
 ---
@@ -14,7 +15,6 @@ header-includes:
     e.style.display = (e.style.display == 'block') ? 'none' : 'block';
  }
 </script>
-
 
 ----
 
@@ -49,10 +49,10 @@ An ANOVA is only appropriate when all of the following are satisfied.
 For a One-way ANOVA
 
 $$
-  H_0: \alpha_1 = \alpha_2 = \ldots = 0
+  H_0: \mu_1 = \mu_2 = \ldots = \mu_m = \mu 
 $$
 $$
-  H_a: \alpha_i \neq 0 \ \text{for at least one} \ i
+  H_a: \mu_i \neq \mu \quad \text{for at least one}\ i\in\{1,\ldots,m\}.
 $$
 
 

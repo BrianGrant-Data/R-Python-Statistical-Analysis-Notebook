@@ -1,0 +1,190 @@
+---
+title: "W5_class_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Day 1 ANOVA One way
+
+## Example 1 - ANOVA for KidsFeet
+
+```{r}
+library(mosaic)
+View(KidsFeet)
+```
+
+Do an ANOVA for the KidsFeet dataframe
+```{r}
+aovOut <- aov(
+  length ~ as.factor(birthmonth),
+  data = KidsFeet
+  )
+
+summary(aovOut)
+```
+### Side note - as.factor()
+
+as.factor() changes a column type. In this case, we changed birthmonth so that it's not a numeric type and is a factor type instead. This was necessary because the ANOVA attempted originally couldn't calculate the degrees of freedom properly since it thought the values were quantitative when they were really qualitative.
+
+```{r}
+class(KidsFeet$birthmonth)
+```
+You can use class on any
+
+### Side note - droplevels()
+I've worked with this before, but we talked about how when you filter data it only HIDES what you didn't want to see, but doesn't delete it. You need to use droplevels() to actually get rid of the things you filtered out.
+
+## Requirements
+
+1 - you need th data to be representative of the population.
+
+2 - You neet to confirm that the data has a constant variance.
+```{r ERROR?}
+par(mfrow=c(1,2))
+plot(chick.aov, which =1, pch=16)
+
+```
+
+3 - To test for normality you will need to Q-Q plot the residuals
+
+```{r}
+qqPlot(chick.aov$residuals, id=FALSE)
+```
+
+
+
+
+
+## Getting a F value
+
+F is the test statistic, or F value for ANOVA.
+
+Brother Amidan drew something to help us understand how to... idk...
+
+<!-- F = between group variance / within group variance -->
+
+## ONe-way anova mathematival model
+
+
+i = represents how many groups you have
+
+k = represents how many items are in each group.
+
+# Day 2 ANOVA Two way
+
+```{r}
+library(car)
+library(tidyverse)
+library(mosaic)
+```
+
+```{r}
+View(Blackmore)
+?Blackmore
+```
+
+```{r}
+
+Blackmore$ageGroup <- cut(Blackmore$age, c(7,10,12,14,18), labels=c("Youth","Pre-Teen","Early-Teen","Late-Teen"))
+
+ 
+
+#OR
+
+ 
+
+library(tidyverse) #way to do it
+
+Blackmore <- Blackmore %>%
+   mutate(ageGroup = cut(age, c(7,10,12,14,18), labels=c("Youth","Pre-Teen", "Early-Teen", "Late-Teen"), ordered_result = TRUE))
+```
+```{r}
+table(Blackmore$ageGroup)
+View(Blackmore)
+```
+
+Perform a two-way ANOVA in R using the group and ageGroup factors, including their interaction term, to understand how average exercise differs between the various levels of each factor.
+
+To check your work, enter the degrees of freedom (Df) for each of the following:
+
+```{r}
+myaov <- aov(
+  exercise ~ group+ageGroup+group:ageGroup,
+  data = Blackmore)
+
+summary(myaov)
+```
+
+```{r}
+
+```
+
+# Skills Quiz - ANOVA
+
+Run the code "View(warpbreaks)" in R. Use that data set to identify each of the following as either a "factor" or a "level" of a factor.
+
+```{r}
+View(warpbreaks)
+```
+
+## Question 3
+
+These questions test your ability to read ANOVA output from R.
+
+Run the following commands in R using the Friendly data set (Recalling Words).
+
+```{r}
+
+library(car) 
+friendly.aov <- aov(
+  correct ~ condition,
+  data=Friendly)
+
+summary(friendly.aov)
+
+par(mfrow=c(1,2))
+
+plot(friendly.aov, which=1:2)
+
+```
+
+
+```{r}
+library(lattice)
+xyplot(correct ~ condition, data=Friendly, jitter.x=TRUE, type=c("p","a"))
+```
+
+## Question 4
+
+```{r}
+?ToothGrowth
+View(ToothGrowth)
+```
+
+```{r}
+as.factor(ToothGrowth$dose)
+
+ToothGrowth.aov <- aov(
+  len ~ supp + as.factor(dose)+supp:as.factor(dose),
+  data = ToothGrowth
+)
+
+summary(ToothGrowth.aov)
+
+par()
+```
+
+```{r}
+xyplot( len ~ supp, data=ToothGrowth, type=c("p","a")) 
+```
+```{r}
+xyplot( len ~ dose, data=ToothGrowth, type=c("p","a"))
+```
+```{r}
+xyplot( len ~ supp, data=ToothGrowth, groups=dose, type=c("p","a"), auto.key=TRUE)
+```
+

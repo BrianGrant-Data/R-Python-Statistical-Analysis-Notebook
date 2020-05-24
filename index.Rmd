@@ -38,7 +38,8 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 [Customization Help](RMarkdownHints.html)
 
 
-
+you'll need an xyplot for two way ANOVAs: that's what was used in the book.
+See: https://www.rdocumentation.org/packages/SetMethods/versions/1.0/topics/xy.plot
 
 
 ### W01
@@ -174,6 +175,7 @@ Add your own notes about graphics to use for this type of data here.
 
 Add your own notes about appropriate inferential procedures for this type of data here.
 
+(HighSchoolSeniors)["analyses/t Tests/HighScoolSeniors.Rmd"]
 
 
 
