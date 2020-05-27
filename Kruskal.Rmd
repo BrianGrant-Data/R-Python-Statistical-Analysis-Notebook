@@ -38,9 +38,11 @@ Allows for deciding if several samples come from the same population or if at le
 
 It is assumed that the various populations are of approximately the same form, but are shifted or translated. 
 
-Can also be used when data is ordered (ordinal) but does not have an exact measurement. 
+Can also be used when data is ordered (ordinal) or ranked but does not have an exact measurement. 
 
 Best used when the distribution of the data is not normal. ANOVA is appropriate when the data is normal. 
+
+(**Can't be used** if there are ties, at least not without additional training that we will not undergo in MATH 325)
 
 **Hypotheses**
 

@@ -1,0 +1,88 @@
+---
+title: "W6_class_notes"
+output: html_document
+---
+
+```{r Prep}
+library(tidyverse)
+library(mosaic)
+library(pander)
+```
+
+# Announcements
+In 3 weeks (DO IT NOW)
+- data set
+- quesitn about the data set
+
+best: find a small business that would like some help.
+(KAI'S SHOE STORE? GAME PULSE? IMDB? SLEEP DATA? )
+
+# Kruskal-Wallis Test
+
+## Why
+An ANOVA test requires the dataset with more than 2 factors to have a normal distribution. Kruskal-Wallis Tests can test more than 2 factors without needing a normal distribution.
+
+Can also be used when data is ordered (ordinal) but does not have an exact measurement.
+
+## What
+
+## How
+You really just do three things:
+- run a kruskal
+- make a boxplot
+- show the datatable
+
+### Example pigweights
+
+```{r Dataset}
+pigweights <- data.frame(Subject=1:56,
+                   Litter=factor(rep(1:8, c(10,8,10,8,6,4,6,4))),
+                   Weight=c(2.0,2.8,3.3,3.2,4.4,3.6,1.9,3.3,2.8,1.1,
+                            3.5,2.8,3.2,3.5,2.3,2.4,2.0,1.6,
+                            3.3,3.6,2.6,3.1,3.2,3.3,2.9,3.4,3.2,3.2,
+                            3.2,3.3,3.2,2.9,3.3,2.5,2.6,2.8,
+                            2.6,2.6,2.9,2.0,2.0,2.1,
+                            3.1,2.9,3.1,2.5,
+                            2.6,2.2,2.2,2.5,1.2,1.2,
+                            2.5,2.4,3.0,1.4))
+knitr::kable(pigweights, align='l')
+```
+
+```{r Kruskal}
+kruskal.test(Weight ~ Litter, data=pigweights)
+```
+```{r Boxplot}
+boxplot(Weight ~ Litter, data=pigweights, 
+        col="lightgray", xlab="Litter Number", main="Weights of Piglets for 8 Different Litters from One Mother", ylab="Piglet Weight")
+stripchart(Weight ~ Litter, data=pigweights, 
+           vertical=TRUE, pch=16, add=TRUE, col="skyblue3")
+
+```
+```{r Datatable}
+pander(favstats(Weight ~ Litter, data=pigweights)[,-10])
+```
+
+### Example Friendly
+
+```{r Dataset}
+library(car)
+?Friendly
+```
+```{r Kruskal}
+kruskal.test(
+  correct ~ condition,
+  data = Friendly
+  )
+```
+We have insufficient evidence to reject the null.
+
+```{r Boxplot}
+boxplot(correct ~ condition,
+  data = Friendly)
+```
+```{r Datatable}
+
+```
+
+
+

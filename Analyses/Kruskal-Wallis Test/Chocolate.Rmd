@@ -6,7 +6,7 @@ output:
     code_folding: hide
 ---
 
-```{r, include=FALSE}
+```{r Prep, include=FALSE}
 # Be sure to use your file menus at the top of R-Studio to:
 # "Session -> Set working directory -> To source file location"
 # Then play this chunk and the next one to get the data into R.
@@ -15,10 +15,10 @@ library(car)
 library(DT)
 library(pander)
 library(readr)
-choc <- read_csv("../Data/Chocolate.csv")
+choc <- read_csv("../../Data/Chocolate.csv")
 ```
 
-```{r, eval=FALSE}
+```{r Dataset, eval=FALSE}
 View(choc)
 ```
 
@@ -34,7 +34,7 @@ View(choc)
 
   * Orig: The specific geo-region of origin for the bar.
 
-  * Review: Date of publication of the review.
+  * Review: Year of publication of the review.
 
   * Cocoa: Cocoa percentage (darkness) of the chocolate bar being reviewed.
 

@@ -125,6 +125,9 @@ Late <- reshape(late,
                 direction = "long")
 pander(Late)
 ```
+```{r}
+Late$Period <- cut(Late$Week, c(0, 4, 16, 20), labels = c("Pre-Fine", "Fine", "Postfine")) 
+```
 
 
  
@@ -137,7 +140,7 @@ pander(Late)
 
 ### Hypothesis
 
-There are three recorded factors that could possibly effect how many parents are late: Treatment, Center, Week, and Status. The Treatment factor has two levels, *Control* and *Fine*. The  Center factor has 12 levels, one for each private daycare in the study. The Week factor has 20 levels. 
+There are three recorded factors that could possibly effect how many parents are late: Treatment, Center, Week, and Period The Treatment factor has two levels, *Control* and *Fine*. The  Center factor has 12 levels, one for each private daycare in the study. The Week factor has 20 levels. 
 
 <!-- For a three-way ANOVA there are 7 sets of hypotheses: -->
 
@@ -184,9 +187,9 @@ $$
 
 I will conduct an ANOVA with the following code:
 
-```{r}
+```{r ANOVA}
 Late.aov <- aov(
-  No.ofLateChildren ~     + Treatment + as.factor(Center) + as.factor(Week),
+  No.ofLateChildren ~ Treatment + Period + Treatment:Period,
   data = Late
   )
 
@@ -236,18 +239,18 @@ Now I will find out which combination of factors yields an average amount of tar
 
 I'll expand the ANOVA.
 
-```{r Expanded ANOVA}
-Lateint.aov <- aov(
-  No.ofLateChildren ~ 
-    as.factor(Treatment) * 
-    as.factor(Center) *
-    as.factor(Week),
-  data = Late
-  )
+<!-- ```{r Expanded ANOVA} -->
+<!-- Lateint.aov <- aov( -->
+<!--   No.ofLateChildren ~  -->
+<!--     as.factor(Treatment) *  -->
+<!--     as.factor(Center) * -->
+<!--     as.factor(Week), -->
+<!--   data = Late -->
+<!--   ) -->
 
-summary(Lateint.aov) %>% 
-  pander()
-```
+<!-- summary(Lateint.aov) %>%  -->
+<!--   pander() -->
+<!-- ``` -->
 
 The ANOVA can no longer show p-values. This is apparently because the ANOVA is "fully-saturated" and does not have the degrees of freedom necessary.
 
