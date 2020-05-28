@@ -38,11 +38,7 @@ late <- read.csv("../../Data/late.csv", header=TRUE)
 <!--If you want to give your critiquers some ideas about what you have questions on and would like help with, place those details here.-->
 
 **Comments to Critiquers:** 
-Does anyone know how to write the seven hypotheses required for a three-way ANOVA? In particular, how to write the seventh hypothesis where all three factors are referenced?
 
-I apologize in advance: though I put together the most cohesive ANOVA I can think of for our data set, I believe I might have misunderstood the assignment. My conclusion is simply that this assignment can't be completed with the resources we have.
-
-If you could focus your comments on clarifying what the assignment is and how to go about completing it, that would be greatly appreciated.
 
 <!--End your comments to your critiquers before this line.-->
 
@@ -82,7 +78,7 @@ A natural option [to fix the problem of parents showing up late] is to introduce
 
 The overall period of the study was 20 weeks. In the first 4 weeks we
 simply recorded the number of parents who arrived late each week. At the
-beginning of the fifth week, we introduced a fine in six of the 10 day-care centers, which had been selected randomly. The announcement of the fine was made with a note posted on the bulletin board of the day-care center. Parents tend to look at this board every day, since important announcements are posted there. The announcement specified that the fine would be NIS 10 for a delay of 10 minutes or more. The fine was per child; thus, if parents had two children in the center and they came late, they had to pay NIS 20. Payment was made to the principal of the day-care center at the end of the month. Since monthly payments are made to the owner during the year, the fines were added to those amounts. The money was paid to the owner, rather then to the teacher who was staying late (and did not get any additional money). The teachers were informed of the fine but not of the study. Registering the names of parents who came late was a common practice in any case.
+beginning of the fifth week, we introduced a fine in six of the 10 day-care centers, which had been selected randomly. The announcement of the fine was made with a note posted on the bulletin board of the day-care center. Parents tend to look at this board every day, since important announcements are posted there. The announcement specified that the fine would be NIS 10 for a delay of 10 minutes or more. The fine was per child; thus, if parents had two children in the center and they came late, they had to pay NIS 20. Payment was made to the principal of the day-care center at the end of the month. Since monthly payments are made to the owner during the year, the fines were added to those amounts. The money was paid to the owner, rather than to the teacher who was staying late (and did not get any additional money). The teachers were informed of the fine but not of the study. Registering the names of parents who came late was a common practice in any case.
 
 At the beginning of the seventeenth week, the fine was removed with no explanation. Notice of the cancellation was posted on the board. If parents asked why the fines were removed, the principals were instructed to reply that the fine had been a trial for a limited time and that the results of this trial were now being evaluated.
 
@@ -140,48 +136,42 @@ Late$Period <- cut(Late$Week, c(0, 4, 16, 20), labels = c("Pre-Fine", "Fine", "P
 
 ### Hypothesis
 
-There are three recorded factors that could possibly effect how many parents are late: Treatment, Center, Week, and Period The Treatment factor has two levels, *Control* and *Fine*. The  Center factor has 12 levels, one for each private daycare in the study. The Week factor has 20 levels. 
+There are two recorded factors that could possibly affect how many parents are late: Treatment and Period. The Treatment factor has two levels, *Control* and *Fine*. The Period factor has three levels, *Pre-Fine*, *Fine*, and *PostFine*.
 
-<!-- For a three-way ANOVA there are 7 sets of hypotheses: -->
+For a two-way ANOVA there are three sets of hypotheses, one set for each question we can ask:
 
-<!-- #### Factor A -->
-<!-- $$ -->
-<!--   H_0: \alpha_1 = \alpha_2 = \ldots = 0 -->
-<!-- $$ -->
-<!-- $$ -->
-<!--   H_a: \alpha_i \neq 0 \ \text{for at least one} \ i -->
-<!-- $$ -->
+#### Question 1: Does the Treatment factor affect the number of children picked up late?
+$$
+  H_0: \mu_{Control} = \mu_{Fine} = \ldots = 0
+$$
+$$
+  H_a: \mu_i \neq 0 \ \text{for at least one} \ i
+$$
 
-<!-- #### Factor B -->
-<!-- $$ -->
-<!--   H_0: \beta_1 = \beta_2 = \ldots = 0 -->
-<!-- $$ -->
-<!-- $$ -->
-<!--   H_a: \beta_j \neq 0 \ \text{for at least one} \ j -->
-<!-- $$ -->
+#### Question 2: Does the Period factor affect the number of children picked up late?
+$$
+  H_0: \mu_{Pre-Fine} = \mu_{Fine} = \mu_{Postfine} = \ldots = 0
+$$
+$$
+  H_a: \mu_j \neq 0 \ \text{for at least one} \ j
+$$
 
-<!-- #### Factor C -->
-<!-- $$ -->
-<!--   H_0: \gamma_1 = \gamma_2 = \ldots = 0 -->
-<!-- $$ -->
-<!-- $$ -->
-<!--   H_a: \gamma_k \neq 0 \ \text{for at least one} \ k -->
-<!-- $$ -->
-
-<!-- #### Factor AB -->
-<!-- $$ -->
-<!--   H_0: \text{The effect of} \ \alpha \ \text{is the same for all levels of} \ \beta -->
-<!-- $$ -->
-<!-- $$ -->
-<!--   H_a: \text{The effect of} \ \alpha \ \text{is different for at least one level of} \ \beta -->
-<!-- $$ -->
+#### Question 3: Does the effect of the Treatment factor change for different periods?
+$$
+  H_0: \text{The effect of} \ Treatment \ \text{is the same for all levels of} \ Period.
+$$
+$$
+  H_a: \text{The effect of} \ Treatment \ \text{is different for at least one levels of} \ Period.
+$$
 
 
 The mathematical model is as follows and will be used to conduct an ANOVA:
 
 $$
-  y_{ijkl} = \mu + \alpha_i + \beta_j + \gamma_k + \epsilon_{ijkl} \ \text{where} \ \epsilon_{ijkl}\sim N(0,\sigma)
+  Y_{ijk} = \mu + \alpha_i + \beta_j + \alpha\beta_{ij} +\epsilon_{ijk} \ 
 $$
+where $\mu$ is the grand mean, $\alpha$ is the Treatment factor with levels Fine = 1 and Control = 2, $\beta_j$ is the Period factor with levels Pre-Fine = 1, Fine = 2, and Postfine = 3,  $\alpha\beta_{ij}$ is the interaction of the two factors which has 2 x 3 = 6 levels, and $\epsilon_{ijk}\sim N(0,\sigma^2)$ is the error term.
+
 
 ### ANOVA
 
@@ -197,93 +187,57 @@ summary(Late.aov) %>%
   pander()
 ```
 
-The ANOVA returns low p-values for each of the three factors. Therefore, at least one level for each of the factors has a different average amount of tardiness then from the other levels of that factor.
+The ANOVA returns low p-values for each of the three hypotheses. Therefore, at least one level for each of the factors has a different average amount of tardiness then from the other levels of that factor.
 
-In other words, each of the factors has an affect on how many children are picked up late.
+In other words, each of the factors has an effect on how many children are picked up late.
 
-I'll show the results of the ANOVA graphicaly by plotting each factor.
+I'll show the results of the ANOVA graphically by plotting each factor.
 
 
 ```{r Plot Demonstrating Treatment}
 xyplot(
-  No.ofLateChildren ~ 
-    Treatment, 
+  No.ofLateChildren ~ Treatment, 
   data = Late, 
   main = "Plot Demonstrating Treatment", 
   jitter.x=TRUE,
   pch=16)
 ```
-```{r Plot Demonstrating Center}
+```{r Plot Demonstrating Period}
 xyplot(
-  No.ofLateChildren ~ 
-    Center, 
+  No.ofLateChildren ~ Period, 
   data = Late, 
-  main = "Plot Demonstrating Center", 
+  main = "Plot Demonstrating Period", 
   jitter.x=TRUE,
   pch=16)
 
 ```
-```{r Plot Demonstrating Week}
+```{r Plot Significance of the Interaction}
 xyplot(
-  No.ofLateChildren ~ 
-    Week, 
+  No.ofLateChildren ~ Period,
   data = Late, 
-  main = "Plot Demonstrating Week", 
-  jitter.x=TRUE,
-  pch=16)
-
+  groups = Treatment,
+  type=c("p","a"),
+  main="Significance of the Interaction",
+  auto.key=list(corner=c(1,1)))
 ```
 
-
-Now I will find out which combination of factors yields an average amount of tardiness greater than the other levels of that combination.
-
-I'll expand the ANOVA.
-
-<!-- ```{r Expanded ANOVA} -->
-<!-- Lateint.aov <- aov( -->
-<!--   No.ofLateChildren ~  -->
-<!--     as.factor(Treatment) *  -->
-<!--     as.factor(Center) * -->
-<!--     as.factor(Week), -->
-<!--   data = Late -->
-<!--   ) -->
-
-<!-- summary(Lateint.aov) %>%  -->
-<!--   pander() -->
-<!-- ``` -->
-
-The ANOVA can no longer show p-values. This is apparently because the ANOVA is "fully-saturated" and does not have the degrees of freedom necessary.
-
-I'll now check the requirements for an ANOVA and see if there were issues there.
+Here we can see that the fined group had more children be picked up late over the course of the experiment while the control group had either insignificant change or a minor decrease in the amount of children picked up late.
 
 ### Requirements Check
 
-
-The sample of data can be considered to be representative of the population since there are more than 30 observations (in this case there are 200).
-
-As shown below, the data is not normally distributed in each group, but the population variance of each group can be assumed to be the same since the *residuals* from the ANOVA show a constant variance.
+I'll now check the requirements for the two-way ANOVA.
 
 ```{r}
 par(mfrow = c(1,2))
-plot(Late.aov, which = 1:2)
+plot(Late.aov, 
+     which = 1:2,
+     col = "skyblue")
 ```
 
-Since not all three requirements have been met, an ANOVA is not an apropriate test for this analysis but since I have not been taught any methods that would be better.
+The sample of data can be considered to be representative of the population since there are more than 30 observations.
+
+As shown, the data is normally distributed in each group and the population variance of each group can be assumed to be the same since the *residuals* from the ANOVA show a constant variance.
+
 
 ## Conclusion
-
-Since this is as far as we can go, I'll accept the null hypothesis since the data doesn't meet the requirements necessary for an ANOVA.
-<!-- did the less parents arrive late when there was a fine? (weeks 5-16) -->
-<!-- or did more or less parents arrive late after the fine was removed? (1-4 vs 17-20) -->
-
-<!-- factors:  -->
-<!-- *1 tretment -->
-<!-- *2 center -->
-<!-- *3 week -->
-<!-- 4 fine "status" (pre, active, post, or null) -->
-
-<!-- This model allows me to ask the following questions: -->
-
-<!-- 1. Does the treatment factor affect the amount of parents arriving late -->
-
-<!-- 2. Does the amount of time the fine has been in affect for affect the amount of parents arriving late  -->
+For whatever reason, it looks like both the presence of a fine and the removal of the fine increased the number of children that were picked up late from the private day care. There could be many reasons for this, but we'd need more data to be sure. In the meantime, private daycares in India should refrain from fining parents that arrive late to pick up their children, as not doing so seems to increase the number of children picked up late each week from about 10 to about 20 children in maximum capacity day cares.
