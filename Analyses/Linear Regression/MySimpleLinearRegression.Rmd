@@ -8,8 +8,11 @@ output:
 
 ```{r, message=FALSE, warning=FALSE}
 # Load your libraries
+library(mosaic)
+library(DT)
 library(car)
 library(tidyverse)
+library(pander)
 
 # Load your data after saving a csv file in your Data folder.
 # You can use either 
@@ -23,7 +26,9 @@ library(tidyverse)
 ```
 
 
-<!-- Directions
+
+
+<!-- Directions`
 
 Come up with a simple linear regression of your own creation. 
 
@@ -43,4 +48,125 @@ Come up with a simple linear regression of your own creation.
 
 ## Background
 
+I am interested in movies and their ability to generate revenue. Movie making, though an art, often involves massive business ventures and can be an easy way to lose millions of dollars in investments. Needless to say, being able to predict movie success before the investment is made is a very important, and useful, skill. 
 
+One of the main, assumptions up and coming film makers make is that in order for them to make good movies they need money. I'll be testing that notion in this analysis.
+
+## Question
+
+We'll model that question as follows:
+
+$$
+  \underbrace{Y_i}_\text{Revenue} = \beta_0 + \beta_1 \underbrace{X_i}_\text{Budget} + \epsilon_i \quad \text{where} \ \epsilon_i \sim N(0, \sigma^2) 
+$$
+Our null hypothesis is that the slope of the regression model,$\beta_1$ is equal to 0, or in other words that the Budget and Revenue are not related. OUr alternative hypothesis is that the slope is not equal to 0 and, therefore, that there is some sort of relationship between the two factors.
+$$
+  H_0: \beta_1 = 0
+$$
+$$
+  H_a: \beta_1 \neq 0
+$$
+$$
+  \alpha = 0.05
+$$
+
+## Data
+For this analysis we'll use data collect by the The Movie Database. They're data has been collected for download at on Kaggle.com as well, [click here for the link.](https://www.kaggle.com/tmdb/tmdb-movie-metadata) 
+
+## {.tabset .tabset-pills .tabset-fade}
+
+### Hide Data
+
+### Show Data {.tabset}
+
+```{r, message=FALSE, warning=FALSE}
+library(readr)
+movies <- read_csv("../../Data/tmdb_5000_movies.csv")
+```
+
+  
+The Kaggle website notes that budget values that equal zero should probably be treated as if they were null. I'll filter them out of our dataframe and do the same for revenue values.
+  
+```{r, warning=FALSE}
+movies2 <- movies %>% 
+  select(
+    c(original_title, budget, revenue, release_date)
+  ) %>% 
+  filter(
+    budget != 0 & revenue != 0
+  ) %>% 
+  droplevels()
+
+```
+
+```{r, warning=FALSE}
+datatable(movies2)
+```
+
+## Analysis
+
+For this analysis, we'll conduct test for linear regression, plot a scatterplot and a regression line, check assumptions and find the confidence intervals.
+```{r Perform the Regression}
+movies2.lm <- lm(
+  revenue ~ budget,
+  data = movies2
+)
+```
+
+```{r Plot}
+plot(revenue ~ budget,
+     data = movies2,
+     pch = 21,
+     bg = "skyblue",
+     col = "gray",
+     main = "Movie Revenue and Budget"
+     )
+
+abline(
+  movies2.lm, 
+  lwd = 3,
+  col = rgb(.4, .4, .4, .2)
+)
+
+abline(v=seq(40,120,20), h=seq(40,120,20), lty=2, col=rgb(.6,.6,.6,.2))
+
+```
+```{r, message=FALSE}
+movies2 %>% 
+  summarise(cor(budget, revenue, use = "complete.obs")) %>% 
+              pander( )
+```
+
+Though the dots aren't tightly clustered, there does seem to be a consistency in the slope. The correlation coefficient is 0.705, so there does seem to be a correlation.
+
+The estimated slope is 2.96, which is significantly different from zero since $p=0 $ for this analysis. Below I have shown the complete summary of the regression.
+
+```{r Show the Regression Summary}
+pander(summary(movies2.lm))
+```
+
+The mathematical equation for the scatterplot above is
+
+$$
+  \underbrace{\hat{Y}_i}_\text{Mean Revenue} = 902541 + 2.96 \underbrace{X_i}_\text{Budget}
+$$
+Since our p-value is less than our alpha we can assume that we have sufficient evidence to reject the null hypothesis. First, however let's check the linear regression assumptions.
+
+## Appropriateness of the Regression
+
+The Regression fails two assumptions. The resideuals in the Q-Q plot are not normal, though the Residuals vs Fitted plot shows that the data is essentially linear. The Residuals vs. Order plot shows that there the error terms seem to be correlated due to the obvious megaphone shape we see there. 
+```{r Check Assumptions}
+par(mfrow = c(1,3))
+plot(movies2.lm, which = 1:2)
+plot(movies2.lm$residuals, main = "Residuals vs Order")
+```
+
+When checking the confidence intervals below, we see that the intercept varies greatly. Revenue could be anywhere between 5.3 million in the negative to 7.1 milliion in the positive.
+```{r Finding Confidence Intervals for Model Parameters}
+
+confint(movies2.lm, level = .95) %>% pander()
+```
+
+
+## Conclusion
+More research should be done into the way the data was gathered and perhaps this test should be conducted with inflation accounted for since the data points span from 1916 to 2017. As it stands, since we haven't met the assumptions for the analysis, we can't conclude that the more money you put into a movie production the more revenue you'll earn. However, further examination might yield more useful results.

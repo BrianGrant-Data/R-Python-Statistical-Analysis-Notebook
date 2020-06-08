@@ -3,11 +3,6 @@ title: "W3_Notes"
 output: html_document
 ---
 ## Setup
-```{r}
-install.packages("tidyverse")
-install.packages("plotly")
-install.packages("mosaic")
-```
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -19,11 +14,6 @@ We were working on content in MakingInference.Rmd
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r}
-install.packages("car")
 ```
 
 
@@ -67,7 +57,7 @@ qqPlot(length ~ sex, data = KidsFeet)
 t.test(length ~ sex, 
        data = KidsFeet,
        mu = 0, 
-       alternative = "two. sided",
+       alternative = "two.sided",
        conf.level = .95)
 ```
 
@@ -78,13 +68,9 @@ Use the R Instructions to perform a Paired-Samples t Test of the following hypot
 
 
 ```{r}
-View(KidsFeet)
-
-kf <- kidsfeet
+kf <- KidsFeet
 kf$width3 <- kf$width * 3
 
-t.test()
-.....
 ```
 
 

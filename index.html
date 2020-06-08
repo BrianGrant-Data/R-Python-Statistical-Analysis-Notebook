@@ -392,6 +392,7 @@ $(document).ready(function () {
 <div style="color:gray;">
 <!-- Code to change the following paragraphs to gray text -->
 <p>This page, and all pages of this notebook, are meant to be customized to become a useful <em>Guide to Statistical Analysis</em> in R for your <em>current</em> and <em>future</em> self.</p>
+<p>To see the Math 221 Textbook <a href="https://byuistats.github.io/BYUI_M221_Book/index.html">click here</a></p>
 <div style="font-size:.8em;">
 <!-- Code to shrink font-size of following paragraph -->
 <p>To begin customizing, <a href="https://github.com/saundersg/Statistics-Notebook">download</a> your own copy of the book <span style="font-size:.8em;">(if you haven’t already)</span>. Please note the <a href="https://choosealicense.com/licenses/gpl-3.0/">GNU General Public License</a> when downloading. You are free to delete this commentary in your own copy of the notebook.</p>
@@ -401,60 +402,64 @@ $(document).ready(function () {
 <!-- End gray text section -->
 <!-- End of download and copyright instructions. -->
 </div>
-<div id="class-notes" class="section level2 tabset tabset-fade">
+<div id="class-notes" class="section level2 tabset tabset tabset-fade">
 <h2>Class Notes</h2>
 <!-- This seems to designate the start and end of the notes tabs -->
 <div id="hide-notes" class="section level3">
 <h3>Hide Notes</h3>
 </div>
-<div id="general-notes" class="section level3">
-<h3>General Notes</h3>
+<div id="class-notes-1" class="section level3">
+<h3>Class Notes</h3>
 <!-- This is a great place to add general notes --------------- -->
 <p><a href="RMarkdownHints.html">Customization Help</a></p>
-<p>you’ll need an xyplot for two way ANOVAs: that’s what was used in the book. See: <a href="https://www.rdocumentation.org/packages/SetMethods/versions/1.0/topics/xy.plot" class="uri">https://www.rdocumentation.org/packages/SetMethods/versions/1.0/topics/xy.plot</a></p>
-</div>
-<div id="w01" class="section level3">
-<h3>W01</h3>
-</div>
-<div id="w02" class="section level3">
-<h3>W02</h3>
-</div>
-<div id="w03" class="section level3">
-<h3>W03</h3>
-</div>
-<div id="w04" class="section level3">
-<h3>W04</h3>
-</div>
-<div id="w05" class="section level3">
-<h3>W05</h3>
-</div>
-<div id="w06" class="section level3">
-<h3>W06</h3>
-</div>
-<div id="w07" class="section level3">
-<h3>W07</h3>
-</div>
-<div id="w08" class="section level3">
-<h3>W08</h3>
-</div>
-<div id="w09" class="section level3">
-<h3>W09</h3>
-</div>
-<div id="w10" class="section level3">
-<h3>W10</h3>
-</div>
-<div id="w11" class="section level3">
-<h3>W11</h3>
-</div>
-<div id="w12" class="section level3">
-<h3>W12</h3>
-</div>
-<div id="w13" class="section level3">
-<h3>W13</h3>
-</div>
-<div id="w14" class="section level3">
-<h3>W14</h3>
+<p><a href="00Notes/W1_class_notes.html">Week 1</a></p>
+<p><a href="00Notes/W2_class_notes.html">Week 2</a></p>
+<p><a href="00Notes/W3_class_notes.html">Week 3</a></p>
+<p><a href="00Notes/W4_class_notes.html">Week 4</a></p>
+<p><a href="00Notes/W5_class_notes.html">Week 5</a></p>
+<p><a href="00Notes/W6_class_notes.html">Week 6</a></p>
+<p><a href="00Notes/W7_class_notes.html">Week 7</a></p>
+<p><a href="00Notes/W8_class_notes.html">Week 8</a></p>
+<p><a href="00Notes/W9_class_notes.html">Week 9</a></p>
+<p><a href="00Notes/W10_class_notes.html">Week 10</a></p>
+<p><a href="00Notes/W11_class_notes.html">Week 11</a></p>
+<p><a href="00Notes/W12_class_notes.html">Week 12</a></p>
+<p><a href="00Notes/W13_class_notes.html">Week 13</a></p>
+<p><a href="00Notes/W14_class_notes.html">Week 14</a></p>
 <!-- End your notes before here. ------------------------------------- -->
+</div>
+<div id="general-notes" class="section level3">
+<h3>General Notes</h3>
+<p>Add your own notes here…</p>
+<pre class="r"><code># Add R commands you want to remember here...</code></pre>
+<pre class="r"><code># Or create other R chunks to put them in like this...</code></pre>
+<pre class="r"><code># Using ```{r, eval=FALSE} turns off the chunk, but still shows it.
+# Useful when you want to remember code, but not run it in this file.</code></pre>
+<p>Datacamp.com made me aware that ggplot can scale the x and/or y axis on a logorithmic scale. Since I don’t see it elsewhere in the notebook I’ll add it here for now.</p>
+<pre class="r"><code>install.packages(&quot;gapminder&quot;)</code></pre>
+<pre class="r"><code>library(gapminder)
+library(ggplot2)
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>#filter
+gapminder_2007 &lt;- gapminder %&gt;% 
+  filter(year == 2007)
+
+#plot
+ggplot(gapminder_2007,
+       aes(x = gdpPercap,
+           y = lifeExp,
+           color = continent)
+       ) + geom_point() + scale_x_log10()</code></pre>
+<p><img src="index_files/figure-html/scale_x_log10-1.png" width="672" /></p>
+<p>you’ll need an xyplot for two way ANOVAs: that’s what was used in the book. See: <a href="https://www.rdocumentation.org/packages/SetMethods/versions/1.0/topics/xy.plot" class="uri">https://www.rdocumentation.org/packages/SetMethods/versions/1.0/topics/xy.plot</a></p>
 </div>
 </div>
 <div id="section-1" class="section level2">
@@ -471,22 +476,33 @@ $(document).ready(function () {
 </div>
 <p>Y is a single quantitative variable of interest. This would be like “heights” of BYU-Idaho students.</span></p>
 </div>
-<div id="section-3" class="section level3 tabset tabset-pills">
+<div id="section-3" class="section level3 tabset tabset tabset-pills">
 <h3></h3>
 <div id="graphics" class="section level4">
 <h4>Graphics</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about graphics to use for this type of data here.</p>
 <p><a href="GraphicalSummaries.html#histogram"> <img class="myhover" src="Images/histogram.png" alt="Histogram" title="Histogram"> </a> <a href="GraphicalSummaries.html#dot-plots"> <img class="myhover" src="Images/dotplotsingle.png" alt="Dot Plot" title="Dot Plot"> </a> <a href="GraphicalSummaries.html#boxplots"> <img class="myhover" src="Images/boxplotsingle.png" alt="Boxplot" title="Boxplot"> </a></p>
 <!--- End your notes before here.  ------------------>
+<p>o</p>
 </div>
 </div>
 <div id="tests" class="section level4">
 <h4>Tests</h4>
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:black;">
 <!-- Add your customizations in the area below: -->
-<p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
+<p><strong>Tests</strong> <a href="tTests.html">One Sample t Test</a> <a href="WilcoxonTests.html">Signed-Rank Wilcoxon Test</a></p>
+<p><strong>Graphics Summaries</strong> <a href="GraphicalSummaires.html">Histogram, Boxplot, or Dotplot</a></p>
+<p><strong>Numeric Summaries</strong> <a href="NumericalSummaries.html">Mean, median, five-number summary, standard deviation</a></p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
+<div id="tips" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
@@ -505,7 +521,7 @@ $(document).ready(function () {
 <p><img src="Images/QuantYQualXg2.png" width=59px;></p>
 </div>
 <p>Y is a single quantitative variable of interest. This would be like “heights” of BYU-Idaho students. X is a qualitative (categorical) variable of interest like “gender” that has just two groups “A” and “B”. So this logo represents situtations where we would want to compare heights of male (group A) and female (group B) students.</p>
-<div id="section-5" class="section level3 tabset tabset-pills">
+<div id="section-5" class="section level3 tabset tabset tabset-pills">
 <h3></h3>
 <div id="graphics-1" class="section level4">
 <h4>Graphics</h4>
@@ -525,6 +541,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-1" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-6" class="section level2">
@@ -536,7 +560,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/QuantYQualXg3plus.png" width=59px;> <span class="tooltipimagetext">Y is a single quantitative variable of interest, like “heights” of BYU-Idaho students. X is a categorical (qualitative) variable like which Math 221 you took, 221A, 221B, or 221C. In other words, X has three or more groups. So “Classrank” could be X, with groups “Freshman”, “Sophomore”, “Junior”, and “Senior”.</span></p>
 </div>
-<div id="quantitative-y-categorical-x-3-groups" class="section level3 tabset tabset-pills">
+<div id="quantitative-y-categorical-x-3-groups" class="section level3 tabset tabset tabset-pills">
 <h3>Quantitative Y | Categorical X (3+ Groups)</h3>
 <div id="graphics-2" class="section level4">
 <h4>Graphics</h4>
@@ -555,6 +579,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-2" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-7" class="section level2">
@@ -567,7 +599,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/QuantYQuantX.png" width=59px;> <span class="tooltipimagetext">Y is a single quantitative variable of interest, like “height”. X is another single quantitative variable of interest, like “shoe-size”. This would imply we are using “shoe-size” (X) to explain “height” (Y).</span></p>
 </div>
-<div id="quantitative-y-quantitative-x" class="section level3 tabset tabset-pills">
+<div id="quantitative-y-quantitative-x" class="section level3 tabset tabset tabset-pills">
 <h3>Quantitative Y | Quantitative X</h3>
 <div id="graphics-3" class="section level4">
 <h4>Graphics</h4>
@@ -586,6 +618,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-3" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-8" class="section level2">
@@ -597,7 +637,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/QuantYMultX.png" width=100px;> <span class="tooltipimagetext">Y is a single quantitative variable of interest, like height. While we could use an X1 of “shoe-size” to explain height, we might also want to use a second x-variable, X2, like “gender” to help explain height. Further x-variables could also be used.</span></p>
 </div>
-<div id="quantitative-y-multiple-x" class="section level3 tabset tabset-pills">
+<div id="quantitative-y-multiple-x" class="section level3 tabset tabset tabset-pills">
 <h3>Quantitative Y | Multiple X</h3>
 <div id="graphics-4" class="section level4">
 <h4>Graphics</h4>
@@ -616,6 +656,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-4" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-9" class="section level2">
@@ -627,7 +675,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/BinomYQuantX.png" width=59px;> <span class="tooltipimagetext">Y is a single categorical (qualitative) variable of interest where 1 (success) or 0 (failure) are the only possible values for Y. This would be like “getting an A in Math 325” where 1 means you got an A and 0 means you didn’t. We might use an explanatory variable X of “height” to see if taller students are more likely to get an A in Math 325 than shorter students. (They aren’t, if you were wondering.)</span></p>
 </div>
-<div id="binomial-y-quantitative-x" class="section level3 tabset tabset-pills">
+<div id="binomial-y-quantitative-x" class="section level3 tabset tabset tabset-pills">
 <h3>Binomial Y | Quantitative X</h3>
 <div id="graphics-5" class="section level4">
 <h4>Graphics</h4>
@@ -646,6 +694,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-5" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-10" class="section level2">
@@ -657,7 +713,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/BinomYMultX.png" width=100px;> <span class="tooltipimagetext">Y is a single categorical (qualitative) variable of interest where 1 (success) or 0 (failure) are the only possible values for Y. This would be like “getting an A in Math 325” where 1 means you got an A and 0 means you didn’t. We might use an explanatory variable X1 of “height” and a second explanatory variable X2 of “gender” to try to predict whether or not a student will get an A in Math 325.</span></p>
 </div>
-<div id="binomial-y-multiple-x" class="section level3 tabset tabset-pills">
+<div id="binomial-y-multiple-x" class="section level3 tabset tabset tabset-pills">
 <h3>Binomial Y | Multiple X</h3>
 <div id="graphics-6" class="section level4">
 <h4>Graphics</h4>
@@ -676,6 +732,14 @@ $(document).ready(function () {
 <!--- End of Add content area.  ------------------>
 </div>
 </div>
+<div id="tips-6" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
 </div>
 </div>
 <div id="section-11" class="section level2">
@@ -687,7 +751,7 @@ $(document).ready(function () {
 <div class="tooltipimage" style="float:left;width:125px;" align="center">
 <p><img src="Images/QualYQualX.png" width=59px;> <span class="tooltipimagetext">Y is a single categorical variable of interest, like gender. X is another categorical variable of interest, like “hair color”. This type of data would help us understand if men or women are more likely to have certain hair colors than the other gender.</span></p>
 </div>
-<div id="caterogical-y-categorical-x" class="section level3 tabset tabset-pills">
+<div id="caterogical-y-categorical-x" class="section level3 tabset tabset tabset-pills">
 <h3>Caterogical Y | Categorical X</h3>
 <div id="graphics-7" class="section level4">
 <h4>Graphics</h4>
@@ -703,6 +767,14 @@ $(document).ready(function () {
 <div style="padding-left:125px;color:lightgray;">
 <!-- Add your customizations in the area below: -->
 <p>Add your own notes about appropriate inferential procedures for this type of data here.</p>
+<!--- End of Add content area.  ------------------>
+</div>
+</div>
+<div id="tips-7" class="section level4">
+<h4>Tips</h4>
+<div style="padding-left:125px;color:gray;">
+<!-- Add your customizations in the area below: -->
+<p>Include a brief note or comment instructing your future self with hints and tips on what to do to correctly analyze data.</p>
 <!--- End of Add content area.  ------------------>
 </div>
 </div>

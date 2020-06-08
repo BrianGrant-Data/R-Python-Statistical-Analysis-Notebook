@@ -57,6 +57,8 @@ Simple linear regression is a good analysis technique when the data consists of 
 ### Overview {.tabset}
 
 <div style="padding-left:125px;">
+**Fun Tool**
+[simple linear regression model](https://phet.colorado.edu/sims/html/least-squares-regression/latest/least-squares-regression_en.html)
 
 **Mathematical Model**
 
@@ -3742,7 +3744,7 @@ Note that the default of the `loess` function in R is to use quadratic regressio
 
 <div style="float:left;width:125px;" align=center>
 <img src="./Images/QuantYMultX.png" width=108px;>
-</div>
+</div>o
 
 Multiple regression allows for more than one explanatory variable to be included in the modeling of the expected value of the quantitative response variable $Y_i$. 
 

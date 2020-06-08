@@ -3,7 +3,7 @@ title: "W6_class_notes"
 output: html_document
 ---
 
-```{r Prep}
+```{r Prep, include=FALSE}
 library(tidyverse)
 library(mosaic)
 library(pander)
@@ -34,7 +34,7 @@ You really just do three things:
 
 ### Example pigweights
 
-```{r Dataset}
+```{r Pigweights Dataset}
 pigweights <- data.frame(Subject=1:56,
                    Litter=factor(rep(1:8, c(10,8,10,8,6,4,6,4))),
                    Weight=c(2.0,2.8,3.3,3.2,4.4,3.6,1.9,3.3,2.8,1.1,
@@ -48,27 +48,27 @@ pigweights <- data.frame(Subject=1:56,
 knitr::kable(pigweights, align='l')
 ```
 
-```{r Kruskal}
+```{r Kruskal 1}
 kruskal.test(Weight ~ Litter, data=pigweights)
 ```
-```{r Boxplot}
+```{r Boxplot 1}
 boxplot(Weight ~ Litter, data=pigweights, 
         col="lightgray", xlab="Litter Number", main="Weights of Piglets for 8 Different Litters from One Mother", ylab="Piglet Weight")
 stripchart(Weight ~ Litter, data=pigweights, 
            vertical=TRUE, pch=16, add=TRUE, col="skyblue3")
 
 ```
-```{r Datatable}
+```{r Datatable 1}
 pander(favstats(Weight ~ Litter, data=pigweights)[,-10])
 ```
 
 ### Example Friendly
 
-```{r Dataset}
+```{r Friendly Dataset, include=FALSE}
 library(car)
 ?Friendly
 ```
-```{r Kruskal}
+```{r Kruskal 2}
 kruskal.test(
   correct ~ condition,
   data = Friendly
@@ -76,13 +76,70 @@ kruskal.test(
 ```
 We have insufficient evidence to reject the null.
 
-```{r Boxplot}
+```{r Boxplot 2}
 boxplot(correct ~ condition,
   data = Friendly)
 ```
-```{r Datatable}
+```{r Datatable 2}
 
 ```
 
 
+
+
+# Skills Quiz
+## Question 1
+
+```{r set up, include=FALSE}
+library(mosaic)
+
+table(SaratogaHouses$fuel)
+```
+
+```{r, include=FALSE}
+?SaratogaHouses
+
+View(SaratogaHouses)
+```
+
+Say a homeowner in Saratoga County, New York is curious about whether upgrading their home from an oil heating fuel system to either a gas or electric fuel system would increase the resale value of their home. Use the SaratogaHouses dataset in R and a Kruskal-Wallis Test to answer the question, "which heating system results in the hightest distribution of home resale values (price)?"
+
+$H_0$:  The null hypothesis for this study is that the prices of homes with either gas, oil, or electric heating fuel systems all come from the same distribution. 
+
+$H_a$: The alternative hypothesis is that at least one type of fuel system results in a different distribution of prices of homes.
+
+### Kruskal-Wallis Test 
+Find test statistic, degrees of freedom, p-value, and highest median price of house for an individual fuel system.
+
+```{r}
+kruskal.test(
+  price ~ fuel,
+  data = SaratogaHouses
+  )
+
+boxplot(price ~ fuel, data=SaratogaHouses)
+
+pander(
+  favstats(
+    price ~ fuel,
+    data = SaratogaHouses
+  )
+  )
+```
+
+
+Make a conclusion
+
+Reject the null. The highest median is for the gas fuel system.
+
+## Question 2
+Study the wages and pigweights examples for the Kruskal-Wallis Test before completing the following questions.
+
+Copy and paste in the chi-squared results from those studies into the quiz.
+
+## Question 3
+Review the Kruskal-Wallis Test notes
+
+## Question 4
+Remember that customizing your table of contents is 5% of your grade. Work on it for this question and email your teacher a screen shot of what you did.
 

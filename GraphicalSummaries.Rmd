@@ -43,6 +43,22 @@ There are many ways to display data. The fundamental idea is that the graphical 
 
 ----
 
+
+
+## Notes {.tabset .tabset-fade}
+<!-- This seems to designate the start and end of the notes tabs -->
+### Hide Notes
+
+### See Notes
+<!-- This is a great place to add general notes --------------- -->
+**XY Plots**
+
+See [rdocumentation](https://www.rdocumentation.org/packages/lattice/versions/0.10-10/topics/xyplot)
+
+<!-- End your notes before here. ------------------------------------- -->
+##
+
+
 ### Histograms {.tabset .tabset-fade .tabset-pills}
 
 <div style="float:left;width:125px;">
@@ -518,7 +534,9 @@ Hover to see code.
 
 ----
 
-#### Python Instructions Place Holder (it's the next 454 lines plus the above 2 lines) 
+#### Python Instructions 
+
+Place Holder (it's the next 454 lines plus the above 2 lines) 
 
 <div style="padding-left:125px;">
 
@@ -3047,6 +3065,7 @@ ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
 </div>
 
 ----
+
 
 
 

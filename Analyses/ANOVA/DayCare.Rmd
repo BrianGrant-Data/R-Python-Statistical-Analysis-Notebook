@@ -193,6 +193,10 @@ In other words, each of the factors has an effect on how many children are picke
 
 I'll show the results of the ANOVA graphically by plotting each factor.
 
+```{r, include=FALSE}
+library(lattice)
+```
+
 
 ```{r Plot Demonstrating Treatment}
 xyplot(

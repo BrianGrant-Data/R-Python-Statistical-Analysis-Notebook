@@ -1,0 +1,81 @@
+---
+title: "W1_class_notes"
+output: html_document
+---
+
+# Class notes W2
+
+## Load Libraries and View Data
+
+```{r}
+
+library(mosaic)
+library(tidyverse)
+library(pander)
+View(KidsFeet)
+
+```
+
+## Boxplot
+```{r}
+
+boxplot(length ~ sex, data = KidsFeet)
+
+```
+
+## Five-number Summary
+```{r}
+
+
+KidsFeet %>% 
+  group_by(sex) %>% 
+  summarise(
+    min = min(length),
+    Q1 = quantile(length, 0.25),
+    median = median(length),
+    Q3 = quantile(length, 0.75),
+    max = max(length)
+  ) %>% 
+  pander()
+  
+
+```
+
+## Barplot
+```{r}
+barplot(table(KidsFeet$sex))
+table(KidsFeet$sex)
+
+```
+
+## Scatterplot 
+```{r}
+
+plot(length ~ width, data = KidsFeet)
+
+```
+
+## Correlation
+```{r}
+
+KidsFeet %>% 
+  summarise(cor(width, length))
+        
+```
+# Day 2
+```{r}
+install.packages("tidyverse")
+install.packages("mosaic")
+install.packages("DT")
+install.packages("pander")
+
+```
+```{r}
+
+library(tidyverse)
+library(mosaic)
+library(DT)
+library(pander)
+
+```
+

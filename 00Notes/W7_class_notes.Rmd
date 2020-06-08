@@ -1,0 +1,16 @@
+---
+title: "W7_class_notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Prep, include=FALSE}
+library(tidyverse)
+library(mosaic)
+library(pander)
+```
+# Announcements

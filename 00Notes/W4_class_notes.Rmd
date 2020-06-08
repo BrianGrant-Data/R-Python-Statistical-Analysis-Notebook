@@ -5,28 +5,42 @@ output:
     theme: cerulean
     css: styles.css
 ---
+
+# Day 1
+1 Sample t test
+  (use a Signed-Rank Test)
+  test statistic: x-bar
+  Ho: mew = (a value)
+
+2 Sample Paired t test
+  (use a Signed-Rank Test)
+  test statistic: d-bar
+  Ho: d = 0
+
+2 Sample Independent t test
+  (use a Rank Sum Test)
+  test statistic: (x-bar_1 - x-bar_2)
+  Ho: (mew_1 - mew_2) = 0
+  
+- If you have ties then you'll have to point that out in the analysis
+- If you have zeroes you will have to do likewise
+
+
+
+
+
 # Set up
-
-```{r Downloads}
-install.packages("cars")
-```
-
-```{r Libraries}
-library(car)
-```
-
-
-# Trying Wilcoxon Tests
 ```{r Libraries}
 library(mosaic)
 library(car)
 ```
-```{r Example}
 
+# Trying Wilcoxon Tests
+
+```{r Example}
 wilcox.test(length ~ sex,
             data=KidsFeet)
 ```
-
 
 Since the wilcoxon test had ties in the rankings, let's try a t-test.
 
