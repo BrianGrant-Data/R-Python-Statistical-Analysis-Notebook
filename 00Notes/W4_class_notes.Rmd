@@ -1,10 +1,11 @@
 ---
 title: "W4 Notes: Wilcoxon Tests"
-output: 
-  html_document: 
-    theme: cerulean
-    css: styles.css
+output: html_document
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 # Day 1
 1 Sample t test
@@ -30,7 +31,7 @@ output:
 
 
 # Set up
-```{r Libraries}
+```{r Libraries1}
 library(mosaic)
 library(car)
 ```
@@ -85,11 +86,11 @@ View(Friendly)
 # SKills Quiz
 ## Set up
 
-```{r Downloads}
-install.packages("cars")
+```{r Downloads, message=FALSE}
+#install.packages("cars")
 ```
 
-```{r Libraries}
+```{r Libraries2}
 library(car)
 library(mosaic)
 ```
@@ -177,7 +178,7 @@ Filter the data set to just show "wc" and "prof" types of occupations. Then, cre
 
 ```{r}
 library(car)
-view(Duncan)
+#View(Duncan)
 ```
 
 
@@ -217,8 +218,8 @@ library(mosaic)
 ```
 
 ```{r}
-View(Salaries)
-?Salaries
+#(Salaries)
+#?Salaries
 ```
 
 ```{r}
@@ -276,8 +277,8 @@ library(car)
 ```
 
 ```{r Examine data}
-View(Davis)
-?Davis
+#View(Davis)
+#?Davis
 
 DavisM <- Davis %>% 
   filter(

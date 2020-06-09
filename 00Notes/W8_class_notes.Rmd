@@ -1,0 +1,148 @@
+---
+title: "W8_class_notes"
+author: "Brian Grant"
+date: "6/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Prep, include=FALSE}
+library(tidyverse)
+library(mosaic)
+library(pander)
+```
+
+# Announcements
+Next week we'll start the business consulting project.
+
+# Multiple Linear Regression - Two Lines Model
+
+## Why
+
+## What 
+### Math Model
+  *Baseline*
+  $$
+  Baseline = y = \beta_0 + \beta_1x_1
+  $$
+  
+  
+## How
+### Class Example
+use the example in the linear regression page as well.
+#### mtcars
+
+So if you had data like what we see below, you'd see two very sepearate groupings. 
+```{r}
+plot(mpg ~ qsec, 
+     data = mtcars, 
+     col= am+2)
+#this plots mpg ~ qsec with the two layers of mtcars$am colored differently
+```
+
+We need to put lines through each of these groups. You do that like follows
+
+```{r}
+lmout <- lm(mpg ~ qsec + am + qsec:am,
+            data = mtcars)
+#this should remind you of Two-factor ANOVA!
+summary(lmout)
+
+coef <- lmout$coefficients
+coef
+#we'll need this to make lines on our plots
+```
+The coefficicients given in coef are the y-intercept, the 
+```{r}
+plot(mpg ~ qsec,
+     data = mtcars,
+     col = am+2)
+abline(a=coef[1], 
+       b=coef[2], 
+       col="red")
+abline(a=coef[3] + coef[1], 
+       b=coef[4] + coef[2], 
+       col="green")
+```
+The red one is the baseline (first/bottom line). The green one is the change line (second/top line).
+
+Ok, we have the lines, but how do we know if this helped at all?
+
+
+```{r}
+summary(lmout)
+```
+Well it looks like mtcars$am wasn't statistically significant. Lets remove it.
+```{r}
+lmout2 <- lm(mpg ~ qsec + qsec:am,
+             data=mtcars)
+summary(lmout2)
+```
+first estimate = $\beta_0$
+second estimate = $\beta_1$
+third estimate = $\beta_2$
+fourth estimate = $\beta_3$
+```{r}
+coef2 <- lmout2$coefficients
+coef2
+```
+Let's plot the new model
+
+```{r}
+plot(mpg ~ qsec,
+     data = mtcars,
+     col = am+2,
+     xlim = c(0,30),
+     ylim = c(-25,35))
+abline(a=coef2[1], 
+       b=coef2[2], 
+       col="red")
+abline(a=coef2[1], 
+       b=coef2[3] + coef2[2], 
+       col="green")
+```
+
+Now the intercept has become statistically significant. 
+
+*Note*
+if you're not sure which you should drop, start with the second line and the third and so on in that order. You want to see if there is a need for a second variable at all.
+
+
+Now lets calculate the estimated values of the slope and intercept of each of the drawn lines.
+
+```{r line 1 Automatic}
+#intercept
+coef[1]
+#slope
+coef[2]
+#run this in the command line to get the intercept and slope respectively
+
+
+```
+
+```{r line 2 Manual}
+#intercept
+coef[1] + coef[3]
+#slope
+coef[2] + coef[4] 
+#run this in the command line to get the intercept and slope respectively
+``` 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

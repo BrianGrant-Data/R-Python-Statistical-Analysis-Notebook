@@ -4305,11 +4305,18 @@ $$
 \hat{Y}_i = \overbrace{-9.01}^{\stackrel{\text{y-int}}{\text{baseline}}} + \overbrace{1.439}^{\stackrel{\text{slope}}{\text{baseline}}} X_{1i}
 $$
 
-**Manual Transmission (am==1 , $X_{2i} = 1$) Line**
+**Manual Transmission (am==1 , $X_{2i} = 1$) Line *(See Note)* **
 
 $$
 \hat{Y}_i = \underbrace{(\overbrace{-9.01}^{\stackrel{\text{y-int}}{\text{baseline}}} + \overbrace{-14.51}^{\stackrel{\text{change in}}{\text{y-int}}})}_{\stackrel{\text{y-intercept}}{-23.52}} + \underbrace{(\overbrace{1.439}^{\stackrel{\text{slope}}{\text{baseline}}} +\overbrace{1.321}^{\stackrel{\text{change in}}{\text{slope}}})}_{\stackrel{\text{slope}}{2.76}} X_{1i}
 $$
+  *NOTE: Quick Note on the Manual equation*
+
+  *The Manual equation follows the equation * $$
+\hat{Y}_i = \underbrace{(\overbrace{\beta_0}^{\stackrel{\text{y-int}}{\text{baseline}}} + \overbrace{\beta_2}^{\stackrel{\text{change in}}{\text{y-int}}})}_{\stackrel{\text{y-intercept}}{\beta_0+\beta_2}} + \underbrace{(\overbrace{\beta_1}^{\stackrel{\text{slope}}{\text{baseline}}} +\overbrace{\beta_3}^{\stackrel{\text{change in}}{\text{slope}}})}_{\stackrel{\text{slope}}{\beta_1+\beta_3}} X_{1i}
+$$
+  *Note this is the result of taking the two-lines model and combining like terms. We went over this is in class briefly but it seems that you get the first line by putting setting $X_{2i}=0$ and you get the second line by adding the two y intercepts and the two slopes together.*
+
 
 These lines are drawn as follows. Be sure to look at the "Code" to understand how this graph was created using the ideas in the two equations above.
 
