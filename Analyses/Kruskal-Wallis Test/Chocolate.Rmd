@@ -14,12 +14,6 @@ library(mosaic)
 library(car)
 library(DT)
 library(pander)
-library(readr)
-choc <- read_csv("../../Data/Chocolate.csv")
-```
-
-```{r Dataset, eval=FALSE}
-View(choc)
 ```
 
 ----
@@ -69,6 +63,56 @@ If you want to give your critiquers some ideas about what you have questions on 
 
 ## Background
 
+**Question**
+
+**Hypotheses**
+$$
+
+$$
+
+## {.tabset .tabset-pills .tabset-fade}
+
+### Hide Data
+
+### Show Data {.tabset}
+
+```{r Dataset, message=FALSE, warning=FALSE}
+library(readr)
+choc <- read_csv("../../Data/Chocolate.csv")
+```
+
+```{r Filter}
+choc2 <- choc %>% 
+  select(c(
+    Rating,
+    Type,
+    Cocao,
+    Company
+  )) %>% 
+  droplevels()
+```
+
+```{r, warning=FALSE}
+datatable(choc2)
+```
+
+## Analysis
+
+x is Rating, g is Cocao 
+```{r Boxplot of Groups}
+#or should you do a histogram?
+```
+
+```{r Kruskal Test}
+
+```
+
+```{r Numeric Summary by Group}
+
+```
+
+
+## Interpretation
 
 
 
