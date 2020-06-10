@@ -12,6 +12,12 @@ output:
 
 Delete these words and write your own background here.  
 
+## {.tabset .tabset-pills .tabset-fade}
+
+### Hide Data
+
+### Show Data {.tabset}
+
 ```{r, include=FALSE}
 # Be sure to download the CarPrices.csv file and save it
 # into your Data folder prior to knitting this file.
