@@ -15,8 +15,7 @@ library(tidyverse)
 library(mosaic)
 library(pander)
 ```
-
-# Announcements
+# Day 1 Announcements
 Next week we'll start the business consulting project.
 
 # Multiple Linear Regression - Two Lines Model
@@ -133,11 +132,90 @@ coef[2] + coef[4]
 ``` 
 
 
+# Day 2
+
+## Multi Linear Regression Refresher
+
+### in class excercise 1 - equal slopes model
+
+```{r}
+palette(c("skyblue","firebrick"))
+
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+```
+
+
+```{r}
+mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
+
+summary(mtcars.lm)
+b <- mtcars.lm$coefficients
+
+abline(b[1], b[2], col=palette()[1])
+
+abline(b[3], b[2], col=palette()[2])
+
+legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="Transmission (am)", bty="n")
+```
+
+### in class excercise 2 - equal intercepts model (but different slopes)
+```{r}
+palette(c("skyblue","firebrick"))
+
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+```
+
+
+```{r}
+mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
+
+summary(mtcars.lm)
+b <- mtcars.lm$coefficients
+```
 
 
 
+```{r}
+abline( b[1], b[2], col=palette()[1])
+abline( b[1], b[2]+b[4], col=palette()[2])
+
+legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="Transmission (am)", bty="n")
 
 
+```
+
+###  class excercise 3 - Full Model (different slopes & different intercepts)
+```{r}
+palette(c("skyblue","firebrick"))
+
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
+```
+
+
+```{r}
+mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
+
+summary(mtcars.lm)
+b <- mtcars.lm$coefficients
+```
+
+<!-- because am is insignificant we'll remove do the regression again without it (we didn't do this in the above examples because we were testing models that don't do that). -->
+<!-- ```{r} -->
+<!-- mtcars.lm <- lm(mpg ~ qsec + qsec:am, data = mtcars) -->
+
+<!-- summary(mtcars.lm) -->
+<!-- b <- mtcars.lm$coefficients -->
+<!-- b -->
+<!-- ``` -->
+
+```{r}
+abline( b[1], b[2], col=palette()[1])
+abline( b[1]+b[3], b[2]+b[4], col=palette()[2])
+
+legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="Transmission (am)", bty="n")
+
+
+```
 
 
 
