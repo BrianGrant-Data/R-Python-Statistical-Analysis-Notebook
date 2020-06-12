@@ -169,6 +169,8 @@ The remaining $\beta$ values are all significant and since $\beta_2$ (or model_t
 
 Let's visualize what we've found.
 ```{r}
+palette(c("green","blue"))
+
 plot(Price ~ Mileage,
      data = CarPrices2,
      col = model_trim_id+2
@@ -177,7 +179,7 @@ plot(Price ~ Mileage,
 # Add regression line
 abline(a=coef2[1], 
        b=coef2[2], 
-       col="red")
+       col="blue")
 abline(a=coef2[1] + coef2[3], 
        b=coef2[2], 
        col="green")
