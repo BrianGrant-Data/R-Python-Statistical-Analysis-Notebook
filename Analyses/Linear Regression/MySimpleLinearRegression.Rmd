@@ -70,8 +70,8 @@ $$
   \alpha = 0.05
 $$
 
-## Data
-For this analysis we'll use data collect by the The Movie Database. They're data has been collected for download at on Kaggle.com as well, [click here for the link.](https://www.kaggle.com/tmdb/tmdb-movie-metadata) 
+## The Data
+For this analysis we'll use data collect by the The Movie Database. Their data has been collected for download at on Kaggle.com as well, [click here for the link.](https://www.kaggle.com/tmdb/tmdb-movie-metadata) 
 
 ## {.tabset .tabset-pills .tabset-fade}
 
