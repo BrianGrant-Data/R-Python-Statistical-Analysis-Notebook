@@ -5,27 +5,207 @@ output:
     theme: cerulean
     code_folding: hide
 ---
+----
 
-<br>
+BEFORE YOU GET TO WORK ON THIS YOU'LL HAVE TO DO A LOT OF CLEAN UP: I COPIED A LOT OF THINGS IN THE ANALYSIS SECTION FROM W8_CLASS NOTES
+```{r, message=FALSE, warning=FALSE}
+# Load your libraries
+library(mosaic)
+library(DT)
+library(car)
+library(tidyverse)
+library(pander)
+```
 
 ## Background
 
-Delete these words and write your own background here.  
+When buying a car, it's important to consider the resale value as well as how long you plan to keep the car you'll eventually buy. Linear regression models can help predict resale values based on mileage. To demonstrate this, I'll use a Two Lines Model multi-linear regression to compare the price depreciation of two car models. 
 
 ## {.tabset .tabset-pills .tabset-fade}
 
 ### Hide Data
+A dataset for car prices has been provided for analysis by Brigham Young University - Idaho.
 
 ### Show Data {.tabset}
+The dataset includes observations for 32 models so we'll pick the model and trim with the smallest range in observed prices. I'll limit our search to sedans since different car types certainly depreciate at different rates.
+
+
+#### Original Data
 
 ```{r, include=FALSE}
 # Be sure to download the CarPrices.csv file and save it
 # into your Data folder prior to knitting this file.
-CarPrices <- read.csv("../Data/CarPrices.csv", header=TRUE)
+CarPrices <- read.csv("../../Data/CarPrices.csv", header=TRUE)
 
 # Remember, to get the CarPrices data into your Console you have
 # to use the "Import Dataset" option in the "Environment" window.
 ```
+```{r}
+datatable(CarPrices)
+```
 
+#### Cleaned Data
+The two model's with the smallest range in price are the Cavalier LS Sport Sedan 4D and the Malibu Sedan 4D.
+```{r}
+Model_Price_Range <- CarPrices %>% 
+  select(Make, Model, Trim, Type, Price) %>%
+  filter(Type == 'Sedan') %>% 
+  group_by(Model, Trim) %>% 
+  summarise(range = max(Price) - min(Price)) %>% 
+  arrange(range)
+
+datatable(Model_Price_Range, options=list(lengthMenu = c(2,10,30)), extensions="Responsive")
+```
+
+```{r}
+CarPrices2 <- CarPrices %>% 
+  select(Price, Mileage, Make, Model, Trim, Type) %>% 
+  filter(Trim == 'LS Sport Sedan 4D' | Trim == 'Sedan 4D') %>% 
+  filter(Model == 'Cavalier' | Model == 'Malibu') %>% 
+  mutate(
+    model_trim_id = case_when(
+      Model == "Cavalier" & Trim == "LS Sport Sedan 4D" ~ 0,
+      Model == "Malibu" & Trim == "Sedan 4D" ~ 1,
+      Model == "Cavalier" & Trim == "Sedan 4D" ~ 2,
+    )
+  )
+
+CarPrices2 <- CarPrices2 %>% 
+  filter(model_trim_id != 2)
+
+datatable(CarPrices2)
+```
+
+
+## The Model
+
+The mathematical model for this Two-lines model is as follows:
+$$
+  \underbrace{Y_i}_{\text{Price}} = \overbrace{\beta_0 + \beta_1 \underbrace{X_{i1}}_{\text{Mileage}}}^{\text{Cavalier Line}} + \overbrace{\beta_2 \underbrace{X_{i2}}_{\text{1 if Malibu}} + \beta_3 \underbrace{X_{i1} X_{i2}}_{\text{Interaction}}}^{\text{Malibu Adjustments to Line}} + \epsilon_i
+$$
+$$
+ X_{2i} = \left\{\begin{array}{ll} 1, & \text{Malibu} \\ 0, & \text{Cavalier} \end{array}\right.
+$$
+$\epsilon_i\sim N(0,\sigma^2)$
+$X_{i2} = 0$ for the Cavalier.
+$X_{i2} = 1$ for Malibu.
+
+<center>
+
+| Vehicle | Value of $X_{i2}$ | Resulting Model   |
+|---------|-------------------|-------------------|
+| Cavalier   | $X_{i2} = 0$      | $Y_i = \beta_0 + \beta_1 X_{i1} + \epsilon_i$ |
+| Malibu | $X_{i2} = 1$      | $Y_i = (\beta_0 + \beta_2) + (\beta_1 + \beta_3) X_{i1} + \epsilon_i$ |
+
+</center>
+
+We'll use these resulting models to plot the data later on in the analysis.
+
+## Hypothesis 
+### Equal y-Intercepts Hypothesis 
+
+If the y-intercepts are equal (or if $\beta_2 =0$), then the cars have the same average cost when brand new, but if they are not equal (or if $\beta_2 \neq 0$) than one car is generally more expensive then the other.
+
+$$
+  H_0: \beta_2 = 0 \quad \text{(Equal average cost when brand new)} \\
+  H_a: \beta_2 \neq 0 \quad \text{(Non-equal average cost when brand new)}
+$$
+
+### Equal Slopes Hypothesis
+If the slopes are equal, then the cars depreciate at the same rate and so you'll lose the same amount of money per mile no matter which car you pick.
+
+
+$$
+  H_0: \beta_3 = 0 \quad \text{(Equal rates of depreciation)} \\
+  H_a: \beta_3 \neq 0 \quad \text{(Non-equal rates of depreciation)}
+$$
+
+## Analysis
+
+
+### Test for Equal Slopes
+Here is the regression. 
+```{r}
+lmout <- lm(Price ~ Mileage + model_trim_id + Mileage:model_trim_id,
+            data = CarPrices2)
+summary(lmout) %>% pander
+
+coef <- lmout$coefficients
+coef %>% pander
+#we'll need this to make lines on our plots
+```
+
+With a p-value of 0.2512, our $\beta_3$ or 'Mileage:model_trim_id' is not statistically significant. In other words, $\beta_3 = 0$. Since the other $\beta$ values are statistically significant we won't have to rerun this model for the slope hypothesis test.
+
+
+### Test for Equal y-Intercepts
+We will need to remove $\beta_3$ in order to do the y-intercept hypothesis test since $\beta_3$ is statistically insignificant. The new model will be as follows:
+
+$\epsilon_i\sim N(0,\sigma^2)$
+$X_{i2} = 0$ for the Cavalier.
+$X_{i2} = 1$ for Malibu.
+
+<center>
+
+| Vehicle | Value of $X_{i2}$ | Resulting Model   |
+|---------|-------------------|-------------------|
+| Cavalier   | $X_{i2} = 0$      | $Y_i = \beta_0 + \beta_1 X_{i1} + \epsilon_i$ |
+| Malibu | $X_{i2} = 1$      | $Y_i = (\beta_0 + \beta_2) + (\beta_1) X_{i1} + \epsilon_i$ |
+
+</center>
+
+
+
+Here is the regression.
+```{r}
+lmout2 <- lm(Price ~ Mileage + model_trim_id,
+            data = CarPrices2)
+summary(lmout2) %>% pander
+
+coef2 <- lmout2$coefficients
+coef2
+```
+
+The remaining $\beta$ values are all significant and since $\beta_2$ (or model_trim_id) has a p-value of 8.273e-12 we can conclude that we have sufficient evidence to accept the null hypothesis and that the starting prices of the two models are not equal to one another.
+
+
+Let's visualize what we've found.
+```{r}
+plot(Price ~ Mileage,
+     data = CarPrices2,
+     col = model_trim_id+2,
+     yaxt="n",
+     xaxt="n"
+    )
+abline(a=coef2[1], 
+       b=coef2[2], 
+       col="green")
+abline(a=coef2[1] + coef2[3], 
+       b=coef2[2], 
+       col="blue")
+```
+As we can see, our above conclusions are correct: the slopes do look approximately equal and the two cars clearly don't have the same price when they are brand new.
+
+## Assumptions tests
+
+Let's check the assumptions.
+<!-- The results of this analysis should be taken with a grain of salt for a few reasons. First, it should be remembered that these vehicles were only sampled from the Utah based Classifieds "KSL Classifieds". Also, the data was sampled on a single day, so these results don't actually show pricing trends over time. They just show the current value of various mileages. Most importantly the regression model assumptions are not fully satisfied as detailed in the next paragraph. This leaves some question as to validity of the specific detailed results of this analysis, though the general pattern in the data seems to demonstrate the Corolla costing less brand new and holding its value better over time.  -->
+
+<!-- The linearity of the data looks to be okay because of the relative flatness of the red lowess line in the residuals vs fitted plot. Also, the vertical variability of the dots in the residuals vs. fitted plot seems to be roughly constant across all fitted values, so constant variance can be assumed. There are two potential outliers shown in the residuals vs fitted plot (observations 17 and 30 in the original dataset) that could be unduly influencing the regression. It may be worth removing these to see how they are effecting the results of the regression. The most important violation of the model assumptions to note is the lack of normality of the residuals shown in the Q-Q Plot of the residuals. This is seen by how much the dots depart the green dashed lines bounding the "zone of normality" where data would typically land if it truly was normally distributed. There does not appear to be any independence issues in the data however, as witnessed by the random pattern in the residuals vs. order plot. -->
+
+```{r, fig.height=3}
+# This chunk uses ```{r, fig.height=3} to shrink the heigh of the graphs.
+par(mfrow=c(1,3))
+plot(lmout2, which=1)
+qqPlot(lmout2$residuals)
+mtext(side=3,text="Q-Q Plot of Residuals")
+plot(lmout2$residuals)
+mtext(side=3, text="Residuals vs. Order")
+```
+
+1
+2 The Q-Q Plot
+3 The residuals vs. order plot shows that there isn't a __
+## Conclusion
 
 
