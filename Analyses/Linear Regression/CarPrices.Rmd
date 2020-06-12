@@ -6,8 +6,6 @@ output:
     code_folding: hide
 ---
 ----
-
-BEFORE YOU GET TO WORK ON THIS YOU'LL HAVE TO DO A LOT OF CLEAN UP: I COPIED A LOT OF THINGS IN THE ANALYSIS SECTION FROM W8_CLASS NOTES
 ```{r, message=FALSE, warning=FALSE}
 # Load your libraries
 library(mosaic)
@@ -173,16 +171,25 @@ Let's visualize what we've found.
 ```{r}
 plot(Price ~ Mileage,
      data = CarPrices2,
-     col = model_trim_id+2,
-     yaxt="n",
-     xaxt="n"
+     col = model_trim_id+2
     )
+
+# Add regression line
 abline(a=coef2[1], 
        b=coef2[2], 
-       col="green")
+       col="red")
 abline(a=coef2[1] + coef2[3], 
        b=coef2[2], 
-       col="blue")
+       col="green")
+
+# Add legend:
+  legend("topright",
+         col = palette(), 
+         pch = 21, 
+         legend = c("Malibu",
+                    "Cavalier"), 
+         bty="n", 
+         text.col = palette())
 ```
 As we can see, our above conclusions are correct: the slopes do look approximately equal and the two cars clearly don't have the same price when they are brand new.
 
