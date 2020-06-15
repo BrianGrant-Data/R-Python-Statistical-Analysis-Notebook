@@ -1,0 +1,16 @@
+---
+title: "W9_class_notes"
+author: "Brian Grant"
+date: "6/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Announcements
+
+## Client Analysis
+- speak on the level and language of your client
+- - still say what tests you ran and why but focus on making the conclusion (and graphs) understandable and focused.
