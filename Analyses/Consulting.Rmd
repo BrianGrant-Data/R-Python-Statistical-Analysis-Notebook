@@ -1,0 +1,34 @@
+---
+title: "Consulting.Rmd"
+author: "Brian Grant"
+date: "6/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<!-- YOU HAVE _ HOURS FOR THIS PROJECT -->
+
+
+<!-- # Instructions -->
+
+<!-- - Step 1: Approve a consulting or research opportunity idea with your instructor. -->
+<!-- - Step 2: Create a Consulting.Rmd* file inside your Statistics Notebook >> Analyses folder within RStudio. -->
+<!--   *It is very important that it is in the Analyses folder! -->
+<!-- - Step 3: Complete your analysis using the Analysis Rubric in your Statistics Notebook >> Analyses folder as your guide. -->
+<!--   But... note that the "Presentation" of the document depends on who you are doing the research for and what they want from you. So, while you should complete all five elements of the Analysis Rubric, the order in which you present things should probably be different from our traditional analyses. Most likely, you should present your conclusions and graphic first, then follow up with all the "technical details" of your analysis. -->
+<!-- - Step 4: Upload your completed Consulting.html analysis to the dropbox below. -->
+
+# Question (and relevance)
+## Types of Questions I'm Trained on 
+  - When we only have a sample of the population instead of the full population and 
+  - one sample, paired sample or two sample hypotheses that are either parametric (t/Wilcoxon tests)
+  - (ANOVA/Kruskal-Wallis) 
+  - (Linear Regression)
+  
+## Types of Questions I can't do yet
+  - 
+# Analysis in brief
+# Conclusion
+Analysis further explained
