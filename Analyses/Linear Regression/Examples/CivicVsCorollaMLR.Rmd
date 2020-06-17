@@ -99,7 +99,18 @@ cars_lm <- lm(Price ~ Mileage + Model + Mileage:Model, data=ccCars)
       mgp=c(3.5,1,0)) #moves the xlab and ylab out to 3.5 lines.
   
   # Draw plot with default axis labels turned off (xaxt, yaxt):
-  plot(Price ~ Mileage, data=ccCars, col=Model, pch=16, main="Cost and Depreciation Comparison \n Honda Civic vs. Toyota Corolla", ylab="Listing Price of the Vehicle", xlab="Mileage of the Vehicle", yaxt="n", xaxt="n", xlim=c(0,60000), ylim=c(8000,20000))
+  plot(Price ~ Mileage,
+       data=ccCars, 
+       col=Model,
+       pch=16,
+       main="Cost and Depreciation Comparison \n Honda Civic vs. Toyota Corolla",
+       ylab="Listing Price of the Vehicle", 
+       xlab="Mileage of the Vehicle",
+       yaxt="n", 
+       xaxt="n", 
+       xlim=c(0,60000), 
+       ylim=c(8000,20000)
+       )
   
   # Add grid lines:
   abline(v=c(0,10000, 20000, 30000, 40000, 50000), h=c(10000,12000,14000,16000,18000), col=rgb(.8,.8,.8,.4), lty=2)
