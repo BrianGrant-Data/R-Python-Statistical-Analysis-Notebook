@@ -11,6 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Announcements
 
+
 ## Client Analysis
 - speak on the level and language of your client
 - - still say what tests you ran and why but focus on making the conclusion (and graphs) understandable and focused.
+
+## General
+This week is simply an opportunity to work on late work in class and to work on the consulting project.
