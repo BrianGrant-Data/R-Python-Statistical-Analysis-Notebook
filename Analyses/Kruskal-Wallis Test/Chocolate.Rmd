@@ -50,7 +50,7 @@ Note this dataset and description come from: © 2018 Kaggle Inc for further deta
 [Kaggle.com](https://www.kaggle.com/rtatman/chocolate-bar-ratings/data)
 
 
-If you want to give your critiquers some ideas about what you have questions on and would like help with, place those details here.-->
+If you want to give your critiques some ideas about what you have questions on and would like help with, place those details here.-->
 **Comments to Critiquers:** 
 
 
@@ -62,12 +62,21 @@ If you want to give your critiquers some ideas about what you have questions on 
 <!--Begin writing your Analysis after this point.-->
 
 ## Background
+Making good chocolate can be a complicated task. There are many factors involved and at times it can be difficult to quantify or rank elements that impact the chocolates quality. 
 
-**Question**
+A dataset has been gathered from Kaggle.com on chocolate and its sources, quality, and rating. This dataset will be used in this analysis to answer the following questions:
 
-**Hypotheses**
+  - What are the ratings chocolates receive?
+  
+  - Does the chocolate ratings increase as the percentage of cocoa in the chocolate increases?
+
+Our hypotheses are as follows:
+
 $$
-
+  H_0: \text{All samples represent a sample of data from the same distribution.}
+$$ 
+$$
+  H_a: \text{At least one distribution is stochastically different than the others.}
 $$
 
 ## {.tabset .tabset-pills .tabset-fade}
@@ -82,14 +91,11 @@ choc <- read_csv("../../Data/Chocolate.csv")
 ```
 
 ```{r Filter}
-choc2 <- choc %>% 
-  select(c(
-    Rating,
-    Type,
-    Cocao,
-    Company
-  )) %>% 
-  droplevels()
+choc2 <- select(choc,
+                c(Rating, Cocao)
+                ) %>%
+  mutate(Cocao_percent = as.numeric(gsub("%", "", choc$Cocao)) / 100,
+         Rating = as.numeric(Rating))
 ```
 
 ```{r, warning=FALSE}
@@ -98,22 +104,61 @@ datatable(choc2)
 
 ## Analysis
 
-x is Rating, g is Cocao 
-```{r Boxplot of Groups}
-#or should you do a histogram?
+If we analyze the data using plots and numeric summaries, we'd see that most of the chocolate had a quality between 70% and 75%. The chocolate was mostly rated between about 2 and 4. 
+
+**Chocolate Rating Summary**
+```{r}
+favstats(choc2$Rating) %>% pander()
 ```
 
-```{r Kruskal Test}
+**Chocolate Percentage Summary**
 
+```{r}
+favstats(choc2$Cocao_percent) %>% pander()
+```
+```{r}
+hist(choc2$Cocao_percent, 
+     breaks = 12,
+     col = "skyblue",
+     main = "Chocolate Scoring Frequency",
+     xlab = "Cocao Percentage")
+```
+
+The boxplot seems to show that the cocao percentage approaches 70% as the ratings approach a perfect score of 5.
+
+```{r Boxplot of Groups}
+boxplot(Cocao_percent ~ round(Rating, 0),
+        data = choc2,
+        col = "skyblue",
+        main = "Spread of Cocao Percentage by Ratings",
+        ylab = "Percentage of Cocao",
+        xlab = "Ratings Rounded to the Nearest Whole Number")
+```
+
+Let's confirm this with a Kruskal Wallis Test.
+
+
+**Kruskal Test**
+```{r Kruskal Test}
+kruskal.test(Cocao_percent ~ as.factor(round(Rating, 0)),
+             data = choc2) %>% pander()
 ```
 
 ```{r Numeric Summary by Group}
-
+favstats(Cocao_percent ~ as.factor(round(Rating, 0)), 
+         data = choc2,
+         caption = "Numeric Summary")[,-10] %>% pander()
 ```
+With a p-value of 5.46e-05 we know that there is sufficient evidence to reject the null hypothesis. One of these five scores comes from a different cocao percentage distribution.
 
+This test won't prove which of the five groups is stochastically different. We know that the distributions did shrink as we approached the Rating of 5. 
 
 ## Interpretation
+Generally speaking, it seems that chocolate ratings go up as the percentage of chocolate per bar approaches 70%. Chocolate companies should try to keep their cocao percentages means around there if they're looking to have high ratings on their chocolate itself.
 
+Some might argue that the two ratings of 5 are not sufficiently large to be representative of chocolate bars at that high of a rating and though this is true, removing those two values (or that rating in general) wouldn't change that the standard deviations decreases for the other four ratings as we approach the fifth rating.
+
+At this point, it might be worthwhile to conduct an ANOVA and see what other factors may have impact the ratings.
 
 
 
