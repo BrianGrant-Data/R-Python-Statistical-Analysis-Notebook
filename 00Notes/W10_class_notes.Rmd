@@ -1,0 +1,16 @@
+---
+title: "W10_class_notes"
+author: "Brian Grant"
+date: "6/22/2020"
+output: html_document
+---
+# Announcements
+
+# Logistic Regression
+[Simple Logistic Regression](LogisticRegression.html)
+
+- notice that if your binomials have a value greater than 0, you can have the logistical regression have the y value set to [variable] > 0 so that it'll accept anything above 0 as a success (i.e. '1').
+
+This week we're collecting our own data for the Logistic Regression analysis.
+
+Notice that for this we want the p-value to be GREATER than alpha. This is because the null hypothesis is backwards than normal: we're TRYING to accept that null is true instead of trying to reject the null.
