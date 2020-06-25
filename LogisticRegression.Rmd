@@ -725,7 +725,7 @@ Beginning to solve this equation for $\pi_i$ leads to the intermediate, but impo
 $$
     \underbrace{\frac{\pi_i}{1-\pi_i}}_{\text{Odds for}\ Y_i=1} = e^{\overbrace{\beta_0 + \beta_1 x_i}^{\text{linear regression}}} = e^{\beta_0}e^{\beta_1 x_i}
 $$
-Thus, while the coefficients $\beta_0$ and $\beta_1$ are difficult to interpret directly, $e^{\beta_0}$ and $e^{\beta_1}$ have a valuable interpretation. **The value of $e^{\beta_0}$ is interpreted as the odds for $Y_i=1$ when $x_i = 0$.** It may not be possible for a given model to have $x_i=0$, in which case $e^{\beta_0}$ has no interpretation. The value of $e^{\beta_1}$ denotes the proportional change in the odds that $Y_i=1$ for every one unit increase in $x_i$. 
+Thus, while the coefficients $\beta_0$ and $\beta_1$ are difficult to interpret directly, $e^{\beta_0}$ and $e^{\beta_1}$ have a valuable interpretation. **The value of $e^{\beta_0}$ is interpreted as the odds for $Y_i=1$ when $x_i = 0$.** (this is the code exp(coef[0])) It may not be possible for a given model to have $x_i=0$, in which case $e^{\beta_0}$ has no interpretation. The value of $e^{\beta_1}$ denotes the proportional change in the odds that $Y_i=1$ for every one unit increase in $x_i$. (this is the code exp(coef[1]))
 
 Notice that solving the last equation for $\pi_i$ results in the logistic regression model presented at the beginning of this page.
 
@@ -774,7 +774,8 @@ One of the great uses of Logistic Regression is that it provides an estimate of 
 ###
 
 <div style="padding-left:125px;">
-**Examples:** [challenger](./Analyses/Logistic Regression/Examples/challengerLogisticReg.html) 
+**Examples:** 
+[challenger](./Analyses/Logistic Regression/Examples/challengerLogisticReg.html) 
 </div>
 
 ----
