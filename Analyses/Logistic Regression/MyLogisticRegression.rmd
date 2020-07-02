@@ -19,24 +19,110 @@ in your Console to see available datasets in R that you could use for this Analy
 library(mosaic)
 library(ResourceSelection) 
 library(DT)
+setwd("C:/Users/BAG20/Desktop/Data Analytic & School/R-Python-Statistical-Analysis-Notebook/Analyses/Logistic Regression")
 ```
 
 ```{r}
-movies <- read.csv("../../Data/tmdb_5000_movies.csv", header=TRUE)
-head(movies)
-str(movies)
-summary(movies)
-# movies <- ggplot2movies::movies
+tmdb <- read.csv("../../Data/tmdb_5000_movies.csv", header=TRUE)
+# head(movies)
+# str(movies)
+# summary(movies)
+movies <- ggplot2movies::movies
 ```
 
 <!-- for this analysis if you follow the outline of the challenger example you'll get an automatic 100% -->
 
 #### Background
-<insert background here>
+
+Making movies is a significant financial venture. When millions, and even billions, of dollars are at stake, it is very important to know if people will like the movie. We will begin an analysis on this issue by finding out what budget amounts are more likely to result in a movie that generates more revenue than was spent in the budget. 
+
+
 
 ```{r}
-datatable(movies)
+#load csv
+tmdb <- read.csv("../../Data/tmdb_5000_movies.csv", header=TRUE)
+
+#select relevant columns
+tmdb2 <- tmdb %>% 
+  select(
+    original_title,
+    budget,
+    revenue
+    ) %>% 
+  mutate(
+    profitable = case_when(
+      revenue > budget ~ 1,
+      revenue <= budget ~ 0
+    )
+  )
+
+#identify movies of the fantasy genre
+#tmdb2$fantasy <- grepl("Fantasy", tmdb2$genres, fixed = TRUE)
+```
+Due to this data being compiled via web scrapping, I will assume that the movies that have a record budget of 0 in combination with a revenue of 0 should be treated as if the 0 values where actual NA's. Those movies will be filtered out of this analysis as a result.
+
+```{r}
+#filter out NA's and erroneous data
+tmdb3 <- tmdb2 %>% 
+  filter(tmdb2$budget & tmdb2$revenue == 0)
+
+datatable(tmdb3)  
 ```
 
+#### Logistic Model
+
+The model for the logistic regression model for the probability of a movie being profitable based on budget is as follows:
+
+$$
+  P(Y_i = 1|x_i) = \frac{e^{\beta_0+\beta_1 x_i}}{1+e^{\beta_0 + \beta_1 x_i}} = \pi_i
+$$
+
+where for observation $i$: 
+
+* $Y_i = 1$ denotes that the budget was less than the revenue earned, 
+* $Y_i=0$ denotes that the budget was equal to or less than the revenue gained, and 
+* $x_i$ denotes the movies budget. 
+
+Note that if $\beta_1$ is zero in the above model, then $x_i$ (budget) provides no insight about the probability of a movies profitability. Thus, we could test the hypothesis that
+
+$$
+  H_0: \beta_1 = 0 \\
+  H_a: \beta_1 \neq 0
+$$
+
 <br />
+
+#### Fitting the Model
+
+To obtain estimates of the coefficients $\beta_0$ and $\beta_1$ for the `challeng` data, we apply the following R code.
+
+```{r}
+tmdb.glm <- glm(profitable = 1 ~ budget, 
+                data = tmdb3, 
+                family = binomial)
+summary(tmdb.glm)
+```
+
+Thus the estimated model for $\pi_i$ is given by
+$$
+  P(Y_i = 1|x_i) \approx \frac{e^{15.043-0.232 x_i}}{1+e^{15.043 - 0.232 x_i}} = \hat{\pi}_i
+$$
+where $b_0 = 15.043$ is the value of the `(Intercept)` which estimates $\beta_0$ and $b_1 = -0.232$ is the value of `Temp` which estimates $\beta_1$.
+
+Importantly, the $p$-value for the test of `Temp` shows a significant result $(p = 0.0320)$ giving sufficient evidence to conclude that $\beta_1 \neq 0$, which allows us to conclude that temperature effects the probability of an O-ring failure.
+
+<br />
+
+#### Visualizing the Model
+
+```{r}
+
+```
+
+
+#### Diagnosing the Model
+
+#### Interpreting the Model
+
+
 
