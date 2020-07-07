@@ -1,5 +1,5 @@
 ---
-title: "W8_class_notes"
+title: "Week 8 | Multiple Linear Regression"
 author: "Brian Grant"
 date: "6/8/2020"
 output: html_document
@@ -218,7 +218,90 @@ legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="T
 ```
 
 
+# Skills Quiz 
 
+## Q1
+This problem will have you practice using the "two-lines" multiple regression model from the Math 325 Statistics Notebook.
+
+Run the following commands in R.
+
+library(mosaic)
+?SaratogaHouses
+
+### 1)
+As explained in the help file (?SaratogaHouses), the SaratogaHouses data set contains data about many houses from Saratoga County, New York in the year 2006. When it comes to buying and selling a home, one of the most important factors is determining the value (or price) of the home. Suppose a family is in search of a home that was newly constructed and that has three bedrooms. Suppose further that they are trying to decide how big of a livingArea they can afford and whether or not the price of the home is significantly impacted by adding a fireplace to their "dream home" wish list.
+
+To get a group of homes that are similar to their current specifications run the following codes in R.
+
+SH2 <- filter(SaratogaHouses, bedrooms == 3,  newConstruction=="Yes")
+
+View(SH2)
+
+
+
+Use the SH2 data set and a "two-lines" multiple regression model to describe the price of a house according to the size of the livingArea of the house and whether or not the house has a fireplace (fireplaces is only 0 or 1 for this reduced SH2 data).
+
+
+The two-lines regression model for this situation would be most appropriately labeled as:
+$$
+  \underbrace{Y_i}_\text{price} = \beta_0 + \beta_1 \underbrace{X_{1i}}_\text{livingArea} + \beta_2 \underbrace{X_{2i}}_\text{fireplaces} + \cdots + \beta_{3} X_{1i} X_{2i} + \epsilon_i 
+$$
+$\beta_0$ = The average price of a home with no fireplace and a living area of zero square feet. Since this is unrealistic, this parameter doesn't actually carry any meaning for this particular regression model.
+$\beta_1$ = The change in the average price of a home without a fireplace as the living area increases by 1 additional square foot.
+$\beta_2$ = The difference in the average price of a home with a fireplace as compared to a home without a fireplace for homes with zero square feet of living area. 
+$\beta_3$ = The change in the effect of 1 additional square foot in the living area on the average price of homes with a fireplace as compared to homes without a fireplace.
+
+### 2)
+
+Perform the above regression in R. To demonstrate that you can do this, fill in the blanks in the following R code statement.
+
+```{r}
+sh2.lm <- lm(price ~ livingArea + fireplaces + livingArea:fireplaces,
+             data = SH2)
+
+summary(sh2.lm)
+```
+
+### 3)
+There are four places in the R output of the above regression results that contain p-values, one p-value for each coefficient. Note that each of these p-values have a "t value" next to them implying that they came from a t test, which is cool. If you have done your work correctly, the p-value for the test of the hypothesis that livingArea effects the average price of a home is 0.0055.
+
+What is the p-value for the test of the hypotheses that
+
+$H_0 : \beta_3 = 0$
+$H_0 : \beta_3 \neq 0$
+
+Answer: p-value = 0.0654 
+
+### 4)
+The p-value for the test that β3=0  is not significant at the 0.05 level. However, neither is the p-value for the test of β2=0 . This suggests an interesting idea that either one or both of these variables is not significant. However, mutliple linear regression is a complicated world. It is best practice to "remove" only the "least significant" term from the model and then re-check all p-values to see what is now significant. This is because everything can change dramatically when just one variable is added or removed from the regression. Watch what happens to the summary output when you remove the fireplaces term from the lm(...) but keep the other terms, including the fireplaces:livingArea interaction term, in the model.
+
+```{r}
+sh2.lmreduce <- lm(price ~ livingArea + livingArea:fireplaces,
+             data = SH2)
+
+summary(sh2.lmreduce)
+```
+
+New p-value for the interaction term:  
+
+ 
+
+### 5)
+This is now significant at the α=0.05 level.
+
+ 
+
+It is important to visualize a regression whenever possible so that the reader can connect with the "truth" about the situation that we are trying to show them. Reproduce the two graphics that are shown below. 
+
+ 
+
+Only check these boxes if you really made the graphs:
+
+### 6)
+
+## Q2
+
+## Q3
 
 
 
