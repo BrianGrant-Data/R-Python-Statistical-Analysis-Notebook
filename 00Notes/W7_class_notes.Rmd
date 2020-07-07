@@ -1,5 +1,5 @@
 ---
-title: "W7_class_notes"
+title: "Week 7 | Simple Linear Regression"
 output: html_document
 ---
 
@@ -13,4 +13,75 @@ library(tidyverse)
 library(mosaic)
 library(pander)
 ```
+
 # Announcements
+
+# Skills Quiz
+
+## Question 2
+Perform the following simple linear regression in R.
+
+```{r}
+plot(Height ~ Volume, data=trees)
+
+trees.lm <- lm(Height ~ Volume, data=trees)
+
+abline(trees.lm)
+```
+
+Check the assumptions of the linear regression using the following commands.
+
+```{r}
+par(mfrow=c(1,2))
+
+plot(trees.lm, which=1:2)
+
+par(mfrow = c(1,1)) #This resets your plotting window for future plots.
+```
+
+## Question 3
+Consider the Old Faithful Guyser (Yellowstone National Park) dataset in R.
+
+```{r}
+#?faithful
+```
+Perform a simple linear regression to determine if the expected waiting time to the next eruption can be modeled by the length of the previous eruption.
+
+```{r}
+faithful.lm <- lm(waiting ~ eruptions,
+                  data = faithful)
+summary(faithful.lm)
+```
+
+Answer: The estimated regression equation is given by
+
+$\hat{Y}_i = 33.474 + 10.730 X_i$
+
+Even though both the slope and intercept terms are  
+significant, the intercept term is not of interest. This is because we are not interested in eruptions that last for zero minutes. However, the slope term is of interest. The slope tells us the increase in the expected waiting time to the next eruption for every 1 minute increase in the length of the current eruption. Specifically, for every one minute increase in the length of the current eruption, we would expect to wait 
+10.730 minutes longer (on average) until the next eruption.
+
+
+Verify that this linear regression is appropriate by making the residuals versus fitted-values and normal Q-Q Plot of the residuals in R. Select the appropriate statements for these plots from the list below. (Check all that apply.)
+
+```{r}
+par(mfrow=c(1,2))
+
+plot(faithful.lm, which=1:2)
+
+par(mfrow = c(1,1)) #This resets your plotting window for future plots.
+```
+
+Produce a scatterplot in R of this linear regression.
+
+Say the most recent eruption of the Old Faithful Guyser lasted for 3.5 minutes. Visitors should expect to wait _ minutes on average.
+
+```{r}
+plot(waiting ~ eruptions, data = faithful)
+
+abline(faithful.lm)
+```
+By eyeballing it, we can see it's about a 70 minute wait.
+
+
+

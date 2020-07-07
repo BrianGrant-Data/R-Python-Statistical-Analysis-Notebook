@@ -41,4 +41,151 @@ predict(KidsFeet.glm, newdata = data.frame(length = 0), type = "response")
 exp(coef1[2])
 ```
 
+# In class excercise
+```{r}
+#View(infert)
+#?infert
+infert.glm <- glm( (spontaneous > 0) ~ age, data=infert, family=binomial)
+
+summary(infert.glm)
+plot( (spontaneous > 0) ~ age, data=infert)
+curve( exp(1.48706 + -0.05616*x)/(1 + exp(1.48706 + -0.05616*x)), add=TRUE)
+
+table(infert$age)
+library(tidyverse)
+library(mosaic)
+library(pander)    
+library(plyr)
+
+#Residual deviance: 334.01  on 246  degrees of freedom
+pchisq(334.01, 
+       246,
+       lower.tail=FALSE)
+
+library(mosaic)
+#View(Galton)
+#?Galton
+
+Galton.glm <- glm(sex == "M" ~ height,
+                  data = Galton,
+                  family = binomial)
+summary(Galton.glm)
+coef.gal <- Galton.glm$coefficients
+
+plot(sex == "M" ~ height,
+     data = Galton)
+curve(exp(coef.gal[1] + coef.gal[2]*x)/
+        (1+exp(coef.gal[1]+coef.gal[2]*x)),
+                                        add = TRUE)
+```
+
+# Assessment Quiz
+
+
+## Q1
+Run the following codes in R.
+
+
+
+```{r}
+  # library(mosaic)
+  # 
+  # View(Gestation)
+  # 
+  # ?Gestation
+```
+
+Use an appropriate test to determine if the birth weight in ounces of a baby (wt) can be used to predict the probability that the mother smoked at all (smoke>0) during or prior to the pregnancy. The graphic of the correct analysis is shown below.
+
+```{r}
+Gest.glm <- glm(smoke > 0 ~ wt,
+                data = Gestation,
+                family = binomial)
+
+summary(Gest.glm)
+```
+
+What are the values of b0 and b1 for the curve shown in the graphic below?
+
+Answer: b0=2.417 and b1=−0.018 
+
+
+### Explanation
+
+Call:
+glm(formula = smoke > 0 ~ wt, family = binomial, data = Gestation)
+
+Deviance Residuals:
+    Min       1Q   Median       3Q      Max  
+-1.8055  -1.2341   0.8984   1.0765   1.4810  
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  2.416983   0.402280   6.008 1.88e-09 ***
+wt              -0.018277   0.003311  -5.520 3.39e-08 ***
+
+## Q2
+Here is the output of a logistic regression performed in R.
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  -6.6035     2.3514  -2.808  0.00498
+mpg             0.3070     0.1148   2.673  0.00751
+
+What is the predicted value for P(Yi=1|xi=25) ?
+
+```{r}
+exp(-6.6035 + 0.3070*25) / (1 + exp(-6.6035 + 0.3070*25))
+```
+Answer: 0.7448821
+
+### Explanation
+To compute a predicted value we can either do the calculation by hand:
+
+exp(-6.6035 + 0.3070*25) / (1 + exp(-6.6035 + 0.3070*25)) = 0.7448821
+
+Or we can use the predict function:
+
+predict(glmObject, data.frame(mpg=25), type="response")
+
+However, in this particular case, we don't have access to the "glmObject" that created the summary output, so we can only compute the answer by hand.
+
+ 
+
+## Q3
+
+Consider again the logistic regression output shown below.
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  -6.6035     2.3514  -2.808  0.00498
+mpg             0.3070     0.1148   2.673  0.00751
+
+Which of the following correctly interprets these results
+
+
+```{r}
+exp(0.3070)
+```
+
+Answer: The odds that Yi=1 increase by 36% for every 1 unit change in x.
+
+### Explanation
+
+To intepret the effect of mpg (the x-variable) on the odds, we compute exp(0.3070), which gives the value of eb1 . See the Overview page of Logistic Regression for an explanation.
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  -6.6035     2.3514  -2.808  0.00498
+mpg             0.3070     0.1148   2.673  0.00751
+
+ 
+
+Since exp(0.3070) = 1.359341, we find that the odds of a success, i.e., that Yi =1 increases by 35.9341%, which rounds to 36% for every 1 unit increase in x.
+
+Notices that the 35.9341 came from 1.359341. If you have 1.36 of what you originally had, then you increased by 0.36 or 36%.
+
+100% - 136% = 36%
+
+
 

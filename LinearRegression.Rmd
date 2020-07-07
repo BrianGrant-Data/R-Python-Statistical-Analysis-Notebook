@@ -195,15 +195,15 @@ If $\beta_0 = 0$, then the model reduces to $Y_i = \beta_1 X + \epsilon_i$, a li
 
 This regression model is appropriate for the data when five assumptions can be made.
 
-1. **Linear Relation**: the true regression relation between $Y$ and $X$ is linear.
+1. **Linear Relation**: the true regression relation between $Y$ and $X$ is linear (use a Residuals versus Fitted-values Plot).
     
-2. **Normal Errors**: the error terms $\epsilon_i$ are normally distributed with a mean of zero.
+2. **Normal Errors**: the error terms $\epsilon_i$ are normally distributed with a mean of zero  (use a Q-Q Plot of the Residuals).
 
-3. **Constant Variance**: the variance $\sigma^2$ of the error terms is constant (the same) over all $X_i$ values.
+3. **Constant Variance**: the variance $\sigma^2$ of the error terms is constant (the same) over all $X_i$ values (use a Residuals versus Fitted-values Plot).
 
-4. **Fixed X**: the $X_i$ values can be considered fixed and measured without error.
+4. **Fixed X**: the $X_i$ values can be considered fixed and measured without error (simply decide if your measurements where entered correctly).
 
-5. **Independent Errors**: the error terms $\epsilon_i$ are independent.
+5. **Independent Errors**: the error terms $\epsilon_i$ are independent (use a Residuals versus Order Plot).
 
 <div style="font-size:0.8em;">
 Note: see the **Explanation** tab **Residual Plots & Regression Assumptions** for details about checking the regression assumptions.

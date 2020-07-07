@@ -1,0 +1,79 @@
+---
+title: "Week 12 | Chi-Squared"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Prep, include=FALSE}
+library(tidyverse)
+library(mosaic)
+library(pander)
+library(car)
+```
+
+# Announcements
+
+# Day 1
+
+## Chi Squared Analysis Example
+
+
+```{r}
+#View(Titanic)
+#?Titanic
+```
+
+Lets see if there was a relationship between passenger survival and ticket class.
+```{r}
+table(TitanicSurvival$passengerClass, TitanicSurvival$survived)
+```
+
+
+Lets see if there was a relationship between passenger survival and gender.
+
+```{r}
+table(TitanicSurvival$sex, TitanicSurvival$survived)
+```
+
+### how c() can be used in Chi-squared Analysis
+
+Bascially, you bind c() lists together into a matrix.
+
+Look up rbind & cbind. They turn c() lists into a matrix. rbind turns each list and turns it into a row. cbind does the same but turns them into columns.
+
+```{r}
+fruit <- rbind(Apples=c(Good = 80, Bruised = 20, Rotten = 15),
+               Oranges=c(Good = 75, Bruised = 25, Rotten = 10)
+               )
+fruit
+
+fruit <- cbind(Apples=c(Good = 80, Bruised = 20, Rotten = 15),
+               Oranges=c(Good = 75, Bruised = 25, Rotten = 10)
+               )
+fruit
+```
+
+
+If you need to flip the matrix, just use the t() function.
+```{r}
+t(fruit)
+```
+
+
+### how to graphically summarise the data
+
+Use a barplot.
+
+```{r}
+barplot(fruit, beside = TRUE, legend.text = TRUE)
+```
+
+Is type of fruit connected to it's condition?
+```{r}
+chisq.test(fruit)
+```
+We have sufficient evidence to reject the null and accept that fruit type and condition are related.

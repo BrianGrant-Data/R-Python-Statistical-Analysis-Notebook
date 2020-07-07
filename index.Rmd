@@ -39,33 +39,33 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 [Customization Help](RMarkdownHints.html)
 
-[Week 1](00Notes/W1_class_notes.html)
+[Week 1 | Welcome to the Course & Introduction to RStudio](00Notes/W1_class_notes.html)
 
-[Week 2](00Notes/W2_class_notes.html)
+[Week 2 | Graphical & Numerical Summaries](00Notes/W2_class_notes.html)
 
-[Week 3](00Notes/W3_class_notes.html)
+[Week 3 | t Tests](00Notes/W3_class_notes.html)
 
-[Week 4](00Notes/W4_class_notes.html)
+[Week 4 | Wilcoxon Tests](00Notes/W4_class_notes.html)
 
-[Week 5](00Notes/W5_class_notes.html)
+[Week 5 | ANOVA](00Notes/W5_class_notes.html)
 
-[Week 6](00Notes/W6_class_notes.html)
+[Week 6 | Kruskal-Wallis Test](00Notes/W6_class_notes.html)
 
-[Week 7](00Notes/W7_class_notes.html)
+[Week 7 | Simple Linear Regression](00Notes/W7_class_notes.html)
 
-[Week 8](00Notes/W8_class_notes.html)
+[Week 8 | Multiple Linear Regression](00Notes/W8_class_notes.html)
 
-[Week 9](00Notes/W9_class_notes.html)
+[Week 9 | Consulting Opportunity or Research Project](00Notes/W9_class_notes.html)
 
-[Week 10](00Notes/W10_class_notes.html)
+[Week 10 | Simple Logistical Regression](00Notes/W10_class_notes.html)
 
-[Week 11](00Notes/W11_class_notes.html)
+[Week 11 | Multiple Logistical Regression](00Notes/W11_class_notes.html)
 
-[Week 12](00Notes/W12_class_notes.html)
+[Week 12 | Chi Squared Test](00Notes/W12_class_notes.html)
 
-[Week 13](00Notes/W13_class_notes.html)
+[Week 13 | Randomization Testing](00Notes/W13_class_notes.html)
 
-[Week 14](00Notes/W14_class_notes.html)
+[Week 14 | Math 325 Notebook Organization & Final Exam](00Notes/W14_class_notes.html)
 
 
 <!-- End your notes before here. ------------------------------------- -->
@@ -237,7 +237,7 @@ Y is a single quantitative variable of interest. This would be like "heights" of
 
 ###  {.tabset .tabset .tabset-pills}
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -267,7 +267,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
@@ -331,7 +331,7 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Quantitative Y | Categorical X (3+ Groups) {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -358,7 +358,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
@@ -409,7 +409,7 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Quantitative Y | Quantitative X {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -430,7 +430,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
@@ -481,7 +481,7 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Quantitative Y | Multiple X {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -502,7 +502,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
@@ -553,10 +553,9 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Binomial Y | Quantitative X {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about graphics to use for this type of data here.
 
 
 
@@ -572,7 +571,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
@@ -623,7 +622,7 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Binomial Y | Multiple X {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -642,10 +641,10 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
-Add your own notes about appropriate inferential procedures for this type of data here.
+[Multi Logistic Regression](C:/Users/BAG20/Desktop/Data Analytic & School/R-Python-Statistical-Analysis-Notebook/LogisticRegression.html)
 
 
 
@@ -693,7 +692,7 @@ Include a brief note or comment instructing your future self with hints and tips
 ### Caterogical Y | Categorical X {.tabset .tabset .tabset-pills}
 
 #### Graphics
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about graphics to use for this type of data here.
@@ -711,7 +710,7 @@ Add your own notes about graphics to use for this type of data here.
 </div>
 
 #### Tests
-<div style="padding-left:125px;color:lightgray;">
+<div style="padding-left:125px;color:gray;">
 <!-- Add your customizations in the area below: -->
 
 Add your own notes about appropriate inferential procedures for this type of data here.
