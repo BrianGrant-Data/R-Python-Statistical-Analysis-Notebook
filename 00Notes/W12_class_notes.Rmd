@@ -77,3 +77,83 @@ Is type of fruit connected to it's condition?
 chisq.test(fruit)
 ```
 We have sufficient evidence to reject the null and accept that fruit type and condition are related.
+
+# Day 2
+
+## In class activity
+
+Load the Data/GSS2012.csv file.
+NOTE: link to the original data is at http://sda.berkeley.edu/sdaweb/analysis/?dataset=gss12 and is from the 2012 Topical Surveys
+
+```{r}
+library(readr)
+GSS2012 <- read_delim("Data/GSS2012.csv", 
+                      "\t", escape_double = FALSE, trim_ws = TRUE)
+names(GSS2012) # This shows the names of the columns
+```
+
+Pick any two columns you are interested in (as long as it isn't the "id" column). You'll probably have no idea what the columns represent for now, that's okay. Just pick two of the names.
+
+Say you picked the columns: nameOfColumn1 and nameOfColumn2 then run the codes:
+
+> table(GSS2012$nameOfColumn1)
+
+> table(GSS2012$nameOfColumn2)
+
+> table(GSS2012$nameOfColumn1, GSS2012$nameOfColumn2)
+
+This gives you some insight about how many of each response there are in the data. 
+
+```{r}
+library(mosaic)
+
+matrix.a <- GSS2012 %>% select(RATETONE, JOKESWK) %>% filter(RATETONE != 0 & JOKESWK !=0)
+
+table(matrix.a$RATETONE)
+table(matrix.a$JOKESWK)
+
+table(matrix.a$RATETONE, matrix.a$JOKESWK)
+table(matrix.a$JOKESWK, matrix.a$RATETONE)
+
+```
+
+Turn the three table(...) commands that you just ran into barplots in R. (Open the "Graphical Summaries" page of the Statistics-Notebook if you need help remembering how to do this.)
+
+Show your barplots to your peers, a TA, or the teacher to ensure that you have made them each correctly.
+
+```{r}
+barplot(table(matrix.a$RATETONE))
+
+barplot(table(matrix.a$JOKESWK))
+
+barplot(table(matrix.a$RATETONE, matrix.a$JOKESWK))
+barplot(table(matrix.a$JOKESWK, matrix.a$RATETONE))
+
+```
+
+Run a chi-squared test on your two columns to see if they are independent or associated with each other.
+
+```{r}
+toneXjokes <- table(matrix.a$JOKESWK, matrix.a$RATETONE)
+
+chiresults.toneXjokes <- chisq.test(toneXjokes)
+chiresults.toneXjokes
+```
+
+Check the requirements of your chi-squared test. Are the results of the test valid?
+
+```{r}
+chiresults.toneXjokes$expected
+```
+Suppose you called your chi-squared test, mychisq in R. Then run
+
+mychisq$residuals
+
+Then, open your Statistics-Notebook to the "Explanation" tab of the "Chi Squared Tests" page. Scroll down until you find the part on "Interpretation" and discuss with your group how "Pearson Residuals" are used to interpret the results of a chi-squared test.
+
+If your group is confused about the Pearson Residuals, ask your teacher for help.
+```{r}
+chiresults.toneXjokes$residuals
+```
+Nicely done! You can use this for your Chi-squared analysis this week if you like.
+
