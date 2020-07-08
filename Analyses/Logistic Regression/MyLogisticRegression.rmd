@@ -7,6 +7,14 @@ output:
 ---
 <hr />
 
+<!-- For the second draft of this analysis, consider filtering out all of the $0 revenue values as well. -->
+
+
+
+
+
+<!-- for this analysis if you follow the outline of the challenger example you'll get an automatic 100% -->
+
 <!-- Find some data of interest to you that can be analyzed with a logistic regression. Complete your Logistic Regression Analysis using this file. 
 
 Hint, run the command 
@@ -30,7 +38,6 @@ tmdb <- read.csv("../../Data/tmdb_5000_movies.csv", header=TRUE)
 movies <- ggplot2movies::movies
 ```
 
-<!-- for this analysis if you follow the outline of the challenger example you'll get an automatic 100% -->
 
 #### Background
 
@@ -83,7 +90,7 @@ where for observation $i$:
 * $Y_i=0$ denotes that the budget was equal to or less than the revenue gained, and 
 * $x_i$ denotes the movies budget. 
 
-Note that if $\beta_1$ is zero in the above model, then $x_i$ (budget) provides no insight about the probability of a movies profitability. Thus, we could test the hypothesis that
+Note that if $\beta_1$ is equal to zero in the above model, then it doesn't matter what $x_i$ (budget) is equal to since $\beta_1 x_i$ will always equal 0. So when it comes to probability, we could test the hypothesis that
 
 $$
   H_0: \beta_1 = 0 \\
@@ -94,10 +101,10 @@ $$
 
 #### Fitting the Model
 
-To obtain estimates of the coefficients $\beta_0$ and $\beta_1$ for the `challeng` data, we apply the following R code.
+Now, we'll find what $\beta_0$ and $\beta_1$ are estimated to be for the `tmdb` data.
 
 ```{r}
-tmdb.glm <- glm(profitable = 1 ~ budget, 
+tmdb.glm <- glm(profitable > 0 ~ budget, 
                 data = tmdb3, 
                 family = binomial)
 summary(tmdb.glm)
@@ -105,24 +112,50 @@ summary(tmdb.glm)
 
 Thus the estimated model for $\pi_i$ is given by
 $$
-  P(Y_i = 1|x_i) \approx \frac{e^{15.043-0.232 x_i}}{1+e^{15.043 - 0.232 x_i}} = \hat{\pi}_i
+  P(Y_i = 1|x_i) \approx \frac{e^{-2.657e^{1}- 7.914e^{22} x_i}}{1+e^{-2.657e^{1} - 7.914e^{22}}} = \hat{\pi}_i
 $$
-where $b_0 = 15.043$ is the value of the `(Intercept)` which estimates $\beta_0$ and $b_1 = -0.232$ is the value of `Temp` which estimates $\beta_1$.
+where $b_0 = -2.657e^{1}$ is the value of the `(Intercept)` and $b_1 = 7.914e^{22}$ is the value of `budget`. `(Intercept)` estimates $\beta_0$ and `budget` estimates $\beta_1$.
 
-Importantly, the $p$-value for the test of `Temp` shows a significant result $(p = 0.0320)$ giving sufficient evidence to conclude that $\beta_1 \neq 0$, which allows us to conclude that temperature effects the probability of an O-ring failure.
+#### Conclusion
+
+Since the $p$-value for the test of `budget` shows an insignificant result $(p = 1.000)$ there is insufficient evidence to conclude that $\beta_1 \neq 0$. We accept the null hypothesis that budget does not affect the probability of a movie making more money than was budgeted.
 
 <br />
 
 #### Visualizing the Model
 
-```{r}
+Simple logistic regressions can be visualized like follows:
 
+```{r}
+plot( profitable > 0 ~ budget,
+      data = tmdb3, 
+      main = "",
+      ylab = 'Probability of a Movie being Profitable',
+      pch = 16)
+
+curve(exp((-2.657*exp(1))-(7.914*exp(22))*x)/(1+exp((-2.657*exp(1))-(7.914*exp(22))*x)),
+      from = min(tmdb3$budget),
+      to = max(tmdb3$budget),
+      add = TRUE)
 ```
 
 
 #### Diagnosing the Model
 
+Lets test if the logistic regression was a good fit for the data. Since there are many replicated $x$-values, we'll use the deviance goodness of fit test.
+
+```{r Deviance Goodness of Fit Test}
+pchisq(
+  3.1154e-09, #residual deviance
+  535, #df for residual deviance
+  lower.tail = FALSE
+)
+```
+
+Recall that the null hypothesis is that the logistic regression is a good fit for the data, thus we reject the null, and claim that the logistic regression is not appropriate.
+
 #### Interpreting the Model
 
+The value of $e^{b_0} = -2.657e^{1} = -26.57$ which shows that the odds for the movie to be provitable when the budget is $\$0$ or ($Y_i=1 \text{ when } x_i = 0$) is -26.57. This is uninterpretable since that would equal -2657% chance and we can't go below -100%. 
 
-
+The value of $e^{b_0} = 7.914e^{-22}$ which shows that the odds of the movie being profitable increases by a factor of about 7.914 divided by about a fifth of a googol; a number virtually equivalent to 0.
