@@ -157,3 +157,26 @@ chiresults.toneXjokes$residuals
 ```
 Nicely done! You can use this for your Chi-squared analysis this week if you like.
 
+# Skills Quiz
+
+## Q1
+
+Review the Notebook
+
+## Q2
+Refer to the Explanation file of your Chi Squared Tests page of your Statistics Notebook for the following questions.
+
+ 
+In the following table, the factor for the rows would be called $Class$ and the factor for the columns would be called $Survival$.
+
+	No	Yes
+1st	122	203
+2nd	167	118
+3rd	528	178
+Crew	673	212
+
+
+### 1)
+
+### 2)
+
