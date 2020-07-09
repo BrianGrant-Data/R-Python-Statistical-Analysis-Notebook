@@ -87,7 +87,7 @@ NOTE: link to the original data is at http://sda.berkeley.edu/sdaweb/analysis/?d
 
 ```{r}
 library(readr)
-GSS2012 <- read_delim("Data/GSS2012.csv", 
+GSS2012 <- read_delim("../Data/GSS2012.csv", 
                       "\t", escape_double = FALSE, trim_ws = TRUE)
 names(GSS2012) # This shows the names of the columns
 ```
@@ -166,6 +166,7 @@ Review the Notebook
 ## Q2
 Refer to the Explanation file of your Chi Squared Tests page of your Statistics Notebook for the following questions.
 
+### 1)
  
 In the following table, the factor for the rows would be called $Class$ and the factor for the columns would be called $Survival$.
 
@@ -175,8 +176,124 @@ In the following table, the factor for the rows would be called $Class$ and the 
 3rd	528	178
 Crew	673	212
 
+### 2)
+$H_0$ : The row variable and column variable are independent.
+$H_a$ : The row variable and column variable are associated.
+
+The two things needed to obtain a p-value for the chi-squared test of independence are 1) the test statistic χ2=∑mi=1(Oi−Ei)2Ei and 2) the $ distribution$ of the test statistic that is calculated under the assumption that the null hypothesis is true. 
+
+The Ei in the χ2 test statistic formula are called the $expected$ counts and are obtained by multiplying the row total with the $column$ $total$ and dividing by the  $total$ $total$. These values show us what values we would expect to observe if the null hypothesis was true. In other words, they provide the counts we would expect if the row variable and column variable were $independent$. 
+
+ 
+
+The χ2 test statistic can be assumed to follow a  $\text{chi-squared distribution}$ with degrees of freedom p=($r - 1$)*(c−1).
+  
+The chi-squared distribution is a $parametric$ distribution because is has a single parameter known as the degrees of freedom, p.
+ 
+
+Pearson $residuals$ are useful for interpreting the results of a chi-squared test when the $alternative$ hypothesis can be concluded to be the truth. They show a relative measurement of how much the $observed $ counts differ from the $expected$
+counts.
+
+## Q3
+The following questions refer to the R Instructions and the HairEyeColor example of the Chi-squared Tests page.
+
+ 
+
+Run the following code in R. (This data is fabricated to mimick reality, but is not actual data.)
+
+```{r}
+glasses <- cbind( Males = c(Glasses = 5, Contacts = 12, None = 18), Females = c(Glasses = 4, Contacts = 14, None = 22))
+
+glasses
+
+barplot(glasses, beside=TRUE, legend.text=TRUE, args.legend=list(x = "topleft", bty="n"))
+```
+ 
+### 1)
+
+Which of the following statements are correct interpretations of the bar plot that the above code generated in R?
+
+answer: 
+
+The data shows that the most common result for either males or females is to not wear glasses or contacts. It also shows that the least common result for both genders is to wear glasses. In other words, the pattern for both genders is the same.
+
+and 
+
+The gender of an individual does not seem to be associated with whether a person wears glasses, contacts, or no eye correction because the pattern of the bars is essentially the same for males and females.
+
+### 2)
+The correct null and alternative hypotheses for these data are
+
+$H_0$  Corrective eye wearing and gender are independent
+$H_a$  Corrective eye wearing and gender are associated
+
+### 3)
+Run the following code in R to determine if a chi-squared test of independence is appropriate for the glasses data.
+
+```{r}
+chis.glasses <- chisq.test(glasses)
+
+chis.glasses$expected
+```
+ 
+
+Are the requirements for this test satisfied?
+
+answer: Yes, the requirements are met because the average of the expected counts is greater than 5 and all expected counts are greater than 1, even though some expected counts are less than 5.
+
+### 4)
+Run the following code in R to view the results of your test.
+
+```{r}
+chis.glasses
+```
+
+χ2=   0.3331
+
+degrees of freedom =  2
+
+p-value =  0.8466
+
+### 5)
+This confirms our original suspicion that we saw in the graphic. There is  $insufficient$ evidence to conclude that corrective eye wearing and gender are  $associated$. We will continue to assume the null hypothesis that whether someone wears glasses, contacts, or no corrective eye wear is $independent$ of their gender.
+
+ 
+
+Since we failed to reject the null there is no interpretation to make for these data so we are not interested in the Pearson Residuals. However, so that you get the opportunity to see what the Pearson Residuals look like when we fail to reject, run the following code in R and notice that none of the residuals stand out as being exceptionally large in magnitude. This is always the case when we fail to reject the null hypothesis in a chi-squared test of independence.
+
+> chis.glasses$residuals
+
+## Q4
 
 ### 1)
+These questions allow you to check your understanding of how to properly perform a Chi-squared Test of Independence in R.
+
+ 
+
+Asia has become a major competitor with the U.S and Western Europe in education. The following table presents the counts of university degrees awarded to students in engineering and science (natural and social sciences) for the three regions.
+
+ 
+
+ 	 	Region	 
+Field	United States	Western Europe	Asia
+Engineering	61941	158931	280772
+Natural Science	111158	140126	242879
+Social Science	182166	116353	236018
+ 
+
+The following code gets this data into R.
+
+> education <- cbind( `United States` = c(Engineering = 61941, `Natural Science` = 111158, `Social Science` = 182166), `Western Europe` = c(Engineering = 158931, `Natural Science` = 140126, `Social Science` = 116353), Asia = c(280772, 242879, 236018))
+
+> education
+
+ 
+
+Are there any differences in the numbers of degrees awarded to each field for the different regions? In other words, are field and region associated? Or can we assume that all three countries are similar in their patterns of degrees being awarded?
+
+
+The null and alternative hypotheses for this study are:
 
 ### 2)
 
+## Q5
