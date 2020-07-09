@@ -27,5 +27,44 @@ Come up with a chi squared test analysis of your own creation.
 
 
 ## Background
+<!-- text -->
 
+## Hypothesis
+<!-- text -->
+$H_0 : \text{... are independent}$
+$H_a : \text{... are associated (i.e. not independent)}$
+
+We will use $\alpha = 0.05$ as our significance level.
+
+## Analysis
+<!-- text -->
+```{r table of the data}
+
+```
+
+<!-- intro text -->
+```{r barplot of the data}
+
+```
+
+<!-- intro text -->
+```{r chi-squared test of the data}
+
+```
+
+<!-- intro text -->
+```{r expected values table}
+
+```
+<!-- are the requirements met? -->
+<!-- do we accept or reject the hypothesis? -->
+
+<!-- intro text -->
+```{r table of residuals}
+
+```
+<!-- explain residuals -->
+
+## Interpretation
+<!-- text -->
 
