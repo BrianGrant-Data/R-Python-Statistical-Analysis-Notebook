@@ -27,24 +27,94 @@ Come up with a chi squared test analysis of your own creation.
 
 
 ## Background
-<!-- text -->
+Social issues are often hard to quantify but detailed surveys yield great insites if the sampling method is done currectly.
+
+The university of Berkeley has a large dataset of surveys available for viewing at sda.berkelyey.edu ( [clickhere](http://sda.berkeley.edu/sdaweb/analysis/?dataset=gss12) ).
+
+Their 2012 ISSP Module contains a survey question about worklife balance and I am curious to see if there is any correlations between a respondents' gender and how they answered the question. 
+
+
+Respondents' gender was classified as either male or female. 
+
+The respondents were asked to respond to the statement, "It has been difficult for you to fulfil your family responsibilities because of the amount of time you spent on your job." Their answers could be any of the following:
+
+0: Doesn't apply/no job
+1: Several times a Week
+2: Several Times a Month
+3: Once or Twice
+4: Never
+8: Don't Know
+9: No answer
+
 
 ## Hypothesis
-<!-- text -->
-$H_0 : \text{... are independent}$
-$H_a : \text{... are associated (i.e. not independent)}$
+Our official questions is: Does time spent working have varing impact on each genders ability to fulfilling family responsibilities. Our null and alternative hypothesis are stated below:
+
+$H_0 : \text{The respondents' sex and their difficult to fulfil their family responsibilities are independent}$
+$H_a : \text{The respondents' sex and their difficult to fulfil their family responsibilities are associated (i.e. not independent)}$
 
 We will use $\alpha = 0.05$ as our significance level.
 
 ## Analysis
-<!-- text -->
-```{r table of the data}
+First lets make a table of the counts for each answer by gender. I would assume that due to culture most of the female respondents will have answered 0: N/A.
+<!-- SEX & JOBVSFA1 -->
+```{r prepare environment}
+library(readr)
+GSS2012 <- read_delim("../../Data/GSS2012.csv", 
+                      "\t", escape_double = FALSE, trim_ws = TRUE)
 
+library(mosaic)
+rawdata <- GSS2012 %>%  
+  select(sex, JOBVSFA1)
+  
+
+# Filter out the IAP results
+filt.data <- rawdata %>% 
+  filter(JOBVSFA1 != -1)
+
+# Reformate for visability
+data <- filt.data %>% 
+  mutate(JobvsFam = JOBVSFA1) %>% 
+  select(sex, JobvsFam) %>% 
+  mutate(
+    sex = case_when(
+      sex == 1 ~ "Male",
+      sex == 2 ~ "Female"
+    ),
+    JobvsFam = case_when(
+      JobvsFam == 0 ~ "0: N/A",
+      JobvsFam == 1 ~ "1: Weekly",
+      JobvsFam == 2 ~ "2: Monthly",
+      JobvsFam == 3 ~ "3: Once or Twice",
+      JobvsFam == 4 ~ "4: Never",
+      JobvsFam == 8 ~ "8: Don't Know",
+      JobvsFam == 9 ~ "9: No answer"
+    )
+  )
 ```
 
-<!-- intro text -->
-```{r barplot of the data}
+```{r table of the data}
+jobtable <- table(data$JobvsFam, data$sex)
+jobtable2 <- t(jobtable)
 
+jobtable
+```
+
+It does look like a largest group is female respondents stating that the question is not applicable. Let's visualize this with a barplot.
+
+```{r barplot of the data}
+barplot(jobtable2, 
+        beside = TRUE, 
+        col = c("pink","blue"),
+        horiz = TRUE,
+        las = 2,
+        legend.text = TRUE,
+        args.legend =
+          list(x = "topright",
+               bty = "n",
+               title = "Gender"),
+        xlab = "Response",
+        main = "Respondents Work-Life balance")
 ```
 
 <!-- intro text -->
