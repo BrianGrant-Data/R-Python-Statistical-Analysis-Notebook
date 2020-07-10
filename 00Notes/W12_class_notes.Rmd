@@ -283,17 +283,131 @@ Social Science	182166	116353	236018
 
 The following code gets this data into R.
 
-> education <- cbind( `United States` = c(Engineering = 61941, `Natural Science` = 111158, `Social Science` = 182166), `Western Europe` = c(Engineering = 158931, `Natural Science` = 140126, `Social Science` = 116353), Asia = c(280772, 242879, 236018))
+```{r}
+education <- cbind( `United States` = c(Engineering = 61941, `Natural Science` = 111158, `Social Science` = 182166), `Western Europe` = c(Engineering = 158931, `Natural Science` = 140126, `Social Science` = 116353), Asia = c(280772, 242879, 236018))
 
-> education
-
+education
+```
  
 
 Are there any differences in the numbers of degrees awarded to each field for the different regions? In other words, are field and region associated? Or can we assume that all three countries are similar in their patterns of degrees being awarded?
 
 
 The null and alternative hypotheses for this study are:
+$H_0$: Field and Region are independent
+$H_a$: Field and Region are associated
+
+```{r}
+FandR.chi <- chisq.test(education)
+
+FandR.chi$expected
+FandR.chi$residuals
+
+FandR.chi
+```
 
 ### 2)
+Create an appropriate graphic in R for this analysis. It should look like this:
+
+<graphic>
+
+```{r}
+barplot(cbind( `United States` = c(Engineering = 61941, `Natural Science` = 111158, `Social Science` = 182166), `Western Europe` = c(Engineering = 158931, `Natural Science` = 140126, `Social Science` = 116353), Asia = c(280772, 242879, 236018)),
+        beside = TRUE,
+        main = "College Degrees Awarded by Region",
+        legend.text = TRUE,
+        args.legend =
+          list(x = "topleft",
+               bty = "n")
+        )
+```
+
+
+
+
+### 3)
+Obtain the Pearson Residuals for this analysis. To check that you obtained them correctly, enter the residual for Engineering in Western Europe:  
+
+
+```{r}
+FandR.chi$residuals
+```
+ 
 
 ## Q5
+This is a review question. It covers one of the topics we have previously studied this semester. It should help you review for the final exam.
+
+Consider the InsectSprays dataset in R.
+
+?InsectSprays
+
+ 
+### 1)
+Test the hypothesis that the mean number of bugs killed by insectisides A, B, C, D, E, and F are all the same against the alternative that at least one mean is different.
+
+```{r}
+insect <- table(InsectSprays$count, InsectSprays$spray)
+
+Insect.chi <- chisq.test(insect) 
+
+Insect.chi
+Insect.chi$expected
+Insect.chi$residuals
+
+```
+
+
+The p-value of the test is less than $.05$ showing that there is  $sufficient$ evidence to conclude that $\text{at least one bug spray results in a different}$ average number of bugs per agricultural experimental unit than the other sprays.
+
+The appropriateness of the test is $questionable$ because the residual plot shows that the  $\text{constant (equal) variance}$ is $questionable$ and the Q-Q Plot suggests the errors are $\text{likely not normally distributed.}$
+
+
+Thus, we should not make any conclusion about these insect sprays until next week when we can use the non-parametric version of ANOVA called the "Kruskal-Wallis Test." In other words, this test is inconclusive due to difficulties with the requirements not being satisfied.
+
+
+# Assessment Quiz
+
+## Q1
+
+What type of statistical test would be appropriate for understanding how gender impacts the risk a person of a certain age has of having a heart attack?
+
+Answer: Multiple Logistic Regression 
+
+We are trying to predict an outcome, whether or not the person will experience a heart attack, using their age and gender. Age is a quantitative measurement, gender is a qualitative measurement, and the response variable Y could be 1 for a heart attack and 0 for no heart attack. This is the perfect scenario of a multiple logistic regression.
+
+## Q2
+
+Which statistical method would be best suited for determining how the age and gender of an individual can predict their annual income, measured in thousands of dollars?
+
+Answer:  Multiple Linear Regression 
+
+The response variable of this scenario, annual income measured in thousands, is quantitative. Since we have a quantitative explanatory variable of age and a qualitative explanatory variable of gender, a multiple linear regression would be the best choice.
+
+## Q3
+
+Run the following codes in R:
+
+
+```{r}
+plot((Wind > 10) ~ Temp, data=airquality, xlab="Daily Average Temperature", ylab="Probability Daily Average Wind Speed (mph) > 10", main="La Guardia Airport Measurements in 1973")
+
+air.glm <- glm(Wind > 10 ~ Temp + as.factor(Month), data=airquality, family=binomial)
+
+curve(exp(air.glm$coefficients[1]+air.glm$coefficients[2]*x)/(1 + exp(air.glm$coefficients[1] + air.glm$coefficients[2]*x)), add = TRUE)
+
+
+```
+
+During which month is there a significant change in the probability that the daily average wind speed will be greater than 10 mph, for all values of daily average temperature?
+
+
+
+
+ANSWER: No change
+
+```{r}
+summary(glm(Wind > 10 ~ Temp + as.factor(Month), data=airquality, family=binomial))
+# look at the p-values. They are all greater than .05 so fail to reject the null. 
+
+```
+
