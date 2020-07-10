@@ -27,11 +27,11 @@ Come up with a chi squared test analysis of your own creation.
 
 
 ## Background
-Social issues are often hard to quantify but detailed surveys yield great insites if the sampling method is done currectly.
+Social issues are often hard to quantify but detailed surveys yield great insights if the sampling method is done correctly.
 
 The university of Berkeley has a large dataset of surveys available for viewing at sda.berkelyey.edu ( [clickhere](http://sda.berkeley.edu/sdaweb/analysis/?dataset=gss12) ).
 
-Their 2012 ISSP Module contains a survey question about worklife balance and I am curious to see if there is any correlations between a respondents' gender and how they answered the question. 
+Their 2012 ISSP Module contains a survey question about work life balance and I am curious to see if there are any correlations between a respondents' gender and how they answered the question. 
 
 
 Respondents' gender was classified as either male or female. 
@@ -48,7 +48,7 @@ The respondents were asked to respond to the statement, "It has been difficult f
 
 
 ## Hypothesis
-Our official questions is: Does time spent working have varing impact on each genders ability to fulfilling family responsibilities. Our null and alternative hypothesis are stated below:
+Our official question is: Does time spent working have varying impact on each genders ability to fulfilling family responsibilities. Our null and alternative hypothesis are stated below:
 
 $H_0 : \text{The respondents' sex and their difficult to fulfil their family responsibilities are independent}$
 $H_a : \text{The respondents' sex and their difficult to fulfil their family responsibilities are associated (i.e. not independent)}$
@@ -56,7 +56,8 @@ $H_a : \text{The respondents' sex and their difficult to fulfil their family res
 We will use $\alpha = 0.05$ as our significance level.
 
 ## Analysis
-First lets make a table of the counts for each answer by gender. I would assume that due to culture most of the female respondents will have answered 0: N/A.
+
+First let’s make a table of the counts for each answer by gender. I would assume that due to culture most of the female respondents will have answered 0: N/A.
 <!-- SEX & JOBVSFA1 -->
 ```{r prepare environment}
 library(readr)
@@ -72,7 +73,7 @@ rawdata <- GSS2012 %>%
 filt.data <- rawdata %>% 
   filter(JOBVSFA1 != -1)
 
-# Reformate for visability
+# Reformate for visibility
 data <- filt.data %>% 
   mutate(JobvsFam = JOBVSFA1) %>% 
   select(sex, JobvsFam) %>% 
@@ -100,9 +101,9 @@ jobtable2 <- t(jobtable)
 jobtable
 ```
 
-It does look like a largest group is female respondents stating that the question is not applicable. Let's visualize this with a barplot.
+It does look like a largest group is female respondents stating that the question is not applicable. Let's visualize this with a bar plot.
 
-```{r barplot of the data}
+```{r bar plot of the data}
 barplot(jobtable2, 
         beside = TRUE, 
         col = c("pink","blue"),
@@ -117,24 +118,34 @@ barplot(jobtable2,
         main = "Respondents Work-Life balance")
 ```
 
-<!-- intro text -->
-```{r chi-squared test of the data}
+Now that we've examined and prepared the data, I will conduct a Chi-Squared Test. This is how we'll know if we should reject or fail to reject the null hypothesis.
+```{r Pearson’s Chi-squared test}
+chi <- chisq.test(jobtable)
 
+library(pander)
+pander(chi)
+
+pander(chi$expected)
 ```
 
-<!-- intro text -->
-```{r expected values table}
+These results tell us that though there are expected values that or less than 5, the average is greater than 5 and the requirements for the test have been met.
 
-```
-<!-- are the requirements met? -->
-<!-- do we accept or reject the hypothesis? -->
+Our $p$-value (9.005e-06) is less than $\alpha$ so we reject the null hypothesis and conclude that the work-life balance and gender of respondents are associated.
 
-<!-- intro text -->
+In order to get a clearer picture of how these two factors are related, I have included a chart of how far our observed values where from the expected values.
 ```{r table of residuals}
-
+pander(chi$residuals)
 ```
-<!-- explain residuals -->
+
+The only major differences came with the observed counts of respondents answering "0:N/A" or "4: Never". 
 
 ## Interpretation
-<!-- text -->
+
+Something interesting to note is that for every question other than "0: N/A" or "9: No answer" the female respondents had less counts than expected. Male respondents likewise had more counts than expected in every area other than those same two answers. In the case of "9: No answer", female respondents were barely above the expected values and male respondents were barely below the expected count. 
+
+It seems that that an unusually high amount of women are unemployed and thus don't have work-life balancing issues, but at the same time there are an unusually low amount of women who answered that they never had work-life balance issues. Likewise, and unusually low amount of men were unemployed, and an unusually high amount of men said that work never interfered with their duties at home.
+
+This might indicate a reverse correlation between employment and work-life balance: it may be that as a group's employment rate increases the amount of times their work interrupts home duties decreases. In the case of women, their work-life balance is worse than expected and for men the balance is better than expected. 
+
+<!-- This might indicate a type of polarization on this issue: either Women were unemployed, or their work responsibilities interrupted their responsibilities at home to some degree. The reverse being the trend for men: either men had never had their work responsibilities  -->
 
