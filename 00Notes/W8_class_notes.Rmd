@@ -394,8 +394,222 @@ Note that they are represented in the Residuals vs Fitted Plot by the dots that 
 None of these diagnostic plots look "great" but they are "good enough" to use the regression results for interpretation and prediction.
 
 ## Q2
+While the "two-lines" model is a very good way to begin your journey into multiple linear regression, there is a vast number of other possible models that we could use, infintely many actually. This problem will allow you to practice what is called a "high dimensional model."
+
+### 1)
+A researcher is interested in knowing what controllable factors influence the rate of vehicle accidents on highways. Data was collected in 1973 on highways in Minnesota in an effort to answer this question.
+
+```{r}
+
+library(car)
+# ?Highway1
+# View(Highway1)
+
+```
+
+ 
+
+Use the Highway1 dataset in R to determine if the speed limit (slim), width of the shoulder on the roadway (shld), and the percentage of vehicle volume that are trucks (trks) have any significant effect on the rate of accidents. 
+
+The mathematical model for this regression is given by
+
+Yi=β0+β1Xi1+β2Xi2+β3Xi3+ϵi
+
+where Yi is the $\text{Rate of accidents: rate}$, Xi1 is the $\text{speed limit: slim}$, Xi2 is the $\text{width of the shoulder: shld}$, and Xi3 is the $\text{percentage of trucks: trks}$.
+
+ 
+Use R to find an estimated regression equation of the model defined above.
+
+```{r High Dimensional Model}
+Highway1.lm <- lm(rate ~
+                    slim +
+                    shld +
+                    trks,
+                  data = Highway1)
+# NOTE: THERE WAS NO INTERACTION TERM! WHY?! BECAUSE WE'RE COMPARING EACH VARIABLE TO SEE IT'S AFFECT ON THE INTERCEPT I THING???
+
+summary(Highway1.lm)
+```
+
+$\hat{Y_i}$=$\text{}$ + $\text{}$Xi1 + 0.02015Xi2 + −0.28175Xi3.
+
+### 2)
+
+
+Select the variables that have a significant effect (non-zero βi) on the average rate of accidents when all variables stated above are included in the model.
+
+Answer: speed limit & percentage of trucks
+
+### 3)
+Check the appropriateness of this regression model by creating the Residuals vs. fitted-values and normal Q-Q plots. One point is labeled as the most extreme outlier in these plots? What number is next to this point?
+```{r}
+par(mfrom = c(1,3))
+plot(Highway1.lm, which = 1:2)
+plot(Highway1.lm$residuals)
+```
+
+
+Point # $27$
+
+### 4)
+The linear relation assumption for this model is perhaps somewhat questionable, but constant variance and normality of the errors don't pose any real concerns. Continuing with the regression despite the possible difficulty, use your math skills or R skills to predict the rate of accidents if the speed limit = 55, width of shoulder = 6, and Percentage of trucks = 10.
+
+```{r}
+predict(Highway1.lm, data.frame(slim = 55,
+                                shld = 6,
+                                trks = 10))
+```
+
+The predicted rate of accidents is  $3.727934$
+
+
 
 ## Q3
+Selecting an appropriate model in multiple regression is a very difficult process. This question will give you some practice at doing this by starting with a simple linear regression model, and trying to add to it "useful" explanatory variables. These are called "added variables" and 
+
+ 
+
+A researcher develops a multiple regression model to predict the highway miles per gallon of a vehicle based on the city miles per gallon of the vehicle. They run the following codes to do this.
+
+```{r}
+library(mosaic)
+# ?mpg
+# View(mpg)
+
+plot(hwy ~ cty, data = mpg)
+mpg.lm <- lm(hwy ~ cty, data=mpg)
+
+summary(mpg.lm)
+
+par(mfrow=c(1,2)); plot(mpg.lm, which=1:2)
+
+```
+
+
+Note that the city miles per gallon is a significant predictor of the highway miles per gallon, p-value < 2e-16.
+
+ 
+
+The researcher is wondering if their model would be improved by including a second explanatory variable. They are considering whether they should add (A) the number of cylinders of the vehicle, (B) the the drive type of the vehicle, or (C) the displacement of the vehicle to the model. 
+
+Create added variable plots for each of these three variables using the following code
+
+```{r}
+
+par(mfrow=c(1,3))
+
+plot(mpg.lm$residuals ~ cyl , data=mpg)
+
+plot(mpg.lm$residuals ~ as.factor(drv), data=mpg)
+
+plot(mpg.lm$residuals ~ displ, data=mpg)
+
+# note that they just made a plot for each of the variables' residuals 
+```
+
+
+### 1)
+Select all variables that appear to show pattterns in the residuals. These patterns imply that there is extra information to add to the mpg.lm regression model. In other words, we should add these variable(s) to the current regression.
+
+Answer: drv only. Though cyl looks like it's a pattern that's jsut because there are very few factors and so everything has been grouped within each one. 
+
+### 2)
+To see how a t Test helps to decide this same result, perform three two-variable regressions. Note that in each regression the original explanatory variable of city is included with one of the three extra variables under consideration included each time. For example the first regression would use
+
+```{r}
+
+mpg.lm <- lm(hwy ~ cty + cyl, data=mpg)
+
+summary(mpg.lm)
+
+```
+
+Your turn, now run three such regresions in R where you change out cyl on two of the regressions for drv and then displ, respectively.
+
+```{r}
+
+mpg.lm2 <- lm(hwy ~ cty + drv, data=mpg)
+
+summary(mpg.lm2)
+
+```
+
+```{r}
+
+mpg.lm3 <- lm(hwy ~ cty + displ, data=mpg)
+
+summary(mpg.lm3)
+
+```
+
+
+What is the p-value for the number of cylinders variable when added to the original mpg.lm regression?
+
+p-value =   $0.466$
+
+This shows that there is  $insufficient$ evidence to conclude that the coefficient for cylinders is different from zero. In other words, cylinders doesn't add anything to the original regression model. 
+
+Note: this is just as we observed above in Q3.2
+
+### 3)
+What is the t Test p-value for the displacement of the engine when added to the original mpg.lm regression?
+
+p-value = $0.817 $
+
+This shows that there is $insufficient$ evidence to conclude that the coefficient for displacement of the engine is different from zero. In other words, displacement of the engine doesn't add anything to the original regression model.
+
+Note: again, this is just as we observed above in Q3.2
+
+### 4)
+What is the t Test p-value for the drive type of the vehicle when added to the original mpg.lm regression?
+
+Note that since drive type is a categorical variable with 4-wheel, front-wheel, and rear-wheel drive categories, there are two p-values. 
+
+p-value for front-wheel drive types = 1.42e-14
+  (copy and paste the answer)
+
+p-value for rear-wheel drive types = 9.70e-10
+ (copy and paste the answer)
+
+This shows that there is  $sufficient$ evidence to conclude that the coefficients for front-wheel and rear-wheel drive types is different from zero. In other words, the various drive types add information to the original regression model. They should be included in the model. 
+
+### ?)
+Optional: To verify this result, see if you can use mPlot(mpg) to visually recreate a near depiction this regression. Email your code to your instructor to see how you did. Doing this will help you on your Analysis for this week and is recommended even though it is optional.
+
+```{r}
+mpg.lm2 <- lm(hwy ~ cty + drv, 
+              data=mpg)
+mpglm2.coef <- mpg.lm2$coefficients
+summary(mpg.lm2)
+
+plot(hwy ~ cty,
+     data = mpg,
+     col = c("red", "green")[as.factor(drv)]
+)
+
+# curve(
+#   mpglm2.coef[1] + mpglm2.coef[2]*x, 
+#   add = TRUE)
+# curve(
+#   (mpglm2.coef[1] + mpglm2.coef[3]) + 
+#   (mpglm2.coef[2]+ mpglm2.coef[4]*x), 
+#   add = TRUE)
+
+curve(
+  mpglm2.coef[1] + mpglm2.coef[2]*x,
+  add = TRUE,
+  col = "red")
+# curve(
+#   (mpglm2.coef[1] + mpglm2.coef[3]) + 
+#   (mpglm2.coef[2]*x), 
+#   col = "red",
+  # add = TRUE)
+curve(
+  (mpglm2.coef[1] + mpglm2.coef[4]) + 
+  (mpglm2.coef[2]*x), 
+  col = "green",
+  add = TRUE)
+```
 
 
 
