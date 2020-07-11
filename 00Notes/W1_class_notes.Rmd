@@ -1,5 +1,5 @@
 ---
-title: "W1_class_notes"
+title: "Week 1 | Welcome to the Course & Introduction to RStudio"
 output: html_document
 ---
 
@@ -63,11 +63,11 @@ KidsFeet %>%
         
 ```
 # Day 2
-```{r}
-install.packages("tidyverse")
-install.packages("mosaic")
-install.packages("DT")
-install.packages("pander")
+```{r, include=FALSE}
+# install.packages("tidyverse")
+# install.packages("mosaic")
+# install.packages("DT")
+# install.packages("pander")
 
 ```
 ```{r}

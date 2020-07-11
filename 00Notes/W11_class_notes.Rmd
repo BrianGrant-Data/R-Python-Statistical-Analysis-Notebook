@@ -1,5 +1,5 @@
 ---
-title: "W11_class_notes"
+title: "Week 11 | Multiple Logistical Regression"
 output: html_document
 ---
 
