@@ -138,18 +138,16 @@ coef[2] + coef[4]
 
 ### in class excercise 1 - equal slopes model
 
-```{r}
-palette(c("skyblue","firebrick"))
-
-plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
-```
-
 
 ```{r}
 mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
 
 summary(mtcars.lm)
 b <- mtcars.lm$coefficients
+
+palette(c("skyblue","firebrick"))
+
+plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
 
 abline(b[1], b[2], col=palette()[1])
 
@@ -163,19 +161,12 @@ legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="T
 palette(c("skyblue","firebrick"))
 
 plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
-```
 
-
-```{r}
 mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
 
 summary(mtcars.lm)
 b <- mtcars.lm$coefficients
-```
 
-
-
-```{r}
 abline( b[1], b[2], col=palette()[1])
 abline( b[1], b[2]+b[4], col=palette()[2])
 
@@ -189,26 +180,12 @@ legend("topleft", legend=c("automatic","manual"), pch=1, col=palette(), title="T
 palette(c("skyblue","firebrick"))
 
 plot(mpg ~ qsec, data=mtcars, col=as.factor(am), xlim=c(0,30), ylim=c(-30,40), main="1974 Motor Trend Cars", pch=16)
-```
 
-
-```{r}
 mtcars.lm <- lm(mpg ~ qsec + am + qsec:am, data = mtcars)
 
 summary(mtcars.lm)
 b <- mtcars.lm$coefficients
-```
 
-<!-- because am is insignificant we'll remove do the regression again without it (we didn't do this in the above examples because we were testing models that don't do that). -->
-<!-- ```{r} -->
-<!-- mtcars.lm <- lm(mpg ~ qsec + qsec:am, data = mtcars) -->
-
-<!-- summary(mtcars.lm) -->
-<!-- b <- mtcars.lm$coefficients -->
-<!-- b -->
-<!-- ``` -->
-
-```{r}
 abline( b[1], b[2], col=palette()[1])
 abline( b[1]+b[3], b[2]+b[4], col=palette()[2])
 
@@ -225,18 +202,21 @@ This problem will have you practice using the "two-lines" multiple regression mo
 
 Run the following commands in R.
 
+```{r}
 library(mosaic)
-?SaratogaHouses
+#?SaratogaHouses
+```
 
 ### 1)
 As explained in the help file (?SaratogaHouses), the SaratogaHouses data set contains data about many houses from Saratoga County, New York in the year 2006. When it comes to buying and selling a home, one of the most important factors is determining the value (or price) of the home. Suppose a family is in search of a home that was newly constructed and that has three bedrooms. Suppose further that they are trying to decide how big of a livingArea they can afford and whether or not the price of the home is significantly impacted by adding a fireplace to their "dream home" wish list.
 
 To get a group of homes that are similar to their current specifications run the following codes in R.
 
+```{r}
 SH2 <- filter(SaratogaHouses, bedrooms == 3,  newConstruction=="Yes")
 
-View(SH2)
-
+#View(SH2)
+```
 
 
 Use the SH2 data set and a "two-lines" multiple regression model to describe the price of a house according to the size of the livingArea of the house and whether or not the house has a fireplace (fireplaces is only 0 or 1 for this reduced SH2 data).
@@ -260,6 +240,7 @@ sh2.lm <- lm(price ~ livingArea + fireplaces + livingArea:fireplaces,
              data = SH2)
 
 summary(sh2.lm)
+sh2.coef <- sh2.lm$coefficients
 ```
 
 ### 3)
@@ -280,16 +261,14 @@ sh2.lmreduce <- lm(price ~ livingArea + livingArea:fireplaces,
              data = SH2)
 
 summary(sh2.lmreduce)
+sh2.reduce.coef <- sh2.lmreduce$coefficients
 ```
 
-New p-value for the interaction term:  
+New p-value for the interaction term:   0.0482
 
- 
-
-### 5)
 This is now significant at the α=0.05 level.
 
- 
+### 5)
 
 It is important to visualize a regression whenever possible so that the reader can connect with the "truth" about the situation that we are trying to show them. Reproduce the two graphics that are shown below. 
 
@@ -297,7 +276,77 @@ It is important to visualize a regression whenever possible so that the reader c
 
 Only check these boxes if you really made the graphs:
 
+```{r Full Regression Model}
+plot(price ~ livingArea,
+     data = SH2,
+     col = c("skyblue","orange")[as.factor(fireplaces)],
+     pch = 21,
+     bg = "gray83", 
+     main = "Two-lines Model using SH2 data set", 
+     cex.main = 1)
+
+legend("topleft",
+       legend = c("Baseline (fireplaces == 0)",
+                  "Changed-line (fireplaces == 1)"),
+       bty = "n",
+       lty = 1,
+       col = c("skyblue","orange"),
+       cex = 0.8)
+
+#get the "Estimates" automatically:
+b <- sh2.coef
+
+# Then b will have 4 estimates:
+# b[1] is the estimate of beta_0: intercept
+# b[2] is the estimate of beta_1:  livingArea
+# b[3] is the estimate of beta_2: fireplaces
+# b[4] is the estimate of beta_3: livingArea:fireplaces
+curve(b[1] + b[2]*x,
+      col="skyblue",
+      lwd=2,
+      add=TRUE)  #baseline (in blue)
+curve((b[1] + b[3]) + (b[2] + b[4])*x,
+      col="orange", 
+      lwd=2,
+      add=TRUE) #changed line (in orange)
+```
+
+```{r Regression Model with Fireplaces term removed}
+plot(price ~ livingArea,
+     data = SH2,
+     col = c("skyblue","orange")[as.factor(fireplaces)],
+     pch = 21,
+     bg = "gray83", 
+     main = "Two-lines Model using SH2 data set", 
+     cex.main = 1)
+
+legend("topleft",
+       legend = c("Baseline (fireplaces == 0)",
+                  "Changed-line (fireplaces == 1)"),
+       bty = "n",
+       lty = 1,
+       col = c("skyblue","orange"),
+       cex = 0.8)
+
+#get the "Estimates" automatically:
+b <- sh2.reduce.coef
+# Then b will have 3 estimates:
+# b[1] is the estimate of beta_0: intercept
+# b[2] is the estimate of beta_1:  livingArea
+###
+# b[3] is the estimate of beta_3: livingArea:fireplaces
+curve(b[1] + b[2]*x,
+      col="skyblue",
+      lwd=2,
+      add=TRUE)  #baseline (in blue)
+curve((b[1]) + (b[2] + b[3])*x,
+      col="orange", 
+      lwd=2,
+      add=TRUE) #changed line (in orange)
+```
 ### 6)
+
+
 
 ## Q2
 
