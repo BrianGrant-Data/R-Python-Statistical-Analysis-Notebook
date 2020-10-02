@@ -1,0 +1,579 @@
+---
+title: "Week 13 | Permutation Tests"
+author: "Brian Grant"
+date: "7/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Announcements
+
+# Day 1
+
+## Initial Example
+
+```{r}
+library(mosaic)
+
+# Step 1: Compute a test statistic for the initial data
+mytest <- t.test(KidsFeet$length ~ KidsFeet$sex)
+myTestStat <- mytest$statistic
+
+# Step 2: Re-sample the data
+N <- 2000
+permutedTestStats <- rep(NA,N)
+
+for (i in 1:N) { #This will rerun the analysis for N amount of times and store it for plotting later.
+  permutedTest <- t.test(KidsFeet$length ~ sample(KidsFeet$sex)) # this makes a t.test on a random sample
+  permutedTestStats[i] <- permutedTest$statistic # this stores the results
+}
+
+hist(permutedTestStats) 
+abline(v = myTestStat, col = "blue")
+
+# Step 3: P-Value
+2*sum(permutedTestStats > myTestStat) / N  # This calculates the p-value
+```
+
+# Day 2
+
+## In Class activity
+
+### Q1 & 2
+Perform an independent two-sample t test using a permutation test.  Use the mtcars dataset and test whether the average weight of the four cylinder cars differs from the average weight of eight cylinder cars.  Use the following psuedo code as a starting spot.
+
+
+```{r}
+library(car)
+View(mtcars)
+
+mtcars2 <- mtcars %>% 
+  select(wt, cyl) %>% 
+  filter(cyl == "4" | cyl == "8")
+
+#Step 1
+myTest <- t.test(wt ~ cyl, 
+                 data = mtcars2,
+                 mu = 0,
+                 alternative = "two.sided",
+                 conf.level = 0.95)
+observedTestStat <- myTest$statistic
+
+#Step 2
+N <- 2000      
+permutedTestStats <- rep(NA, N)
+for (i in  1:N){
+  permutedData <- sample(mtcars2$cyl)
+  permutedTest <- t.test(mtcars2$wt ~ permutedData)
+  permutedTestStats[i] <- permutedTest$statistic
+}
+hist(permutedTestStats, xlim = c(-8, 8))
+abline(v=observedTestStat, col = 'red')
+
+#Step 3 - P Value
+2*sum(permutedTestStats <= observedTestStat)/N
+
+```
+
+
+
+### Q3 & 4
+Perform a One-way ANOVA using a permutation test.  Use the diamonds dataset and test whether the average price of the diamonds depends on the clarity.  Use the following psuedo code as a starting spot.  (Hint: because the diamonds dataset has 53,000 rows we start with a small N value)
+
+```{r}
+
+library(mosaic)
+
+#Step 1
+myTest <- aov(price ~ clarity, data = diamonds)
+observedTestStat <- summary(myTest)[[1]]$`F value`[1]
+
+#Step 2
+N <- 100      
+permutedTestStats <- rep(NA, N)
+for (i in  1:N){
+  permutedData <- sample(diamonds$clarity)
+  permutedTest <- aov(diamonds$price ~ permutedData)
+  permutedTestStats[i] <- summary(permutedTest)[[1]]$`F value`[1]
+}
+
+hist(permutedTestStats, xlim = c(0, 250))
+abline(v=observedTestStat, col = "red")
+
+#Step 3
+sum(permutedTestStats >= observedTestStat)/N
+
+```
+
+```{r Brother Amidan Code}
+myTest <- aov(diamonds$price ~ diamonds$clarity)
+observedTestStat <- summary(myTest)[[1]]$`F value`[1]
+
+N <- 100      
+permutedTestStats <- rep(NA, N)
+for (i in  1:N){
+  permutedData <- sample(diamonds$clarity)
+  permutedTest <- aov(diamonds$price ~ permutedData)
+  permutedTestStats[i] <- summary(permutedTest)[[1]]$`F value`[1]
+}
+hist(permutedTestStats,xlim=c(0,250))
+abline(v=observedTestStat,col="red")
+
+sum(permutedTestStats >= observedTestStat)/N
+
+```
+
+
+
+### Q5
+
+Perform a Logistic Regression Test using a permutation test.  Use the SAT dataset (mosaic library) and test whether the likelihood of scoring above 1000 (sat > 1000) on the SAT depends on the expenditure per pupil (expend).  Use the following psuedo code as a starting spot.
+
+```{r not functional}
+library(mosaic)
+#View(SAT)
+
+
+#Step 1
+myTest <- glm(sat > 1000 ~ expend, 
+              data = SAT,
+              family = binomial)
+
+observedTestStat <- summary(myTest)[[12]][2,3]
+
+#Step 2
+N <- 100      
+permutedTestStats <- rep(NA, N)
+for (i in  1:N){
+  permutedData <- sample(SAT$expend) # brother amidan skipped this part
+  permutedTest <- glm(sat > 1000 ~ permutedData,
+                      data = SAT,
+                      family = binomial)
+  permutedTestStats[i] <- summary(permutedTest)[[12]][2,3]
+}
+hist(permutedTestStats) # Brother Amidan took this part out
+abline(v=observedTestStat) # Brother Amidan took this part out
+
+#Step 3
+#sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+
+```
+
+
+```{r Brother Amidans Code 2}
+############################################3
+#### Question 5
+library(mosaic)
+
+## calculate the test statistic
+myTest <- glm(sat>1000 ~ expend, data=SAT, family=binomial)
+observedTestStat <- summary(myTest)[[12]][2,3]
+
+## Create the distribution for the test statistic
+N <- 200      
+permutedTestStats <- rep(NA, N)
+for (i in  1:N){
+  permutedTest <- glm(sat>1000 ~ sample(expend), data=SAT, family=binomial)
+  permutedTestStats[i] <- summary(permutedTest)[[12]][2,3]
+}
+
+## Calculate the p-value / regression is always two tailed
+sum(permutedTestStats <= observedTestStat)/N * 2
+# NOTE using <= because test statistic is negative, would use >= if test statistic positive
+
+```
+
+
+<!-- ```{r} -->
+<!-- library(tidyverse) -->
+<!-- library(car) -->
+
+<!-- ############################################3 -->
+<!-- #### Question 1 -->
+
+<!-- ## filter data with only 4 and 8 cylinder -->
+<!-- mtcars2 <- filter(mtcars, mtcars$cyl != "6") -->
+
+<!-- ## calculate the test statistic -->
+<!-- ttestout <- t.test(wt ~ cyl, data=mtcars2) -->
+<!-- observedTestStat <- ttestout$statistic -->
+<!-- # NOTE: observedTestStat contains the test statistic -->
+
+<!-- ## Create the distribution for the test statistic -->
+<!-- N <- 2000       -->
+<!-- permutedTestStats <- rep(NA, N) -->
+<!-- for (i in  1:N){ -->
+<!--   permutedTest <- t.test(wt ~ sample(cyl), data=mtcars2) -->
+<!--   permutedTestStats[i] <- permutedTest$statistic -->
+<!-- } -->
+<!-- # NOTE: permutedTestStats contains 2000 Test Statistics assuming data is just random (Ho is true) -->
+
+<!-- ## Calculate the p-value -->
+<!-- sum(permutedTestStats <= observedTestStat)/N * 2  -->
+<!-- # NOTE: multiply by 2 if a two-tailed test -->
+<!-- # NOTE using <= because test statistic is negative, would use >= if test statistic positive -->
+
+<!-- ############################################3 -->
+<!-- #### Question 3 -->
+
+<!-- ## calculate the test statistic -->
+<!-- myTest <- aov(price ~ clarity, data=diamonds) -->
+<!-- ``` -->
+
+# Skills Quiz
+
+## Q1
+
+N/A
+
+## Q2
+The idea behind permutation testing is that the $null$ hypothesis can be reworded to state that "any pattern that has been witnessed in the sampled data is simply due to $\text{random chance}$."
+
+Permutation tests can be applied to any hypothesis testing scenario in order to compute the   $\text{p-value}$ of the test in a way that does not require any assumptions on the data. The most difficult part of any permutation test is figuring out how to permute the data, which is performed differently for each hypothesis test. Thus, being able to identify the hypothesis test from the stated hypotheses is an important skill you have hopefully started to develop. To see how you are doing with this skill, match the following null hypotheses with their appropriate test.
+
+Chi-squared H0: the two variables are not associated 
+
+ANOVA H0:μ1=μ2=μ3=μ4
+
+Independent Samples t Test H0:μ1=μ2
+
+Wilcoxon Signed-Rank Test H0:  median of the differences = 0
+
+Wilcoxon Rank Sum Test H0: difference in medians = 0
+
+Paired Samples t Test H0:μd=0
+
+## Q3
+### a)
+Run the following codes in R.
+
+ 
+```{r}
+  set.seed(1140411)
+
+   sample1 <- rnorm(30, 69, 2.5)
+
+   sample2 <- rnorm(30, 69, 2.5)
+
+   theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30))
+
+   View(theData)
+
+   boxplot(values ~ group, data = theData)
+```
+
+Both sample 1 and sample 2 in the above code are samples of size n= $30$ from a $\text{normal}$ distribution with $\text{mean 69 and standard deviation 2.5}$. Thus, they are each sampled from $\text{the same distribution}$. Thus, the hypothesis that H0:μ1=μ2 is $true$ for these data.
+
+ 
+
+Suppose we just had theData dataset without knowledge of the population this data came from. The permutation test of the stated null hypothesis would then be coded in R as:
+
+
+myTest <- $\text{t.test(values ~ group, data = theData, mu = 0)}$
+
+observedTestStat <- myTest$statistic  
+  
+
+ 
+
+N <- 2000      
+permutedTestStats <-  rep(NA, N)
+for  (i in 1:N ) {
+   permutedData <-  $\text{sample(x=theData\$group)}$
+  
+   permutedTest <-  $t.test(values ~ permutedData, data = theData, mu = 0)$
+
+   permutedTestStats[i]  <-  $permutedTest\$statistic$  
+  
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+
+ 
+
+ 
+
+Run the above code in R by copying and pasting the R-chunk shown below into a new R Chunk in your ClassNotes.Rmd file and filling in the places missing with the correct answers you obtained above. (You will have to type the answers in by hand, they cannot be copied and pasted.)
+
+IMPORTANT: to match the answer key for the questions below, your R-Chunk you add to your RCheatSheets&Notes.Rmd file will need to use set.seed() as follows. This ensures everyone gets the same "random" data each time.
+
+ 
+
+```{r, eval=FALSE}
+
+# Create the data:
+set.seed(1140411)
+sample1 <- rnorm(30, 69, 2.5)
+sample2 <- rnorm(30, 69, 2.5)
+theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30))
+View(theData)
+boxplot(values ~ group, data = theData)
+
+ 
+
+# Run the permutation test:
+
+myTest <- t.test(values ~ group, data = theData, mu = 0) 
+observedTestStat <- myTest$statistic
+
+ 
+
+N <- 2000      
+permutedTestStats <-  rep(NA, N)
+for  (i in 1:N ) {
+   permutedData <- sample(x=theData$group)
+   permutedTest <- t.test(values ~ permutedData, data = theData, mu = 0)
+   permutedTestStats[i]  <-  permutedTest$statistic
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+
+```
+
+observedTestStat =   $-.7305$
+  (Round to 4 decimal places.)
+
+"Greater than" p-value =  $.77$
+  (Round to 2 decimal places.)
+
+"Less than" p-value =   $.23$
+  (Round to 2 decimal places.)
+
+"Two-sided" p-value = $.46$
+  (Round to 2 decimal places.)
+
+## Q4
+
+Run the following codes in R.
+
+ 
+```{r}
+set.seed(121)
+sample1 <- rnorm(30, 185, 8)
+sample2 <- sample1 - rnorm(30, 0, 3.5)
+theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30), id = rep(c(1:30),times=2))
+#View(theData)
+with(theData, hist(values[group==1] - values[group==2]))
+```
+ 
+
+ 
+
+The above code produces   $\text{two paired samples}$ of size n=$30$  where the differences between the samples are from a $normal$ distribution with $text\{mean of zero and standard deviation}$. Thus, the true average difference between sample1 and sample2 is $0$, i.e., H0:μd=0
+
+ 
+
+Suppose we just had theData dataset without knowledge of the population this data came from. The permutation test of the stated null hypothesis would then be coded in R as:
+
+ 
+
+myTest <-   $\text{t.test(values ~ group, data = theData, paired = TRUE, mu = 0)}$
+
+observedTestStat <- $myTest\$statistic$
+  
+
+ 
+
+N <- 2000      
+permutedTestStats <-  rep(NA, N)
+for  (i in 1:N ) {
+   permutedData <-   $sample(x = c(1, -1), size = 30, replace  = TRUE)$
+  
+   permutedTest <-   $with(theData, t.test(permutedData*values[group==1] - values[group=2]), mu = 0)$
+
+   permutedTestStats[i]  <-  $permutedTest\$statistic$  
+  
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+
+ 
+
+Run the above code in R by copying and pasting the code below into a new R Chunk in your ClassNotes.Rmd file. Then type in the correct answers from above by hand into the places with "..." in the code below.
+
+IMPORTANT: to match the answer key for the questions below, your R-Chunk you add to your ClassNotes.Rmd file will need to use set.seed() as follows. This ensures everyone gets the same "random" data each time.
+
+ 
+
+```{r, eval=FALSE}
+
+# Create the data:
+
+set.seed(121)
+sample1 <- rnorm(30, 185, 8)
+sample2 <- sample1 - rnorm(30, 0, 3.5)
+theData <- data.frame(values = c(sample1,sample2), group = rep(c(1,2), each=30), id = rep(c(1:30),times=2))
+#View(theData)
+with(theData, hist(values[group==1] - values[group==2]))
+
+ 
+
+# Perform the permutation test:
+
+myTest <-   t.test(values ~ group, data = theData, paired = TRUE, mu = 0)
+observedTestStat <- myTest$statistic
+  
+
+ 
+
+N <- 2000      
+permutedTestStats <-  rep(NA, N)
+for  (i in 1:N ) {
+   permutedData <-   sample(x = c(1, -1), size = 30, replace  = TRUE)
+   permutedTest <-   with(theData, t.test(
+     permutedData*(values[group==1] - values[group==2]),
+     mu = 0))
+   permutedTestStats[i]  <-  permutedTest$statistic  
+}
+hist(permutedTestStats)
+abline(v=observedTestStat)
+sum(permutedTestStats >= observedTestStat)/N
+sum(permutedTestStats <= observedTestStat)/N
+2*sum(permutedTestStats <= observedTestStat)/N
+```
+
+ 
+
+ 
+
+observedTestStat =   -0.5384 
+ (Round to 4 decimal places.)
+
+"Greater than" p-value =  0.69
+  (Round to 2 decimal places.)
+
+"Less than" p-value =   0.31
+ (Round to 2 decimal places.)
+
+"Two-sided" p-value =  0.62
+ (Round to 2 decimal places.)
+ 
+ 
+## Q5
+
+### 1
+This question will help you review some of the material from this semester. To begin, run the following code in R.
+
+ 
+```{r}
+library(mosaic)
+
+#?SaratogaHouses
+
+#View(SaratogaHouses)
+
+table(SaratogaHouses$fuel)
+```
+Say a homeowner in Saratoga County, New York is curious about whether upgrading their home from an oil heating fuel system to either a gas or electric fuel system would increase the resale value of their home. Use the SaratogaHouses dataset in R and a Kruskal-Wallis Test to answer the question, "which heating system results in the hightest distribution of home resale values (price)?"
+
+The null hypothesis for this study is that the $\text{prices of homes}$ with either gas, oil, or electric heating fuel systems $\text{all come from the same distribution}$. The alternative hypothesis is that at least one type of $\text{fuel system}$ in a different distribution of $\text{prices of homes}$.
+
+### 2
+Perform a Kruskal-Wallis test for these hypotheses in R using the SaratogaHouses dataset.
+
+```{r}
+kruskal.test(price ~ fuel, data = SaratogaHouses)
+```
+
+
+The Kruskal-Wallis  $\text{Rank Sum Test}$ for these hypotheses gives a test statistic of $\text{159.66}$ with $2$ degrees of freedom, resulting in a p-value < 2.2e-16. There is $\text{sufficient}$ evidence to  $\text{conclude the hypothesis}$ the distribution of  $\text{prices of homes}$ is different for at least one of the $\text{fuel system types}$.  
+
+What's the highest median price?
+```{r}
+SaratogaHouses %>% group_by(fuel) %>% summarise(median = median(price))
+```
+
+
+## Q6
+
+These questions will help you review the material we have learned up to this point in the semester. 
+
+Consider the ToothGrowth dataset in R.
+
+?ToothGrowth
+
+Say a researcher was interested in obtaining guinea pigs with long teeth (yes, that is an odd interest). They want to know which Vitamin C delivery method (OJ or VC) and which dosage level (0.5, 1.0, or 2.0) would result in the longest teeth, on average. Say they produce the following plot:
+
+```{r}
+library(lattice)
+xyplot(len ~ dose, groups=supp, data=ToothGrowth, type=c("p","a"), auto.key=TRUE)
+```
+
+and reach the following conclusion:
+
+"I have decided to use a dosage of 2.0. The delivery method at this dosage does not seem to matter. Both delivery methods result in the same average tooth growth at this highest dosage level even though at lower levels of dosage the OJ delivery method tends to yield longer teeth on average."
+
+Run an appropiate hypothesis test in R to determine if the researcher is justified in reaching their conclusion from the above plot. 
+
+### 1
+
+```{r}
+ToothGrowth.aov <- aov(len ~ as.factor(dose)*as.factor(supp), data = ToothGrowth)
+summary(ToothGrowth.aov)
+
+
+ToothGrowth.aov$statistic
+
+plot(ToothGrowth.aov, which = 1:2)
+```
+
+Most appropriate hypothesis test for these data: $\text{Two-Way ANOVA}$
+
+Test statistic for this test: $4.107$
+
+Degrees of Freedom for this test:  $\text{2 and 54}$
+
+P-value for this test:  $0.024631$
+
+Is the reasercher justified in their conclusion? $Yes$
+
+### 2
+Consider the RailTrail dataset in R. (Be sure library(mosaicData) is loaded.)
+
+ 
+
+?RailTrail
+
+ 
+
+Say a student feels that it is typically more cloudy on weekends than it is on weekdays. They decide to use the RailTrail dataset to test the null hypothesis that weekends and weekdays have equal average cloudiness ratings (0 - 10 scale). They produce the following plot:
+
+ 
+boxplot(cloudcover ~ weekday, data=RailTrail, names=c("Weekend/Holiday", "Weekday"), ylab="Cloud Cover Measurement (in oktas)")  #(google oktas if you don't know what they are) and reach the conclusion that weekdays are actually more cloud covered than weekends.
+
+Run an appropiate hypothesis test in R to determine if the student is justified in reaching their conclusion from the above plot. 
+
+```{r}
+library(mosaicData)
+t.test(cloudcover ~ weekday, data = RailTrail, mu = 0, altenative = "greater", conf.level = 0.95)
+
+```
+ 
+
+Most appropriate hypothesis test for these data:  $\text{Independent t test}$
+
+Test statistic for this test:  $\text{-1.7358}$
+
+Degrees of Freedom for this test:  $\text{48.435}$
+
+P-value for this test:  $\text{0.08895}$
+
+Is the student justified in their conclusion at the 0.1 significance level? $\text{yes}$
+
+
+ 
+
+ 
+
+ 
+
+ 

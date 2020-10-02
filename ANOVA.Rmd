@@ -22,6 +22,11 @@ An ANOVA is for testing the equality of several means simultaneously. A single *
 
 <div style="font-size:0.8em;">Note: A factor is defined as a qualitative variable containing at least two categories. The categories of the factor are referred to as the "levels" of the factor.</div>
 
+Use the following for graphing:
+
+library(lattice)
+xyplot(len ~ dose, groups=supp, data=ToothGrowth, type=c("p","a"), auto.key=TRUE)
+
 ----
 
 

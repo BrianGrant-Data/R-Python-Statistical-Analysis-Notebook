@@ -187,5 +187,75 @@ Notices that the 35.9341 came from 1.359341. If you have 1.36 of what you origin
 
 100% - 136% = 36%
 
+## Q4
+Use the Galton dataset found within the mosaic package to answer the following questions.
+
+```{r}
+library(mosaic)
+```
+View(Galton)
+?Galton
+
+
+### 1)
+We know that in general men are taller than women. Thus, it seems logical that the height of a person could be used to predict their gender. Use the Galton dataset to produce a logistic regression model that allows us to predict the probability that the gender of an individual is male (sex == "M") given the height of the individual.
+
+The logistic regression model for these data is given by
+
+P(Yi=Male)=(e^(β0+β1heighti)/(1+e^(β0+β1heighti)
+
+```{r}
+Galton.glm <- glm(sex == "M" ~ height,
+                  data = Galton,
+                  family = binomial)
+summary(Galton.glm)
+coef.gal <- Galton.glm$coefficients
+
+```
+
+
+The estimated values for the coefficients of this equation are given in R as
+
+coef.gal[0]
+coef.gal[1]
+
+-52.98422
+0.79683
+
+### 2) 
+Create a graphic for this logistic regression. It should look like the following image.
+
+Were you able to make this same plot in R?
+```{r}
+plot(sex == "M" ~ height,
+     data = Galton)
+curve(exp(coef.gal[1] + coef.gal[2]*x)/
+        (1+exp(coef.gal[1]+coef.gal[2]*x)),
+                                        add = TRUE)
+
+```
+
+### 3)
+Use your model to predict the probability that a person who is 65 inches tall is male. 
+
+```{r}
+predict(Galton.glm, newdata = data.frame(height = 65), type = "response")
+```
+
+### 4)
+Conduct Hosmer and Lemeshow's Goodness of Fit test with g=10 to confirm that this simple logistic model is appropriate to use height to predict sex. 
+```{r}
+library(ResourceSelection)
+hoslem.test(Galton.glm$y, Galton.glm$fitted, g = 10)
+
+```
+
+
+The p-value of the test is  
+This shows there is  
+ evidence to reject the null hypothesis that the logistic regression is a good fit for these data. In other words, the model looks really good.
+
+ 
+
 
 

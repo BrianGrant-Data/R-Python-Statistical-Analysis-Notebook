@@ -36,6 +36,7 @@ To begin customizing, [download](https://github.com/saundersg/Statistics-Noteboo
 
 ### Class Notes
 <!-- This is a great place to add general notes --------------- -->
+[Analyses](Analyses/0_Links.html)
 
 [Customization Help](RMarkdownHints.html)
 

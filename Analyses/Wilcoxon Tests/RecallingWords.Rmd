@@ -29,21 +29,24 @@ View(Friendly)
 
 <br />
 
-#### Background
+## Background
 
-Many teachers and other educators are interested in understanding how to best deliver new content to students. In general, they have two choices of how to do this.
+Education is a very expensive industry with whose influence can make or break nations. Due to this, it's very important that educators use the best methods available for helping students to learn.
 
-1. The Meshed Approach
-    * Deliver new content while simultaneously reviewing previously understood content.
+A study was performed to determine whether one of three teaching methods (named *SFR*, *Before*, and *Meshed*) had a better impact on memory recall than the others.
 
-2. The Before Approach
-    * Deliver new content after fully reviewing previously understood content.
+- The SFR method randomly presents information for memorization during each trial session.
+- The Before method presents the information successfully memorized before information not memorized in each successive trial session.
+- The Meshed method alternates presenting the information successfully memorized with information not memorized.
 
-A study was performed to determine whether the *Meshed* or *Before* approaches to delivering content had any positive benefits on memory recall. 
+Further details are included below in "The Experiment" section.
+
+
+
 
 <div style="padding-left:15px;">
 
-## <a href="javascript:showhide('uniquename')">The Experiment <span style="font-size:8pt;">(click to view)</span></a>
+##### <a href="javascript:showhide('uniquename')">Click here for further details </a>
 
 
 <div id="uniquename" style="display:none;">
@@ -66,7 +69,7 @@ The data records the number of correctly recalled words (out of the 40 possible)
 
 </div>
 
-##### <a href="javascript:showhide('uniquename2')">The Data <span style="font-size:8pt;">(click to view)</span></a>
+##### <a href="javascript:showhide('uniquename2')"> Click here to see the raw data </a>
 
 <div id="uniquename2" style="display:none;">
 
@@ -75,8 +78,8 @@ The results from the study can be found in the `Friendly` data set in R after lo
 Click the "Code" button to see the data.
 
 
-```{r view raw data}
-datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
+```{r }
+datatable(Friendly, options=list(lengthMenu = c(10,30)))
 
 ```
 
@@ -84,22 +87,31 @@ datatable(Friendly, options=list(lengthMenu = c(3,10,30)))
 </div>
 </div>
 
-<br />
-
 ## Analysis
 
-### Research Question
+### Hypothesis
 <!-- Note that your goal is to use the Friendly data to show whether or not the Meshed or Before methods have any positive benefit on memory recall. -->
 
-We'll be testing to see if either of the two treatment groups, the ones that used the "Meshed" or "Before" methods, had a greater positive affect on memory recall than control group, the one that used the "SFR" method. 
+We'll be testing to see if the two treatment groups, the ones that used the "Meshed" or "Before" methods, had the same difference in their medians when compared to the control group that used the "SFR" method. 
 
-This will require two independent samples tests: Meshed compared to SFR and Before compared to SFR. Before we can determine what type of test we can do, we will need to check the normality of our data.
+This will require two independent samples tests: Meshed compared to SFR and Before compared to SFR. The Hypothesis and $\alpha$ are as follows.
+
+$$H_0: \text{difference in medians = 0}$$
+
+$$H_a: \text{difference in medians > 0}$$
+
+Normally our $\alpha$ would equal .05 but since we will need to run multiple tests, I'll conduct a Bonferroni correction and set $\alpha = .025$ for each of the tests.
+$$\alpha = .025$$
+
+Before we can determine what type of test we can do, we will need to check the normality of our data.
+
 
 ### Describe the Data
 
-We'll create a six-number summary and a Q-Q plot of each of the three samples.
+We'll start by creating a number summary and a strip chart. From these we can see that the sample size is too small to assume normality.
 
-```{r Check for Normality}
+
+```{r}
 Friendly %>% 
   group_by(condition) %>% 
   summarise(min = min(correct),
@@ -108,29 +120,30 @@ Friendly %>%
             median = median(correct), 
             Q3 = quantile(correct, 0.75),
             max = max(correct),
+            sd = sd(correct),
             "Sample Size" = n()
             ) %>%
   pander()
-
-qqPlot(correct ~ condition,
-       data = Friendly)
-
+```
+This stipchart seems to show that the Before method has the highest average score which the median seems to confirm in the number summary. 
+```{r}
 stripchart(correct ~ condition,
            data = Friendly, 
            method = "stack")
 ```
+Since the sample size is small we'll create a Q-Q plot of each of the three samples to check for normality. Most of the data appears to be normal, however since there are outliers and the sample is small we won't be able to perform a t-Test and will need to conduct a Wilcoxon Test instead.
+```{r Check for Normality}
+qqPlot(correct ~ condition,
+       data = Friendly)
+```
 
-From these we can see that the data is not normal, none of the samples are large enough to be considered normal, and the distributions are not identically distributed. We will have to conduct a Wilcoxon Rank Sum Test.
+
+
+
 
 ### Make inferences
 
 Now that we have determined what type of test we'll conduct, I'll set the official hypothesis.
-
-The null hypothesis is that the difference in the treatment and control samples' medians are equal to zero.
-
-The alternative hypothesis is that the difference in the treatment and control samples' medians are not equal to zero.
-
-Our alpha is equal to 0.05.
 
 The Wilcoxon Rank Sum Tests are as follows:
 
@@ -162,5 +175,5 @@ Since the p-value for the "Meshed" method hypothesis is 0.05075, we have insuffi
 
 ### Conclusion
 
-According to the Wilcoxon test, we can accept that the "Before" method is more effective than the "SFR" method, but we can't do that for the "Meshed" method. According to the original study, educators can conclude that the "Before" method is the better option of the three methods.
+According to the Wilcoxon test, we have sufficient evidence that  the "Before" method performed better than the "Meshed" method and the "SFR" method. Despite this however, it is important to note that the sample size was very small, thus we may be at risk of a false positive result. Based on this information it may be appropriate to assume that funding this same experiment, but with a larger sample size, might yield conclusive evidence.
 

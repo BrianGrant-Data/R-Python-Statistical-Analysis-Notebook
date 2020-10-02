@@ -1,0 +1,35 @@
+---
+title: "M425-W2-class_activity"
+author: "Brian Grant"
+date: "9/25/2020"
+output: html_document
+---
+
+# Q1: load Utlities
+```{r}
+library(mosaicData)
+library(ggplot2)
+```
+
+# Q2: 
+
+Recreate the graph
+```{r}
+fit <- lm(elecbill ~ kwh, data = Utilities)
+
+ggplot(Utilities, 
+       aes(x = kwh, y = elecbill)) +
+  geom_point() +
+  labs(title = "Monthly Electricity Usage for a Minnesota Residence (Utilities",
+       x = "Kilowatt Hours of Electricty Used (kwh)",
+       y = "Total Electric Bill in USD (elecbill)") +
+  geom_smooth(method = 'lm', se = FALSE)
+```
+
+Get the slope
+```{r}
+summary(fit)
+```
+
+
+

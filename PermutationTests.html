@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -84,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -233,6 +232,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -244,18 +244,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -405,6 +393,7 @@ $(document).ready(function () {
 </script>
 <hr />
 <p>A nonparametric approach to computing the p-value for any test statistic in just about any scenario.</p>
+<p>This can be used for anything the other tests aren’t appropriate for. Technically, you can use it even when those other tests are appropriate, but this is a sub-par option to the others.</p>
 <hr />
 <div id="section" class="section level3 tabset tabset-pills tabset-fade">
 <h3></h3>
@@ -499,10 +488,10 @@ sum(permutedTestStats &gt;= observedTestStat)/N</code></pre>
 <pre><code>## [1] 1</code></pre>
 <pre class="r"><code># Less than p-value:
 sum(permutedTestStats &lt;= observedTestStat)/N</code></pre>
-<pre><code>## [1] 0.0035</code></pre>
+<pre><code>## [1] 0.003</code></pre>
 <pre class="r"><code># Correct two sided p-value for this study:
 2*sum(permutedTestStats &lt;= observedTestStat)/N</code></pre>
-<pre><code>## [1] 0.007</code></pre>
+<pre><code>## [1] 0.006</code></pre>
 <h5 id="other-examples-from-students">Other Examples from Students</h5>
 <p><a href="javascript:showhide('ItTest')">Independent Samples t Test (and Wilcoxon) <span style="font-size:8pt;">(click to show/hide)</span></a></p>
 <div id="ItTest" style="display:none;">
@@ -674,6 +663,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

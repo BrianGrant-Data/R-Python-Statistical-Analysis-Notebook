@@ -154,7 +154,7 @@ This gives us 254 gamers and 182 non-gamers to work with.
 
 The distribution is visualized as follows:
 
-```{r Numeric & Graphical Summaries}
+```{r Graphical Summaries}
 boxplot(Doing_Homework_Hours ~ gamer_status, 
         data = relevantdata2,
         main = 'High School Seniors \nHomework Time',
@@ -162,7 +162,11 @@ boxplot(Doing_Homework_Hours ~ gamer_status,
         ylab = 'Homework Hours per Week',
         col = "skyblue"
         )
+```
 
+
+**Hours Spent Doing Homework Each Week**
+```{r Numeric Summaries}
 relevantdata2 %>% 
   group_by(gamer_status) %>% 
   summarise(Min = min(Doing_Homework_Hours),

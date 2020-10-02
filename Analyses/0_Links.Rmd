@@ -1,0 +1,38 @@
+---
+title: "Links to Analyses"
+author: "Brian Grant"
+date: "7/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+[Week 1 | Rent | Welcome to the Course & Introduction to RStudio](Rent.html)
+
+[Week 2 | Stephanie | Graphical & Numerical Summaries](Stephanie.html)
+
+[Week 3 | High School Seniors | t Tests](t Tests/HighSchoolSeniors.html)
+
+[Week 4 | Recalling Words | Wilcoxon Tests](Wilcoxon Tests/RecallingWords.html)
+
+[Week 5 | Day Care | ANOVA](ANOVA/DayCare.html)
+
+[Week 6 | Chocolate | Kruskal-Wallis Test](Kruskal-Wallis Test/Chocolate.html)
+
+[Week 7 | My Simply Linear Regression | Simple Linear Regression](Linear Regression/MySimpleLinearRegression.html)
+
+[Week 8 | Car Prices | Multiple Linear Regression](Linear Regression/CarPrices.html)
+
+[Week 9 | Consulting Project | Consulting Opportunity or Research Project](Consulting.html)
+
+[Week 10 | My Logistic Regression | Simple Logistical Regression](Logistic Regression/MyLogisticRegression.html)
+
+Week 11 | N/A
+
+[Week 12 | My Chi Squared Test | Chi Squared Test](Chi Squared Tests/MyChiSquaredTest.html)
+
+Week 13 | N/A
+
+Week 14 | N/A

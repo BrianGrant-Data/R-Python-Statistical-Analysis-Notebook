@@ -14,6 +14,7 @@ output:
 
 
 ----
+[My Analyses](Analyses/0_Links.html)
 
 It is common to only have a **sample** of data from some population of interest. Using the information from the sample to reach conclusions about the population is called *making inference*. When statistical inference is performed properly, the conclusions about the population are almost always correct. 
 

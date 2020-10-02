@@ -1350,7 +1350,7 @@ HTMLWidgets.widget({
     if (data.caption) $table.prepend(data.caption);
 
     if (!data.selection) data.selection = {
-      mode: 'none', selected: null, target: 'row'
+      mode: 'none', selected: null, target: 'row', selectable: null
     };
     if (HTMLWidgets.shinyMode && data.selection.mode !== 'none' &&
         data.selection.target === 'row+column') {
@@ -1678,6 +1678,12 @@ HTMLWidgets.widget({
             // to avoid problems like 3.423/100 -> 0.034230000000000003
             return (x / scale).toFixed(d);
           };
+          var slider_min = function() {
+            return filter.noUiSlider('options').range.min;
+          };
+          var slider_max = function() {
+            return filter.noUiSlider('options').range.max;
+          };
           $input.on({
             focus: function() {
               $x0.show().trigger('show');
@@ -1700,7 +1706,7 @@ HTMLWidgets.widget({
               $x0.hide().trigger('hide');
             },
             input: function() {
-              if ($input.val() === '') filter.val([r1, r2]);
+              if ($input.val() === '') filter.val([slider_min(), slider_max()]);
             },
             change: function() {
               var v = $input.val().replace(/\s/g, '');
@@ -1710,8 +1716,8 @@ HTMLWidgets.widget({
                 $input.parent().addClass('has-error');
                 return;
               }
-              if (v[0] === '') v[0] = r1;
-              if (v[1] === '') v[1] = r2;
+              if (v[0] === '') v[0] = slider_min();
+              if (v[1] === '') v[1] = slider_max();
               $input.parent().removeClass('has-error');
               // treat date as UTC time at midnight
               var strTime = function(x) {
@@ -1727,8 +1733,8 @@ HTMLWidgets.widget({
                 v[0] = strTime(v[0]);
                 v[1] = strTime(v[1]);
               }
-              if (v[0] != r1) v[0] *= scale;
-              if (v[1] != r2) v[1] *= scale;
+              if (v[0] != slider_min()) v[0] *= scale;
+              if (v[1] != slider_max()) v[1] *= scale;
               filter.val(v);
             }
           });
@@ -1782,7 +1788,7 @@ HTMLWidgets.widget({
           var updateSlider = function(e) {
             var val = filter.val();
             // turn off filter if in full range
-            $td.data('filter', val[0] > r1 || val[1] < r2);
+            $td.data('filter', val[0] > slider_min() || val[1] < slider_max());
             var v1 = formatDate(val[0]), v2 = formatDate(val[1]), ival;
             if ($td.data('filter')) {
               ival = v1 + ' ... ' + v2;
@@ -2020,7 +2026,7 @@ HTMLWidgets.widget({
       id = el.id + '_' + id;
       if (type) id = id + ':' + type;
       // do not update if the new value is the same as old value
-      if (event !== 'cell_edit' && shinyData.hasOwnProperty(id) && shinyData[id] === JSON.stringify(value))
+      if (event !== 'cell_edit' && !/_clicked$/.test(event) && shinyData.hasOwnProperty(id) && shinyData[id] === JSON.stringify(value))
         return;
       shinyData[id] = JSON.stringify(value);
       if (HTMLWidgets.shinyMode && Shiny.setInputValue) {
@@ -2112,20 +2118,29 @@ HTMLWidgets.widget({
     }
 
     var selMode = data.selection.mode, selTarget = data.selection.target;
+    var selDisable = data.selection.selectable === false;
     if (inArray(selMode, ['single', 'multiple'])) {
       var selClass = inArray(data.style, ['bootstrap', 'bootstrap4']) ? 'active' : 'selected';
-      var selected = data.selection.selected, selected1, selected2;
       // selected1: row indices; selected2: column indices
-      if (selected === null) {
-        selected1 = selected2 = [];
-      } else if (selTarget === 'row') {
-        selected1 = $.makeArray(selected);
-      } else if (selTarget === 'column') {
-        selected2 = $.makeArray(selected);
-      } else if (selTarget === 'row+column') {
-        selected1 = $.makeArray(selected.rows);
-        selected2 = $.makeArray(selected.cols);
+      var initSel = function(x) {
+        if (x === null || typeof x === 'boolean' || selTarget === 'cell') {
+          return {rows: [], cols: []};
+        } else if (selTarget === 'row') {
+          return {rows: $.makeArray(x), cols: []};
+        } else if (selTarget === 'column') {
+          return {rows: [], cols: $.makeArray(x)};
+        } else if (selTarget === 'row+column') {
+          return {rows: $.makeArray(x.rows), cols: $.makeArray(x.cols)};
+        }
       }
+      var selected = data.selection.selected;
+      var selected1 = initSel(selected).rows, selected2 = initSel(selected).cols;
+      // selectable should contain either all positive or all non-positive values, not both
+      // positive values indicate "selectable" while non-positive values means "nonselectable"
+      // the assertion is performed on R side. (only column indicides could be zero which indicates
+      // the row name)
+      var selectable = data.selection.selectable;
+      var selectable1 = initSel(selectable).rows, selectable2 = initSel(selectable).cols;
 
       // After users reorder the rows or filter the table, we cannot use the table index
       // directly. Instead, we need this function to find out the rows between the two clicks.
@@ -2148,15 +2163,56 @@ HTMLWidgets.widget({
       // row, column, or cell selection
       var lastClickedRow;
       if (inArray(selTarget, ['row', 'row+column'])) {
+        // Get the current selected rows. It will also
+        // update the selected1's value based on the current row selection state
+        // Note we can't put this function inside selectRows() directly,
+        // the reason is method.selectRows() will override selected1's value but this
+        // function will add rows to selected1 (keep the existing selection), which is
+        // inconsistent with column and cell selection.
         var selectedRows = function() {
           var rows = table.rows('.' + selClass);
           var idx = rows.indexes().toArray();
-          if (!server) return addOne(idx);
+          if (!server) {
+            selected1 = addOne(idx);
+            return selected1;
+          }
           idx = idx.map(function(i) {
             return DT_rows_current[i];
           });
           selected1 = selMode === 'multiple' ? unique(selected1.concat(idx)) : idx;
           return selected1;
+        }
+        // Change selected1's value based on selectable1, then refresh the row state
+        var onlyKeepSelectableRows = function() {
+          if (selDisable) { // users can't select; useful when only want backend select
+            selected1 = [];
+            return;
+          }
+          if (selectable1.length === 0) return;
+          var nonselectable = selectable1[0] <= 0;
+          if (nonselectable) {
+            // should make selectable1 positive
+            selected1 = $(selected1).not(selectable1.map(function(i) { return -i; })).get();
+          } else {
+            selected1 = $(selected1).filter(selectable1).get();
+          }
+        }
+        // Change selected1's value based on selectable1, then
+        // refresh the row selection state according to values in selected1
+        var selectRows = function(ignoreSelectable) {
+          if (!ignoreSelectable) onlyKeepSelectableRows();
+          table.$('tr.' + selClass).removeClass(selClass);
+          if (selected1.length === 0) return;
+          if (server) {
+            table.rows({page: 'current'}).every(function() {
+              if (inArray(DT_rows_current[this.index()], selected1)) {
+                $(this.node()).addClass(selClass);
+              }
+            });
+          } else {
+            var selected0 = selected1.map(function(i) { return i - 1; });
+            $(table.rows(selected0).nodes()).addClass(selClass);
+          }
         }
         table.on('mousedown.dt', 'tbody tr', function(e) {
           var $this = $(this), thisRow = table.row(this);
@@ -2209,33 +2265,21 @@ HTMLWidgets.widget({
             // remove id from selected1 since its class .selected has been removed
             if (inArray(id, selected1)) selected1.splice($.inArray(id, selected1), 1);
           }
-          changeInput('rows_selected', selectedRows());
-          changeInput('row_last_clicked', serverRowIndex(thisRow.index()));
+          selectedRows(); // update selected1's value based on selClass
+          selectRows(false); // only keep the selectable rows
+          changeInput('rows_selected', selected1);
+          changeInput('row_last_clicked', serverRowIndex(thisRow.index()), null, null, {priority: 'event'});
           lastClickedRow = serverRowIndex(thisRow.index());
         });
-        changeInput('rows_selected', selected1);
-        var selectRows = function() {
-          table.$('tr.' + selClass).removeClass(selClass);
-          if (selected1.length === 0) return;
-          if (server) {
-            table.rows({page: 'current'}).every(function() {
-              if (inArray(DT_rows_current[this.index()], selected1)) {
-                $(this.node()).addClass(selClass);
-              }
-            });
-          } else {
-            var selected0 = selected1.map(function(i) { return i - 1; });
-            $(table.rows(selected0).nodes()).addClass(selClass);
-          }
-        }
-        selectRows();  // in case users have specified pre-selected rows
+        selectRows(false);  // in case users have specified pre-selected rows
         // restore selected rows after the table is redrawn (e.g. sort/search/page);
         // client-side tables will preserve the selections automatically; for
         // server-side tables, we have to *real* row indices are in `selected1`
-        if (server) table.on('draw.dt', selectRows);
-        methods.selectRows = function(selected) {
+        changeInput('rows_selected', selected1);
+        if (server) table.on('draw.dt', function(e) { selectRows(false); });
+        methods.selectRows = function(selected, ignoreSelectable) {
           selected1 = $.makeArray(selected);
-          selectRows();
+          selectRows(ignoreSelectable);
           changeInput('rows_selected', selected1);
         }
       }
@@ -2243,6 +2287,34 @@ HTMLWidgets.widget({
       if (inArray(selTarget, ['column', 'row+column'])) {
         if (selTarget === 'row+column') {
           $(table.columns().footer()).css('cursor', 'pointer');
+        }
+        // update selected2's value based on selectable2
+        var onlyKeepSelectableCols = function() {
+          if (selDisable) { // users can't select; useful when only want backend select
+            selected2 = [];
+            return;
+          }
+          if (selectable2.length === 0) return;
+          var nonselectable = selectable2[0] <= 0;
+          if (nonselectable) {
+            // need to make selectable2 positive
+            selected2 = $(selected2).not(selectable2.map(function(i) { return -i; })).get();
+          } else {
+            selected2 = $(selected2).filter(selectable2).get();
+          }
+        }
+        // update selected2 and then
+        // refresh the col selection state according to values in selected2
+        var selectCols = function(ignoreSelectable) {
+          if (!ignoreSelectable) onlyKeepSelectableCols();
+          // if selected2 is not a valide index (e.g., larger than the column number)
+          // table.columns(selected2) will fail and result in a blank table
+          // this is different from the table.rows(), where the out-of-range indexes
+          // doesn't affect at all
+          selected2 = $(selected2).filter(table.columns().indexes()).get();
+          table.columns().nodes().flatten().to$().removeClass(selClass);
+          if (selected2.length > 0)
+            table.columns(selected2).nodes().flatten().to$().addClass(selClass);
         }
         var callback = function() {
           var colIdx = selTarget === 'column' ? table.cell(this).index().column :
@@ -2257,6 +2329,7 @@ HTMLWidgets.widget({
             thisCol.addClass(selClass);
             selected2 = selMode === 'single' ? [colIdx] : unique(selected2.concat([colIdx]));
           }
+          selectCols(false); // update selected2 based on selectable
           changeInput('columns_selected', selected2);
         }
         if (selTarget === 'column') {
@@ -2264,49 +2337,51 @@ HTMLWidgets.widget({
         } else {
           $(table.table().footer()).on('click.dt', 'tr th', callback);
         }
+        selectCols(false);  // in case users have specified pre-selected columns
         changeInput('columns_selected', selected2);
-        var selectCols = function() {
-          table.columns().nodes().flatten().to$().removeClass(selClass);
-          if (selected2.length > 0)
-            table.columns(selected2).nodes().flatten().to$().addClass(selClass);
-        }
-        selectCols();  // in case users have specified pre-selected columns
-        if (server) table.on('draw.dt', selectCols);
-        methods.selectColumns = function(selected) {
+        if (server) table.on('draw.dt', function(e) { selectCols(false); });
+        methods.selectColumns = function(selected, ignoreSelectable) {
           selected2 = $.makeArray(selected);
-          selectCols();
+          selectCols(ignoreSelectable);
           changeInput('columns_selected', selected2);
         }
       }
 
       if (selTarget === 'cell') {
-        var selected3;
-        if (selected === null) {
-          selected3 = [];
-        } else {
-          selected3 = selected;
-        }
-        var findIndex = function(ij) {
-          for (var i = 0; i < selected3.length; i++) {
-            if (ij[0] === selected3[i][0] && ij[1] === selected3[i][1]) return i;
+        var selected3 = [], selectable3 = [];
+        if (selected !== null) selected3 = selected;
+        if (selectable !== null && typeof selectable !== 'boolean') selectable3 = selectable;
+        var findIndex = function(ij, sel) {
+          for (var i = 0; i < sel.length; i++) {
+            if (ij[0] === sel[i][0] && ij[1] === sel[i][1]) return i;
           }
           return -1;
         }
-        table.on('click.dt', 'tbody td', function() {
-          var $this = $(this), info = tweakCellIndex(table.cell(this));
-          if ($this.hasClass(selClass)) {
-            $this.removeClass(selClass);
-            selected3.splice(findIndex([info.row, info.col]), 1);
-          } else {
-            if (selMode === 'single') $(table.cells().nodes()).removeClass(selClass);
-            $this.addClass(selClass);
-            selected3 = selMode === 'single' ? [[info.row, info.col]] :
-              unique(selected3.concat([[info.row, info.col]]));
+         // Change selected3's value based on selectable3, then refresh the cell state
+        var onlyKeepSelectableCells = function() {
+          if (selDisable) { // users can't select; useful when only want backend select
+            selected3 = [];
+            return;
           }
-          changeInput('cells_selected', transposeArray2D(selected3), 'shiny.matrix');
-        });
-        changeInput('cells_selected', transposeArray2D(selected3), 'shiny.matrix');
-        var selectCells = function() {
+          if (selectable3.length === 0) return;
+          var nonselectable = selectable3[0][0] <= 0;
+          var out = [];
+          if (nonselectable) {
+            selected3.map(function(ij) {
+              // should make selectable3 positive
+              if (findIndex([-ij[0], -ij[1]], selectable3) === -1) { out.push(ij); }
+            });
+          } else {
+            selected3.map(function(ij) {
+              if (findIndex(ij, selectable3) > -1) { out.push(ij); }
+            });
+          }
+          selected3 = out;
+        }
+        // Change selected3's value based on selectable3, then
+        // refresh the cell selection state according to values in selected3
+        var selectCells = function(ignoreSelectable) {
+          if (!ignoreSelectable) onlyKeepSelectableCells();
           table.$('td.' + selClass).removeClass(selClass);
           if (selected3.length === 0) return;
           if (server) {
@@ -2321,11 +2396,27 @@ HTMLWidgets.widget({
             });
           }
         };
-        selectCells();  // in case users have specified pre-selected columns
-        if (server) table.on('draw.dt', selectCells);
-        methods.selectCells = function(selected) {
+        table.on('click.dt', 'tbody td', function() {
+          var $this = $(this), info = tweakCellIndex(table.cell(this));
+          if ($this.hasClass(selClass)) {
+            $this.removeClass(selClass);
+            selected3.splice(findIndex([info.row, info.col], selected3), 1);
+          } else {
+            if (selMode === 'single') $(table.cells().nodes()).removeClass(selClass);
+            $this.addClass(selClass);
+            selected3 = selMode === 'single' ? [[info.row, info.col]] :
+              unique(selected3.concat([[info.row, info.col]]));
+          }
+          selectCells(false); // must call this to update selected3 based on selectable3
+          changeInput('cells_selected', transposeArray2D(selected3), 'shiny.matrix');
+        });
+        selectCells(false);  // in case users have specified pre-selected columns
+        changeInput('cells_selected', transposeArray2D(selected3), 'shiny.matrix');
+
+        if (server) table.on('draw.dt', function(e) { selectCells(false); });
+        methods.selectCells = function(selected, ignoreSelectable) {
           selected3 = selected ? selected : [];
-          selectCells();
+          selectCells(ignoreSelectable);
           changeInput('cells_selected', transposeArray2D(selected3), 'shiny.matrix');
         }
       }
@@ -2377,7 +2468,7 @@ HTMLWidgets.widget({
     }
     // the current cell clicked on
     table.on('click.dt', 'tbody td', function() {
-      changeInput('cell_clicked', cellInfo(this));
+      changeInput('cell_clicked', cellInfo(this), null, null, {priority: 'event'});
     })
     changeInput('cell_clicked', {});
 
@@ -2967,13 +3058,13 @@ outliers_hw &lt;- relevantdata %&gt;%
 <p>These are the outliers in the hours spent playing video games.</p>
 <pre class="r"><code>#view(outliers_games %&gt;% select(Video_Games_Hours))
 datatable(outliers_games)</code></pre>
-<div id="htmlwidget-3c6bbfa0220e172c80ba" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3c6bbfa0220e172c80ba">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10"],[48,50,50,50,55,56,70,70,94,100],[0,0,12,40,4,2,3,4,20,100]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Video_Games_Hours<\/th>\n      <th>Doing_Homework_Hours<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-9fb1a5d4c74056445277" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9fb1a5d4c74056445277">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10"],[48,50,50,50,55,56,70,70,94,100],[0,0,12,40,4,2,3,4,20,100]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Video_Games_Hours<\/th>\n      <th>Doing_Homework_Hours<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>These are the outliers in the hours spent doing homework.</p>
 <pre class="r"><code>#view(outliers_hw %&gt;% select(Doing_Homework_Hours))
 datatable(outliers_hw)</code></pre>
-<div id="htmlwidget-7870e5eb7b986b3ee3c3" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7870e5eb7b986b3ee3c3">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8"],[0,0,0.5,10,30,0,7,100],[50,50,50,55,56,70,100,100]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Video_Games_Hours<\/th>\n      <th>Doing_Homework_Hours<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5356897efdee1a01bcc5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5356897efdee1a01bcc5">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8"],[0,0,0.5,10,30,0,7,100],[50,50,50,55,56,70,100,100]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Video_Games_Hours<\/th>\n      <th>Doing_Homework_Hours<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 <p>There is an entry were the person put that the time they spend each week on homework and video games is 200 hours total. This person also put 100 on almost all of the questions at that point of the form so I’ll remove that entry from our data frame.</p>
 <p>There are no other errors I can detect.</p>
 <pre class="r"><code>relevantdata2 &lt;-relevantdata %&gt;% 
@@ -3037,6 +3128,7 @@ relevantdata2 %&gt;%
         col = &quot;skyblue&quot;
         )</code></pre>
 <p><img src="data:image/png;base64,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" width="672" /></p>
+<p><strong>Hours Spent Doing Homework Each Week</strong></p>
 <pre class="r"><code>relevantdata2 %&gt;% 
   group_by(gamer_status) %&gt;% 
   summarise(Min = min(Doing_Homework_Hours),

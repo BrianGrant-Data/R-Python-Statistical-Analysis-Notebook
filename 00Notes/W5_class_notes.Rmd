@@ -7,6 +7,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
+# Analysis
+[DayCare.html](../Analyses/ANOVA/DayCare.html)
+[DayCare.Rmd](../Analyses/ANOVA/DayCare.Rmd)
+
 
 # Day 1 ANOVA One way
 

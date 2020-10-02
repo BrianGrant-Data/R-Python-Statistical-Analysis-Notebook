@@ -346,15 +346,11 @@ Consider the InsectSprays dataset in R.
 Test the hypothesis that the mean number of bugs killed by insectisides A, B, C, D, E, and F are all the same against the alternative that at least one mean is different.
 
 ```{r}
-insect <- table(InsectSprays$count, InsectSprays$spray)
+insect.aov <- aov(InsectSprays$count ~ InsectSprays$spray)
 
-Insect.chi <- chisq.test(insect) 
-
-Insect.chi
-Insect.chi$expected
-Insect.chi$residuals
-
+summary(insect.aov)
 ```
+
 
 
 The p-value of the test is less than $.05$ showing that there is  $sufficient$ evidence to conclude that $\text{at least one bug spray results in a different}$ average number of bugs per agricultural experimental unit than the other sprays.

@@ -1,0 +1,43 @@
+---
+title: "Predicting the Weather"
+author: "Brian Grant"
+date: "9/25/2020"
+output: 
+  html_document:
+    theme: cerulean
+    code_folding: hide
+---
+
+```{r Clean the Data}
+read.csv("C:/Users/BAG20/Downloads/Temporary/Book1.csv")
+```
+
+```{r Graphic}
+# show data points
+
+# show regression line
+
+# show predicted temperature for 21-Sep-2020
+
+# label 
+
+```
+
+# Conclusion
+
+# Technical Details
+
+- How the data was collected
+
+- Show the data set
+
+- show labeled regression model and hypotheses
+
+- present lm summary, diagnostic plots, and their interpretations
+
+- present fitted (y-hat) regression equation
+
+- present an interpreation of estimated slope
+
+- show the math behind the predicted temp
+

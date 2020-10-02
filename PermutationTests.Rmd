@@ -21,6 +21,8 @@ library(car)
 
 A nonparametric approach to computing the p-value for any test statistic in just about any scenario. 
 
+This can be used for anything the other tests aren't appropriate for. Technically, you can use it even when those other tests are appropriate, but this is a sub-par option to the others.
+
 ----
 
 ### {.tabset .tabset-pills .tabset-fade}

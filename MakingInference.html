@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -83,7 +83,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -232,6 +231,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -243,18 +243,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -403,6 +391,7 @@ $(document).ready(function () {
  }
 </script>
 <hr />
+<p><a href="Analyses/0_Links.html">My Analyses</a></p>
 <p>It is common to only have a <strong>sample</strong> of data from some population of interest. Using the information from the sample to reach conclusions about the population is called <em>making inference</em>. When statistical inference is performed properly, the conclusions about the population are almost always correct.</p>
 <div id="hypothesis-testing" class="section level2">
 <h2>Hypothesis Testing</h2>
@@ -411,10 +400,7 @@ $(document).ready(function () {
 <a href="javascript:showhide('progressionOfHypotheses')">Click for an Example </a>
 <div id="progressionOfHypotheses" style="display:none;">
 <p>The current hypothesis may be that the world is flat. Then someone who thinks otherwise sets sail in a boat, gathers some evidence, and when there is sufficient evidence in the data to disbelieve the current hypothesis, we conclude the world is not flat. In light of this new knowledge, we shift our belief to the next working hypothesis, that the world is round. After a while, someone gathers more evidence and shows that the world is not round, and we move to the next working hypothesis, that it is oblate spheroid, i.e., a sphere that is squashed at its poles and swollen at the equator.</p>
-<div class="figure">
-<img src="Images/progressionOfHypotheses.png" />
-
-</div>
+<p><img src="Images/progressionOfHypotheses.png" /></p>
 <p>This process of elimination is called hypothesis testing. The process begins by establishing a <em>null hypothesis</em> (denoted symbolically by <span class="math inline">\(H_0\)</span>) which represents the current opinion, status quo, or what we will believe if the evidence is not sufficient to suggest otherwise. The alternative hypothesis (denoted symbolically by <span class="math inline">\(H_a\)</span>) designates what we will believe if there is sufficient evidence in the data to discredit, or “reject,” the null hypothesis.</p>
 <p>See the <a href="http://statistics.byuimath.com/index.php?title=Lesson_2:_The_Statistical_Process_%26_Design_of_Studies#Making_Inferences:_Hypothesis_Testing">BYU-I Math 221 Stats Wiki</a> for another example.</p>
 </div>
@@ -582,6 +568,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

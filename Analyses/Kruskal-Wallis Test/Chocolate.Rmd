@@ -36,7 +36,7 @@ library(pander)
 
   * Rating: Expert rating for the bar.
       5= Elite (Transcending beyond the ordinary limits)
-      4= Premium (Superior flavor development, character and style)
+      4= Premium (Superior flavor development, character, and style)
       3= Satisfactory(3.0) to praiseworthy(3.75) (well made with special qualities)
       2= Disappointing (Passable but contains at least one significant flaw)
       1= Unpleasant (mostly unpalatable)
@@ -68,15 +68,17 @@ A dataset has been gathered from Kaggle.com on chocolate and its sources, qualit
 
   - What are the ratings chocolates receive?
   
-  - Does the chocolate ratings increase as the percentage of cocoa in the chocolate increases?
+  - Do the chocolate ratings increase as the percentage of cocoa in the chocolate increases?
 
-Our hypotheses are as follows:
+For this analysis we will be comparing the qualitative Cocao ratings (rounded to the nearest whole number) to the quantitative percentage of Cocao in the chocolate. Since the ratings are ordinal numbers we'll need to conduct a nonparametric test. I will be using a Kruskal-Wallis Test as a result.
+
+Our hypotheses are as follows and our significance level will be .05.
 
 $$
-  H_0: \text{All samples represent a sample of data from the same distribution.}
+  H_0: \text{Each rating group has the same distribution in cocao percentages.}
 $$ 
 $$
-  H_a: \text{At least one distribution is stochastically different than the others.}
+  H_a: \text{At least one rating group has a cocao percentage distribution that is stochastically different than the others.}
 $$
 
 ## {.tabset .tabset-pills .tabset-fade}
@@ -104,7 +106,7 @@ datatable(choc2)
 
 ## Analysis
 
-If we analyze the data using plots and numeric summaries, we'd see that most of the chocolate had a quality between 70% and 75%. The chocolate was mostly rated between about 2 and 4. 
+If we analyze the data using plots and numeric summaries, we will see that most of the chocolate had a quality between 70% and 75%. The chocolate was mostly rated between about 2 and 4. The two summaries below and the histogram will prove this.
 
 **Chocolate Rating Summary**
 ```{r}
@@ -120,7 +122,7 @@ favstats(choc2$Cocao_percent) %>% pander()
 hist(choc2$Cocao_percent, 
      breaks = 12,
      col = "skyblue",
-     main = "Chocolate Scoring Frequency",
+     main = "Chocolate Percentage Frequency",
      xlab = "Cocao Percentage")
 ```
 
@@ -135,7 +137,7 @@ boxplot(Cocao_percent ~ round(Rating, 0),
         xlab = "Ratings Rounded to the Nearest Whole Number")
 ```
 
-Let's confirm this with a Kruskal Wallis Test.
+Let us confirm this with a Kruskal Wallis Test. This will confirm what the p-value will be. If it is lower than our level of significance we can reject the nulll. 
 
 
 **Kruskal Test**
@@ -144,17 +146,19 @@ kruskal.test(Cocao_percent ~ as.factor(round(Rating, 0)),
              data = choc2) %>% pander()
 ```
 
+With a p-value of 5.46e-05 we know that there is sufficient evidence to reject the null hypothesis. That means that, one of these five scores come from a different cocao percentage distribution.
+
+Though this test will not prove which of the five scores is stochastically different, we do know that the distributions did shrink as we approached the Rating of 5. We can see that more clearly in the below summary.
 ```{r Numeric Summary by Group}
 favstats(Cocao_percent ~ as.factor(round(Rating, 0)), 
          data = choc2,
          caption = "Numeric Summary")[,-10] %>% pander()
 ```
-With a p-value of 5.46e-05 we know that there is sufficient evidence to reject the null hypothesis. One of these five scores comes from a different cocao percentage distribution.
 
-This test won't prove which of the five groups is stochastically different. We know that the distributions did shrink as we approached the Rating of 5. 
+
 
 ## Interpretation
-Generally speaking, it seems that chocolate ratings go up as the percentage of chocolate per bar approaches 70%. Chocolate companies should try to keep their cocao percentages means around there if they're looking to have high ratings on their chocolate itself.
+Generally speaking, it seems that chocolate ratings go up as the percentage of chocolate per bar approaches 70%. Chocolate companies should try to keep their cocao percentages means around there if they are looking to have high ratings on their chocolate itself.
 
 Some might argue that the two ratings of 5 are not sufficiently large to be representative of chocolate bars at that high of a rating and though this is true, removing those two values (or that rating in general) wouldn't change that the standard deviations decreases for the other four ratings as we approach the fifth rating.
 

@@ -57,7 +57,6 @@ The data comes from ucsd.edu and the details of their study is quoted in the "St
 
 
 
-
 <!--End your background before here.-->
 <!--Click the little black arrow to 
 the left to expand/hide these next sections.-->
@@ -69,7 +68,7 @@ This background is quoted directly from the article ["A Fine is a Price"](http:/
 
 <div style="padding-left:30px; padding-right:30px;">
 
-There are two types of day-care centers in Israel: private and public. A study was conducted in 10 private day-care centers in the city of Haifa from January to June 1998. All of these centers are located in the same part of town, and there is no important difference among them. During the day children are organized into groups according to age, from 1 to 4 years old. Each day-care center is allowed to hold a maximum of 35 children. In some exceptional cases a few additional children are allowed. The fee for each child is NIS 1,400 per month. (The NIS is the New Israeli Shekel.) At the time of the study, a U.S. dollar was worth approximately NIS 3.68, so the fee was about $380 at that time. 
+There are two types of day-care centers in Israel: private and public. A study was conducted in 10 private day-care centers in the city of Haifa from January to June 1998. All these centers are located in the same part of town, and there is no important difference among them. During the day children are organized into groups according to age, from 1 to 4 years old. Each day-care center is allowed to hold a maximum of 35 children. In some exceptional cases a few additional children are allowed. The fee for each child is NIS 1,400 per month. (The NIS is the New Israeli Shekel.) At the time of the study, a U.S. dollar was worth approximately NIS 3.68, so the fee was about $380 at that time. 
 
 The contract signed at the beginning of the year states that the day-care
 center operates between 0730 and 1600. There is no mention of what happens if parents come late to pick up their children. In particular, before the beginning of the study, there was no fine for coming late. When parents did not come on time, one of the teachers had to wait with the children concerned. Teachers would rotate in this task, which is considered part of the job of a teacher, a fact that is clearly explained when a teacher is hired. Parents rarely came after 1630. 
@@ -136,9 +135,11 @@ Late$Period <- cut(Late$Week, c(0, 4, 16, 20), labels = c("Pre-Fine", "Fine", "P
 
 ### Hypothesis
 
-There are two recorded factors that could possibly affect how many parents are late: Treatment and Period. The Treatment factor has two levels, *Control* and *Fine*. The Period factor has three levels, *Pre-Fine*, *Fine*, and *PostFine*.
+This experiment introduces one change (a fine) and then attempts to measure what effect it had on parental tardiness. There is a *Control* group that was never fined and a *Fine* group that was fined. There are also three different time periods which the Period Factor has named, *Pre-Fine*, *Fine*, and *PostFine*, in accordance to before during and after weeks 5-16. Those were the weeks the fine was being applied.  
 
-For a two-way ANOVA there are three sets of hypotheses, one set for each question we can ask:
+<!-- There are two recorded factors that could possibly affect how many parents are late: Treatment and Period. The Treatment factor has two levels, *Control* and *Fine*. The Period factor has three levels, *Pre-Fine*, *Fine*, and *PostFine*. To do this analysis we will need to divide the data according to those factors. Note that  -->
+
+For a two-way ANOVA there will be three sets of hypotheses, one question and set for each fine period of the control group and the same for the fine group.
 
 #### Question 1: Does the Treatment factor affect the number of children picked up late?
 $$
@@ -189,9 +190,9 @@ summary(Late.aov) %>%
 
 The ANOVA returns low p-values for each of the three hypotheses. Therefore, at least one level for each of the factors has a different average amount of tardiness then from the other levels of that factor.
 
-In other words, each of the factors has an effect on how many children are picked up late.
+In other words, each of the factors influences how many children are picked up late.
 
-I'll show the results of the ANOVA graphically by plotting each factor.
+I will show the results of the ANOVA graphically by plotting each factor.
 
 ```{r, include=FALSE}
 library(lattice)
@@ -203,18 +204,25 @@ xyplot(
   No.ofLateChildren ~ Treatment, 
   data = Late, 
   main = "Plot Demonstrating Treatment", 
+  type = c("p", "a"),
   jitter.x=TRUE,
   pch=16)
+
 ```
+This plot indicates that the Fine group had more instances of lateness than the Control group did.
+
 ```{r Plot Demonstrating Period}
 xyplot(
   No.ofLateChildren ~ Period, 
   data = Late, 
   main = "Plot Demonstrating Period", 
+  type = c("p", "a"),
   jitter.x=TRUE,
   pch=16)
 
 ```
+When we combine the data from the Fine and Control groups and look only at the time periods of the experiment, there is clear indication that tardiness increased once the fine begun and never declined even after the fine was removed.
+
 ```{r Plot Significance of the Interaction}
 xyplot(
   No.ofLateChildren ~ Period,
@@ -225,11 +233,11 @@ xyplot(
   auto.key=list(corner=c(1,1)))
 ```
 
-Here we can see that the fined group had more children be picked up late over the course of the experiment while the control group had either insignificant change or a minor decrease in the amount of children picked up late.
+Here we can see that the fined group had more children be picked up late over the course of the experiment while the control group had either insignificant change or a minor decrease in the number of children picked up late.
 
 ### Requirements Check
 
-I'll now check the requirements for the two-way ANOVA.
+I will now check the requirements for the two-way ANOVA.
 
 ```{r}
 par(mfrow = c(1,2))
@@ -237,11 +245,10 @@ plot(Late.aov,
      which = 1:2,
      col = "skyblue")
 ```
+The QQ-Plot checks to see if the error terms are normally distributed. Here we see that the data points mostly fall into a normal distribution.
 
-The sample of data can be considered to be representative of the population since there are more than 30 observations.
-
-As shown, the data is normally distributed in each group and the population variance of each group can be assumed to be the same since the *residuals* from the ANOVA show a constant variance.
+The Residuals vs Fitted plot checks to see if the variance is constant. Here we see that the variance of each group can be assumed to be the same since the *residuals* from the ANOVA show a constant variance.
 
 
 ## Conclusion
-For whatever reason, it looks like both the presence of a fine and the removal of the fine increased the number of children that were picked up late from the private day care. There could be many reasons for this, but we'd need more data to be sure. In the meantime, private daycares in India should refrain from fining parents that arrive late to pick up their children, as not doing so seems to increase the number of children picked up late each week from about 10 to about 20 children in maximum capacity day cares.
+For whatever reason, it looks like both the presence of a fine and the removal of the fine increased the number of children that were picked up late from the private day care. There could be many reasons for this, but we would need more data to be sure. In the meantime, private daycares in India should refrain from fining parents that arrive late to pick up their children, as not doing so seems to increase the number of children picked up late each week from about 10 to about 20 children in maximum capacity day cares.
