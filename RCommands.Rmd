@@ -2113,6 +2113,9 @@ KidsFeet %>%
 ----
 
 <br/>
- 
+
+## More
+
+[How to subtract two lists](https://www.oreilly.com/library/view/the-r-book/9780470510247/ch002-sec073.html)
 
 <footer></footer>

@@ -1,0 +1,601 @@
+---
+  title: "Skills Quiz: Regression Diagnostics & Transformations"
+output: 
+  html_document:
+  theme: cerulean
+code_folding: hide
+toc: true
+toc_float: true
+---
+  
+  
+  ## Instructions
+  
+  Use this file to keep a record of your work as you complete the "Skills Quiz: Regression Diagnostics & Transformations" assignment in Canvas.
+
+
+----
+  
+  <!-- Note: The {} after each Problem and Part header allows you to keep track of what work you have completed. Write something like {Done} once you complete each problem and your html file will then show you a nice summary of what you have "done" already. -->
+  
+  ## Problem 1 {}
+  
+  Open the `Davis` dataset in R, found in `library(car)`. As stated in the help file for this data set, "The subjects were men and women engaged in regular exercise."
+  
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(mosaic)
+library(car)
+
+#View(Davis)
+```
+
+
+Perform a simple linear regression of the height of the individual based on their weight.
+
+```{r}
+Davis.lm <- lm(height ~ weight, data = Davis)
+```
+
+
+### Part (a) {}
+
+Type out the mathematical equation for this regression model and label both $Y$ and $X$ in the equation.
+
+<div class="YourAnswer">
+  
+$$
+  \underbrace{Y_i}_\text{height} = \overbrace{\beta_0}^\text{y-int} + \overbrace{\beta_1}^\text{slope} \underbrace{X_i}_\text{weight} + \epsilon_i \quad \text{where} \ \epsilon_i \sim N(0, \sigma^2)
+
+$$
+  
+  </div> 
+  
+  
+  ### Part (b) {}
+  
+  Plot a scatterplot of the data with your regression line overlaid.
+
+<div class="YourAnswer">
+  
+```{r}
+ggplot(Davis, aes(x = weight, y = height))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+
+```
+
+</div>
+  
+  
+  ### Part (c) {}
+  
+  Create a residuals vs fitted-values plot for this regression. What does this plot show?
+  
+  <div class="YourAnswer">
+  
+```{r}
+plot(Davis.lm, which=1)
+```
+
+Type your answer here...
+
+</div> 
+  
+  
+  ### Part (d) {}
+  
+  State and interpret the slope, y-intercept, and $R^2$ of this regression. Are they meaningful for this data under the current regression?
+  
+  <div class="YourAnswer">
+  
+```{r}
+slope = Davis.lm$coefficients[2]
+y_intercept = Davis.lm$coefficients[1]
+R_squared = 0.03597
+
+slope
+y_intercept
+R_squared
+```
+
+The change in the average height for a one unit change in the weight is 160.09. THis is meaningful for this data.
+
+The average height when weight is zero is 0.15. This is not meaningful for this data since a zero weight person doesn't exist.
+
+The proportion of variation in height explained by the regression is 0.036. This shows a weak correlation.
+
+All of this is being impacted by the outlier though and can't be trusted.
+
+</div>
+  
+  
+  ### Part (e) {}
+  
+  Run `View(Davis)` in your Console. What do you notice about observation #12 in this data set? 
+```{r}
+#View(Davis)
+```
+It looks like the weight and height were switched.
+
+Perform a second regression for this data with observation #12 removed. Recreate the scatterplot of Part (b) with two regression lines showing this time. The first regression line should include the outlier. The second should exclude the outlier. Include a legend to show which line is which.
+
+<div class="YourAnswer">
+  
+```{r}
+Davis_filtered <- Davis %>% filter( height != 57)
+
+ggplot(Davis, aes(x = weight, y = height,))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE, aes(color = "Fitted Regression (with outlier)"))+
+  geom_smooth(method = "lm", se = FALSE, aes(color = "Fitted Regression (outlier removed)"), data = Davis_filtered)+
+  scale_color_manual(name = "", values = c("Fitted Regression (with outlier)" = "gray",  # map regression line colors
+                                "Fitted Regression (outlier removed)" = "skyblue"))+
+  theme(legend.position = "bottom")
+  # theme(legend.position = "left")
+```
+
+</div>
+  
+  
+  ### Part (f) {}
+  
+  Compute the slope, y-intercept, and $R^2$ value for the regression with the outlier removed. compare the results to the values when the outlier was present.
+
+<div class="YourAnswer">
+  
+```{r}
+Davis.lm2 <- lm(height ~ weight, data = Davis_filtered)
+slope2 = Davis.lm2$coefficients[2]
+y_intercept2 = Davis.lm2$coefficients[1]
+R_squared2 = 0.594
+
+
+slope2
+y_intercept2
+R_squared2
+
+
+slope
+y_intercept
+R_squared
+```
+
+The intercept and R^2 are greater and the slope is lower. 
+
+</div>
+  
+  
+  ### Part (g)
+  
+  Create a residuals vs fitted-values plot for the regression with the outlier removed. How do things look now?
+  
+  <div class="YourAnswer">
+  
+```{r}
+plot(Davis.lm2, which=1)
+```
+
+The points are more spread out (at least in appearance)
+
+</div>
+  
+  
+  ----
+  
+  ## Problem 2 {}
+  
+  Open the **Prestige** data set found in `library(car)`.
+```{r}
+#View(Prestige)
+```
+
+
+Perform a regression that explains the 1971 average annual **income** from jobs according to their "Pineo-Porter **prestige** score for occupation, from a social survey conducted in the mod-1960's."
+
+```{r}
+Prestige.lm <- lm(income ~ prestige, data = Prestige)
+summary(Prestige.lm)
+```
+
+
+### Part (a) {}
+
+Plot the data and fitted simple linear regression line.
+
+<div class="YourAnswer">
+  
+```{r}
+ggplot(Prestige, aes(x = prestige, y = income))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+</div>
+  
+  
+  ### Part (b) {}
+  
+  State the estimated values for $\beta_0$, $\beta_1$, and $\sigma$ for this regression. 
+
+<div class="YourAnswer">
+  
+```{r}
+Prestige.b_0 <- Prestige.lm$coefficients[1]
+Prestige.b_1 <- Prestige.lm$coefficients[2]
+Prestige.sigma <- 2984
+
+Prestige.b_0
+Prestige.b_1
+Prestige.sigma #Residual standard of error?
+
+```
+
+</div>
+  
+  
+  ### Part (c) {}
+  
+  Create a residuals vs fitted-values plot and a Q-Q Plot of the residuals for this regression. 
+
+<div class="YourAnswer">
+  
+```{r}
+par(mfrow=c(1,2))
+plot(Prestige.lm,which=1:2)
+```
+
+</div> 
+  
+  
+  ### Part (d) {}
+  
+  Comment on any difficulties the diagnostic plots in Part (c) reveal about the regression. 
+
+Comment on which estimates of Part (b) are likely effected by these difficulties.
+
+<div class="YourAnswer">
+  
+  The data is megaphoneing in part c and has three clear outliers.
+  
+  Part b's right tail is thrown off as a result.
+  
+  Quizzes answer: Normality of the error terms is violated, as shown by the points going "out of bounds" in the Q-Q Plot. However, these problems are likely due to the increasing variance of the residuals shown in the residuals vs fitted-values plot. There even may be some problems with linearity of the data because of the three outliers in the top right of the graph pulling the regression line up (shown by the red line going down).
+  
+  The slope and estimate of the error variance are almost certainly being negatively effected by the increasing variance and three outliers.
+
+</div> 
+  
+  
+  
+  
+  
+  
+  ----
+  
+  
+  ## Problem 3 {}
+  
+  Open the **Burt** data set from library(car).
+```{r}
+#?Burt
+#View(Burt)
+```
+
+
+This data set is famous for being fraudulent, or fake. See ?Burt for more details. One of the first indicators that it was fraudulent was revealed by regressing IQbio ~ IQfoster. This regression was just a little too good to be real. (Note that for social science data, like this data, $R^2$ values above 0.3 are impressive. Values above 0.7 are rare.)
+
+### Part (a) {}
+
+Plot the data and fitted regression line. State the estimated values of $\beta_0$, $\beta_1$, and $\sigma$ as well as the $R^2$ of the regression.
+
+<div class="YourAnswer">
+  
+```{r}
+ggplot(Burt, aes(x = IQfoster, y = IQbio))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+</div>
+  
+  
+  
+  ### Part (b) {}
+  
+  Create a (1) residuals vs. fitted-values plot, (2) Q-Q Plot of the residuals, and (3) residuals vs. order plot for this regression. Are any problems with regression assumption violations visible in these plots?
+  
+  <div class="YourAnswer">
+  
+```{r}
+Burt.lm <- lm(IQbio ~ IQfoster, data = Burt)
+
+par(mfrow=c(1,3))
+plot(Burt.lm, which=1:2)
+plot(Burt.lm$residuals)
+     
+```
+Problems: the left tail of the Q-Q plot is skewed, otherwise... there aren't any problems!
+
+Quiz's answer: 	
+They show a fairly nice regression. There may be some slight difficulties with linearity due to the curved red line in the residuals vs fitted-values plot, and points 23 and 24 are somewhat far away from the rest of the data, but otherwise, things are impressively nice.
+
+</div>
+  
+  
+  ### Part (c) {}
+  
+  Comment on what the three diagnostic plots of Part (b) show for the regression. 
+
+<div class="YourAnswer">
+  
+  All the requirements are by and large met.
+
+</div>
+  
+  
+  
+  
+  
+  ----
+  
+  ## Problem 4
+  
+  Open the **mtcars** data set in R.
+```{r}
+View(mtcars)
+?mtcars
+```
+
+
+Perform a regression of **mpg** explained by the **disp**lacement of the vehicle's engine.
+
+```{r}
+mtcars.lm <- lm(mpg ~ disp, data = mtcars)
+```
+
+
+### Part (a) {}
+
+Plot the data and fitted regression line. State the estimated values of $\beta_0$, $\beta_1$, and $\sigma$ as well as the $R^2$ of the regression.
+
+<div class="YourAnswer">
+
+```{r}
+ggplot(mtcars, aes(x = disp, y = mpg))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+
+mtcars.b_0 <- mtcars.lm$coefficients[1]
+mtcars.b_1 <- mtcars.lm$coefficients[2]
+mtcars.sigma <- 3.251
+mtcars.r2 <- 0.7183
+  
+mtcars.b_0
+mtcars.b_1
+mtcars.sigma
+mtcars.r2
+```
+
+</div>
+
+
+
+### Part (b) {}
+
+Create a (1) residuals vs. fitted-values plot, (2) Q-Q Plot of the residuals, and (3) residuals vs. order plot for this regression. Are any problems with regression assumption violations visible in these plots?
+
+<div class="YourAnswer">
+
+```{r}
+par(mfrow=c(1,3))
+plot(mtcars.lm, which=1:2)
+plot(mtcars.lm$residuals)
+```
+
+</div>
+
+
+### Part (c) {}
+
+Comment on what the three diagnostic plots of Part (b) show for the validity of the values computed in Part (a). 
+
+<div class="YourAnswer">
+
+There are outliers and a megaphone shape on the Residuals vs. Fitted. This shows the variance isn't constant. The Q-Q plot shows that the  tails are skewed as well.
+
+</div>
+
+
+
+
+
+
+
+## Problem 5 {}
+
+Open the **Orange** data set found in R.
+```{r}
+#View(Orange)
+# ?Orange
+```
+
+
+Perform a regression that explains the **circumference** of the trunk of the orange tree as the tree **age**s.
+
+```{r}
+Orange.lm <- lm(circumference ~ age, data = Orange)
+```
+
+
+### Part (a) {}
+
+Plot the data and fitted simple linear regression line.
+
+<div class="YourAnswer">
+
+```{r}
+ggplot(Orange, aes(x = age, y = circumference))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+</div>
+
+
+### Part (b) {}
+
+State the estimated values for $\beta_0$, $\beta_1$, and $\sigma$ for this regression. 
+
+<div class="YourAnswer">
+
+```{r}
+Orange.b_0 <- Orange.lm$coefficients[1]
+Orange.b_1 <- Orange.lm$coefficients[2]
+Orange.sigma <- 23.74
+
+Orange.b_0
+Orange.b_1
+Orange.sigma # Note square root MSE is equal to sigma
+```
+
+</div>
+
+
+### Part (c) {}
+
+Create a residuals vs fitted-values plot and a Q-Q Plot of the residuals for this regression. 
+
+<div class="YourAnswer">
+
+```{r}
+par(mfrow=c(1,3))
+plot(Orange.lm, which=1:2)
+plot(Orange.lm$residuals)
+```
+
+</div> 
+
+
+### Part (d) {}
+
+Comment on any difficulties the diagnostic plots in Part (c) reveal about the regression. 
+
+Comment on which estimates of Part (b) are likely effected by these difficulties.
+
+<div class="YourAnswer">
+
+The variance isn't constant: the Residuals vs. Fitted plot megaphones. Otherwise, all's good!
+
+</div> 
+ 
+
+### Part (e) {}
+
+Perform a Box-Cox analysis of the regression. Which Y-transformation is suggested?
+
+<div class="YourAnswer">
+
+```{r}
+boxCox(lm(circumference ~ age, data = Orange))
+```
+
+I believe it's $$\lambda=0.5$$.
+
+</div> 
+
+ 
+### Part (f) {}
+
+Perform a regression with the transformed y-variable. Plot the regression in the transformed units. Diagnose the fit of the regression on the transformed data.
+
+<div class="YourAnswer">
+
+```{r}
+Orange.lm.trans <- lm(sqrt(circumference) ~ age, data = Orange)
+Orange.trans.b_0 <- Orange.lm.trans$coefficients[1]
+Orange.trans.b_1 <- Orange.lm.trans$coefficients[2]
+
+Orange.trans.b_0
+Orange.trans.b_1
+
+par(mfrow=c(1,3))
+plot(Orange.lm.trans, which=1:2)
+plot(Orange.lm.trans$residuals)
+```
+The Q-Q plot seems to show a worse fit now.
+
+Linearity is also worse (I believe that's represented in the line in Residuals vs. Fitted plot)
+</div> 
+
+
+### Part (g) {}
+
+Write out the fitted model for $\hat{Y}_i'$ and then rewrite the fitted model back in the original units
+
+Now solve the transformed model back in the original units for Y^i . Then compute the following.
+
+    When Xi=500 , then Y^i=
+```{r}
+predict(Orange.lm.trans, data.frame(age = 500))^2
+```
+
+<div class="YourAnswer">
+  
+$$
+$$
+\underbrace{Y_i'}_\text{Some Label} = \overbrace{\beta_0}^\text{5.3408} + \overbrace{\beta_1}^\text{0.0055} \underbrace{X_i}_\text{Some Label}
+$$
+$$
+
+$$
+$$
+\underbrace{\hat{Y}_i}_\text{Some Label} = (\overbrace{\beta_0}^\text{y-int} + \overbrace{\beta_1}^\text{slope} \underbrace{X_i}_\text{Some Label})^2
+$$
+$$
+
+</div> 
+
+
+### Part (h)
+
+Plot the data in the original units. Place the transformed line, back in the original units, on this plot. 
+
+<div class="YourAnswer">
+
+```{r}
+ggplot(Orange, aes(x = age, y = circumference))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)+
+  geom_smooth(method = "lm", se = FALSE,  data = Orange, y = Orange$circumference^2)
+
+```
+I'm sure this isn't right.
+</div> 
+
+
+----
+
+
+
+
+
+
+
+
+<style>
+
+.YourAnswer {
+  color: #317eac;
+  padding: 10px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: skyblue4;
+  border-radius: 5px;
+}
+
+</style>
+
+ 
+ 

@@ -13,6 +13,7 @@ library(DT)
 library(car)
 library(tidyverse)
 library(pander)
+library(readr)
 
 # Load your data after saving a csv file in your Data folder.
 # You can use either 
@@ -80,7 +81,6 @@ For this analysis we'll use data collect by the The Movie Database. Their data h
 ### Show Data {.tabset}
 
 ```{r, message=FALSE, warning=FALSE}
-library(readr)
 movies <- read_csv("../../Data/tmdb_5000_movies.csv")
 ```
 
