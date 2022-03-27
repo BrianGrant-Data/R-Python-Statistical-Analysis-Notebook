@@ -1,5 +1,5 @@
 # Statistics-Notebook
-To access, load index.html. The rest of the files are accessible from the html page.
+To access, load index.html in browser. The rest of the files are accessible from the html page. You can also load index.html via https://raw.githack.com/BrianGrant-Data/R-Python-Statistical-Analysis-Notebook/master/index.html.
 
 This began as the textbook for Intermediate Statistics (Math 325) at BYU-Idaho. It now aims to become a notebook for performing and interpreting statistical analyses in R. 
 
