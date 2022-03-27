@@ -1,7 +1,7 @@
 # Statistics-Notebook
-This began as the textbook for Intermediate Statistics (Math 325) at BYU-Idaho. It aims to become a personal notebook for performing and interpreting statistical analyses in R.
+To access, load index.html. The rest of the files are accessible from the html page.
 
-This page, and all pages of this notebook, are meant to be customized to become a useful *Guide to Statistical Analysis* in R for your *current* and *future* self. 
+This began as the textbook for Intermediate Statistics (Math 325) at BYU-Idaho. It now aims to become a notebook for performing and interpreting statistical analyses in R. 
 
 <div style="font-size:.8em;"><!-- Code to shrink font-size of following paragraph -->
 
